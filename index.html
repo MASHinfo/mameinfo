@@ -41,8 +41,8 @@
 
 <CENTER>
 <font color="#CCCCCC" size="6" face="Arial"><u>Mameinfo.dat v0.284</u></font>
-<br><font color="#FFFFFF" size="2" face="Arial">Updated - 5th January 2026</font><p>
-<font color="#FFFFFF" face="Arial">Homepage - </font><a href="http://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
+<br><font color="#FFFFFF" size="2" face="Arial">Updated - 6th January 2026</font><p>
+<font color="#FFFFFF" face="Arial">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img border="0" src="pics/movie.gif">&nbsp;<font size=+2 face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size=+3 face="Times">ARCADE AT THE MOVIES</font></a><p>
 <img border="0" src="pics/movie1.jpg">&nbsp;&nbsp;<img border="0" src="pics/movie2.jpg">&nbsp;&nbsp;<img border="0" src="pics/movie3.jpg"><br>
@@ -104,7 +104,7 @@
 - jaguar.cpp
   . Rewrote EEPROM access, fixes (MESS) jaguar [cfodder] has no access to the SRAM (ID 09342). Fixed Player 2 buttons. Fixed quickload regression (atari\jaguar.cpp).
   . Don't set a pending irq if line is masked. Use set_input_line for irq 0 as well (cpu\jaguar\jaguar.cpp).
-  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs (atari\jagobj.ipp).
+  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs. Moved out object pointer from process functions. Implemented BCOMPEN, fixes (MESS) jaguar missil3d text and original version GFXs (atari\jagobj.ipp).
   . Attempt to make scanline_update safer. Mask host irqs if correlated bit in INT1 isn't enabled. PIT GPU timer are after regular clock with no internal divider, fixes (MESS) jaguar raiden BGM tempo. Disable PIT on prescaler == 0xffff. Blitter readback fix for (MESS) jaguar avsp. Upcast PIT and JPIT to u64 resolution, fixes hang regression in (MESS) jaguarcd (atari\jaguar_v.cpp).
   . Added JPIT1 and JPIT2 irq sources, fixes sound in (MESS) jaguar cybermor and mutntpng. Sort out JPIT irq section. JPIT setups needs either prescaler or divider set to work, fixes (MESS) jaguar pbfant sound. Allow changing serial frequency after setting SMODE. Allow playback of BIOS roaring sample (atari\jaguar_a.cpp).
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
@@ -121,12 +121,15 @@
 - Renamed (dirtdash) to (dirtdashb) and (packysts) to (packyts)
 - Dipswitch fixes in goldstar.cpp
 - MAME
-  . VIDEO RENDERING SYSTEM: Added an off-screen reload helper plugin for people playing lightgun games with other types of controls (plugins\offscreenreload\*).
+  . VIDEO RENDERING SYSTEM
+    . Added an off-screen reload helper plugin for people playing lightgun games with other types of controls (plugins\offscreenreload\*).
   . UI/OSD: Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp)
-  . PLUGINS: Fixed Cancel not working in input selection menus (plugins\commonui\init.lua)
+  . PLUGINS
+    . Fixed Cancel not working in input selection menus (plugins\commonui\init.lua)
+    . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp)
+    . Added support for non-wrapping analog inputs (plugins\inputmacro\*). Changed the "previous menu" item text to make what it does more obvious (ui\pluginopt.cpp).
 - Compiling
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
-
 
 
 
