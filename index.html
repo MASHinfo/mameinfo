@@ -78,8 +78,9 @@
 
 - New games: Moon Raker and Waku Waku Jumbo (Rev A)
 - New Non-Working games: Gamebox and Modern Cart
-- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Dirt Dash (World, DT2 Ver.C) and Empire City: 1931 (US, bootleg)
-- New drivers: gamebox.cpp and subsino_kr_h8.cpp
+- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Dingo (Nuova Videotron bootleg), Devil Fish (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg) and Jungle King (Nuova Videotron bootleg)
+- New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
+- New drivers: gamebox.cpp, scsi_cdrom_apple_ext and subsino_kr_h8.cpp
 - CPU
   . Dynamic Re-Compiling
     . drccache: Defer allocating to start, allow forcing W^X mode. Added helpers for allocating structures/objects in the cache. Supply desired alignment when allocating cache memory (not fully implemented). Log some statistics on destruction (cpu\drccache.cpp). Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp).
@@ -89,6 +90,7 @@
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
   . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
 - SOUND
+  . MM5837 Digital Noise Source: Configuration interface simplifications (sound\mm5837.h)
   . TMS5110: Removed romclk_hack (sound\tms5110.cpp)
 - DEVICE
   . Imgtool: Retired the get_chain method. This is no longer implemented by any supported filesystem, and no command made any use of the information it provided (floptool's flopblocks command is functionally comparable) (imgtool\imgtool.cpp).
@@ -102,23 +104,27 @@
 - deco156.cpp: Implement volume control for Heavy Smash
 - goldstar.cpp: Cleaned up various stuff
 - jaguar.cpp
-  . Rewrote EEPROM access, fixes (MESS) jaguar [cfodder] has no access to the SRAM (ID 09342). Fixed Player 2 buttons. Fixed quickload regression (atari\jaguar.cpp).
+  . Rewrote EEPROM access, fixes (MESS) jaguar [cfodder] has no access to the SRAM (ID 09342). Fixed Player 2 buttons. Fixed quickload regression. Massage unaligned accesses towards Tom & Jerry. Makes (MESS) jaguar protect and protctse playable. R30 gets overwritten on irqs. Fixed shlq calculation. Former fix for (MESS) jaguar kasumi booting. Fixed random crashes in Fishin' Frenzy startup (access cojag_gun_input_r, leftovers?) (atari\jaguar.cpp).
   . Don't set a pending irq if line is masked. Use set_input_line for irq 0 as well (cpu\jaguar\jaguar.cpp).
-  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs. Moved out object pointer from process functions. Implemented BCOMPEN, fixes (MESS) jaguar missil3d text and original version GFXs (atari\jagobj.ipp).
+  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs. Moved out object pointer from process functions. Implemented BCOMPEN, fixes (MESS) jaguar missil3d text and original version GFXs. Implemented pitch in scaled 8bpp bitmap and blending in scaled 16bpp. Partially fixes (MESS) jaguar mutntpng and phase0 main menus, respectively (atari\jagobj.ipp).
   . Attempt to make scanline_update safer. Mask host irqs if correlated bit in INT1 isn't enabled. PIT GPU timer are after regular clock with no internal divider, fixes (MESS) jaguar raiden BGM tempo. Disable PIT on prescaler == 0xffff. Blitter readback fix for (MESS) jaguar avsp. Upcast PIT and JPIT to u64 resolution, fixes hang regression in (MESS) jaguarcd (atari\jaguar_v.cpp).
   . Added JPIT1 and JPIT2 irq sources, fixes sound in (MESS) jaguar cybermor and mutntpng. Sort out JPIT irq section. JPIT setups needs either prescaler or divider set to work, fixes (MESS) jaguar pbfant sound. Allow changing serial frequency after setting SMODE. Allow playback of BIOS roaring sample (atari\jaguar_a.cpp).
+  . Multiply pitch in source and destination widths. Fixed 3D renders for chekflag and others (atari\jagblit.ipp).
+- mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
+- Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen).
 - Knuckle Joe: Added screen raw params from video measurements. Normalize red color channel for 2nd half of palette. Added note about overclocked Z80.
+- Maque Wangchao / Chaoji Da Manguan 2: Improvements. Hooked up protection device emulation and Oki ROM banking, game is now playable apart from missing hopper support.
 - Qianxi Jielong: Added BG layer
 - Rolling Crash / Moon Base: Use rom PCB locations from moonbase and removed MB14241 Shifter IC
 - The Simpsons: Changed screen visible width to 320 again after confirming it on a 2nd PCB
 - Traverse USA / Zippy Race: Normalize red color channel
 - unknown VRender0+ bowling game: Minor notes update
 - Fixed rom names in vicdual.cpp
-- Description changes of 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Sol Divide: Sword Of Darkness, Sol Divide: Sword Of Darkness (Korea) and Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0)
-- Renamed (dirtdash) to (dirtdashb) and (packysts) to (packyts)
+- Description changes of Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 1), Donkey King Jr. (Nuova Videotron bootleg), 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Pink Panther (German) (Maygay) (M1A/B) (set 1), Sol Divide: Sword Of Darkness, Sol Divide: Sword Of Darkness (Korea), Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0) and Video Pool (Nuova Videotron bootleg of Video Hustler)
+- Renamed (dirtdash) to (dirtdashb), (dkongjrv) to (dkingjrv) and (packysts) to (packyts)
 - Dipswitch fixes in goldstar.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
@@ -126,10 +132,11 @@
   . UI/OSD: Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp)
   . PLUGINS
     . Fixed Cancel not working in input selection menus (plugins\commonui\init.lua)
-    . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp)
     . Added support for non-wrapping analog inputs (plugins\inputmacro\*). Changed the "previous menu" item text to make what it does more obvious (ui\pluginopt.cpp).
+    . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp).
 - Compiling
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
+  . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
 
 
 
@@ -830,7 +837,7 @@
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0282.zip"><font size=+2 color="#eeeeee" face="Arial"><b> MAMEINFO.DAT 0.282 &nbsp;(3.72 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0281.zip"><font size=+2 color="#eeeeee" face="Arial"><b> MAMEINFO.DAT 0.281 &nbsp;(3.71 MB)</b></font></a><br><br>
 <br><br>
-<hr size="2">
+
 
 
 <br>
