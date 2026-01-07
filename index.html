@@ -41,7 +41,7 @@
 
 <CENTER>
 <font color="#CCCCCC" size="6" face="Arial"><u>Mameinfo.dat v0.284</u></font>
-<br><font color="#FFFFFF" size="2" face="Arial">Updated - 6th January 2026</font><p>
+<br><font color="#FFFFFF" size="2" face="Arial">Updated - 7th January 2026</font><p>
 <font color="#FFFFFF" face="Arial">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img border="0" src="pics/movie.gif">&nbsp;<font size=+2 face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size=+3 face="Times">ARCADE AT THE MOVIES</font></a><p>
@@ -77,6 +77,7 @@
 0.285GIT
 
 - New games: Moon Raker and Waku Waku Jumbo (Rev A)
+- New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)'
 - New Non-Working games: Gamebox and Modern Cart
 - New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Dingo (Nuova Videotron bootleg), Devil Fish (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg) and Jungle King (Nuova Videotron bootleg)
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
@@ -114,9 +115,9 @@
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
-- Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen).
+- Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
 - Knuckle Joe: Added screen raw params from video measurements. Normalize red color channel for 2nd half of palette. Added note about overclocked Z80.
-- Maque Wangchao / Chaoji Da Manguan 2: Improvements. Hooked up protection device emulation and Oki ROM banking, game is now playable apart from missing hopper support.
+- Maque Wangchao / Chaoji Da Manguan 2: Improvements. Hooked up protection device emulation and Oki ROM banking. Redumped Oki ROM. Promoted game to working.
 - Qianxi Jielong: Added BG layer
 - Rolling Crash / Moon Base: Use rom PCB locations from moonbase and removed MB14241 Shifter IC
 - The Simpsons: Changed screen visible width to 320 again after confirming it on a 2nd PCB
@@ -134,6 +135,8 @@
     . Fixed Cancel not working in input selection menus (plugins\commonui\init.lua)
     . Added support for non-wrapping analog inputs (plugins\inputmacro\*). Changed the "previous menu" item text to make what it does more obvious (ui\pluginopt.cpp).
     . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp).
+  . Better support for external MMUs (emu\dimemory.cpp, emu\machine.cpp, debug\debugbuf.cpp, debug\debugcmd.cpp, debug\debugcon.cpp, debug\debugcpu.cpp, debug\dvdisasm.cpp, debug\dvmemory.cpp, debugger\osx\disassemblyview.mm, debugger\osx\disassemblyviewer.mm, debugger\osx\memoryview.mm, debugger\osx\memoryviewer.mm, debugger\qt\memorywindow.cpp, debugger\win\memoryviewinfo.cpp amd m68000\m68000.cpp).
+  . Merged wayward speakers (midw8080\mw8080bw_a.cpp, sega\model1.cpp, nscsi\cd.cpp)
 - Compiling
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
   . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
@@ -841,11 +844,11 @@
 
 
 <br>
-&nbsp;&nbsp;&nbsp;<a href="http://www.mameworld.info/ubbthreads/postlist.php?Cat=&Board=news"><font size="3" face="Arial"><b>News Submission Board</b></font></a><br>
 &nbsp;&nbsp;&nbsp;<a href="http://mametesters.org/view_all_set.php?sort=last_updated&dir=DESC&type=2"><font size="3" face="Arial"><b>MAME Testers</b></font></a><br>
-&nbsp;&nbsp;&nbsp;<a href="http://git.redump.net/mame/log/"><font size="3" face="Arial"><b>MAME/MESS GIT</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="http://git.redump.net/mame/log/"><font size="3" face="Arial"><b>MAME GIT</b></font></a><br>
 &nbsp;&nbsp;&nbsp;<a href="http://mamedev.org/release.html"><font size="3" face="Arial"><b>MAME Download</b></font></a><br>
-&nbsp;&nbsp;&nbsp;<a href="http://ashura.mameworld.info/nightlybuilds/builds.html"><font size="3" face="Arial"><b>Ashura-X's Nightly MAME builds</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="https://forums.bannister.org/ubbthreads.php?ubb=postlist&Board=1&page=1"><font size="3" face="Arial"><b>MAME - Forums - Bannister</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="https://forum.mamedev.org/"><font size="3" face="Arial"><b>MAME Discussion - MAMEDEV Forum</b></font></a><br>
 &nbsp;&nbsp;&nbsp;<a href="http://mamedev.org/devwiki/index.php/Frequently_Asked_Questions"><font size="3" face="Arial"><b>MAME Frequently Asked Questions</b></font></a><br>
 <br><br>
 
