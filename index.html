@@ -41,7 +41,7 @@
 
 <CENTER>
 <font color="#CCCCCC" size="6" face="Arial"><u>Mameinfo.dat v0.285GIT</u></font>
-<br><font color="#FFFFFF" size="2" face="Arial">Updated - 10th January 2026</font><p>
+<br><font color="#FFFFFF" size="2" face="Arial">Updated - 11th January 2026</font><p>
 <font color="#FFFFFF" face="Arial">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img border="0" src="pics/movie.gif">&nbsp;<font size=+2 face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size=+3 face="Times">ARCADE AT THE MOVIES</font></a><p>
@@ -78,8 +78,8 @@
 
 - New games: Moon Raker and Waku Waku Jumbo (Rev A)
 - New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)'
-- New Non-Working games: Gamebox, Modern Cart and Relief Pitcher (System 1, prototype)
-- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Dingo (Nuova Videotron bootleg), Devil Fish (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg) and Jungle King (Nuova Videotron bootleg)
+- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Modern Cart and Relief Pitcher (System 1, prototype)
+- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Sparkle (v1.1.3) and Vanguard (SNK, set 2)
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
 - New drivers: gamebox.cpp, scsi_cdrom_apple_ext, subsino_kr_h8.cpp and floppy_twiggy
 - CPU
@@ -94,6 +94,7 @@
   . Texas Instruments TMS32032: Got rid of some superfluous parentheses (tms32031\32031ops.hxx)
   . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
 - SOUND
+  . Ensoniq ES5503: Fixed off-by-1 sample position adjustment on looping (Github #14582; sound\es5503.cpp)
   . MM5837 Digital Noise Source: Configuration interface simplifications (sound\mm5837.h)
   . TMS5110: Removed romclk_hack (sound\tms5110.cpp)
 - DEVICE
@@ -101,6 +102,7 @@
   . Namco C123 (4x + 2x Tilemaps): Zerofill control regs (namco\namco_c123tmap.cpp)
   . Sanyo LC7535: Use device_sound_interface. Removed custom volume callback. Added option to use a logarithmic gain scale. Use explictly sized variables (sound\lc7535.cpp).
 - New drivers: subsino_kr_h8.cpp
+- cps2.cpp: Don't set sprite priorities before screen_update
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
 - deco32.cpp
   . Fixed volume control for Dragon Gun and Locked 'n Loaded (ID 05422)
@@ -111,15 +113,17 @@
 - jaguar.cpp
   . Rewrote EEPROM access, fixes (MESS) jaguar [cfodder] has no access to the SRAM (ID 09342). Fixed Player 2 buttons. Fixed quickload regression. Fixed random crashes in Fishin' Frenzy startup (access cojag_gun_input_r, leftovers?). Workaround for (MESS) battlesp/battlesg black screen. Fixed wave ROM endianness. Allows BIOS logo to correctly play notes (atari\jaguar.cpp).
   . Don't set a pending irq if line is masked. Use set_input_line for irq 0 as well. Massage unaligned accesses towards Tom & Jerry. Makes (MESS) jaguar protect and protctse playable. R30 gets overwritten on irqs. Fixed shlq calculation. Former fix for (MESS) jaguar kasumi booting. Fixed mmult opcode, fixes BIOS ATARI letters, 3d renders in (MESS) superx3d and hstrike. Added N flag for abs opcode and simplify calculation. Accumulator readback is sign extended. Get rid of imultn hack (cpu\jaguar\jaguar.cpp).
-  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs. Moved out object pointer from process functions. Implemented BCOMPEN, fixes (MESS) jaguar missil3d text and original version GFXs. Implemented pitch in scaled 8bpp bitmap and blending in scaled 16bpp. Partially fixes (MESS) jaguar mutntpng and phase0 main menus, respectively. Avoid potential crash in (MESS) raiden. . Fixed object code returns (atari\jagobj.ipp).
-  . Attempt to make scanline_update safer. Mask host irqs if correlated bit in INT1 isn't enabled. PIT GPU timer are after regular clock with no internal divider, fixes (MESS) jaguar raiden BGM tempo. Disable PIT on prescaler == 0xffff. Blitter readback fix for (MESS) jaguar avsp. Upcast PIT and JPIT to u64 resolution, fixes hang regression in (MESS) jaguarcd. Stop drawing at display end, fixes valdiser gameplay flickering. Partial implementation of suspend state in object processor, fixes (MESS) kasumi rowscroll floor (atari\jaguar_v.cpp).
+  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs. Moved out object pointer from process functions. Implemented BCOMPEN, fixes (MESS) jaguar missil3d text and original version GFXs. Implemented pitch in scaled 8bpp bitmap and blending in scaled 16bpp. Partially fixes (MESS) jaguar mutntpng and phase0 main menus, respectively. Avoid potential crash in (MESS) raiden. Fixed object code returns (atari\jagobj.ipp).
+  . Attempt to make scanline_update safer. Mask host irqs if correlated bit in INT1 isn't enabled. PIT GPU timer are after regular clock with no internal divider, fixes (MESS) jaguar raiden BGM tempo. Disable PIT on prescaler == 0xffff. Blitter readback fix for (MESS) jaguar avsp. Upcast PIT and JPIT to u64 resolution, fixes hang regression in (MESS) jaguarcd. Stop drawing at display end, fixes valdiser gameplay flickering. Partial implementation of suspend state in object processor, fixes (MESS) kasumi rowscroll floor. Moved line buffer array as variable and clear it when starting object processor, fixed (MESS) valdiser playfield (atari\jaguar_v.cpp).
   . Added JPIT1 and JPIT2 irq sources, fixes sound in (MESS) jaguar cybermor and mutntpng. Sort out JPIT irq section. JPIT setups needs either prescaler or divider set to work, fixes (MESS) jaguar pbfant sound. Allow changing serial frequency after setting SMODE. Allow playback of BIOS roaring sample. Clear DSP irq lines on JPIT and serial disabled (atari\jaguar_a.cpp).
   . Multiply pitch in source and destination widths. Fixed 3D renders for chekflag and others. Improved non-TOPBEN handling. Fixed (MESS) hstrike difficulty select blending and partially fixed (MESS) battlesp main menu. Preliminary GOURZ support. Fixed clipping A1. Shows proper spinning cube in BIOS (atari\jagblit.ipp).
+- m10.cpp: Removed screen timing constexpr from class
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
 - Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
+- IPM Invader: Fixed bases tile drawing for clone 'IPM Invader (M11)'
 - Ken Sei Mogura: Added separate views for the moles. Tweak colors a bit (layout\kenseim.lay)
 - Knuckle Joe: Added screen raw params from video measurements. Normalize red color channel for 2nd half of palette. Added note about overclocked Z80.
 - Maque Wangchao / Chaoji Da Manguan 2: Improvements. Hooked up protection device emulation and Oki ROM banking. Redumped Oki ROM. Promoted game to working.
@@ -129,7 +133,7 @@
 - Traverse USA / Zippy Race: Normalize red color channel
 - unknown VRender0+ bowling game: Minor notes update
 - Fixed rom names in vicdual.cpp
-- Description changes of Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 1), Donkey King Jr. (Nuova Videotron bootleg), 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Pink Panther (German) (Maygay) (M1A/B) (set 1), Sol Divide: Sword Of Darkness, Sol Divide: Sword Of Darkness (Korea), Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0) and Video Pool (Nuova Videotron bootleg of Video Hustler)
+- Description changes of Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 1), Donkey King Jr. (Nuova Videotron bootleg), 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Pink Panther (German) (Maygay) (M1A/B) (set 1), Sol Divide: Sword Of Darkness, Sol Divide: Sword Of Darkness (Korea), Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0), Vanguard (SNK, set 1) and Video Pool (Nuova Videotron bootleg of Video Hustler)
 - Renamed (dirtdash) to (dirtdashb), (dkongjrv) to (dkingjrv) and (packysts) to (packyts)
 - Dipswitch fixes in goldstar.cpp
 - MAME
