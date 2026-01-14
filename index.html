@@ -56,10 +56,12 @@
 
 - New games: Moon Raker and Waku Waku Jumbo (Rev A)
 - New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)'
-- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Modern Cart and Relief Pitcher (System 1, prototype)
-- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Happy Farm (Ver. IN.01.01.A), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Revolution X (revision 2.0 9/8/94), Sparkle (v1.1.3), Super Poker (v305US) and Vanguard (SNK, set 2)
+- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao, Modern Cart and Relief Pitcher (System 1, prototype)
+- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Happy Farm (Ver. IN.01.01.A), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Revolution X (revision 2.0 9/8/94), Sparkle (v1.1.3), Super Poker (v305US), Tic Tac Trivia (6221-20, U5-0B, 11/17/85), Trivia ? Whiz (6221-03, U5-0) and Vanguard (SNK, set 2)
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
-- New drivers: gamebox.cpp, scsi_cdrom_apple_ext, subsino_kr_h8.cpp and floppy_twiggy
+- Removed games: Trivia ? Whiz (6221-00)
+- New drivers: gamebox.cpp, lanmao.cpp and subsino_kr_h8.cpp
+- New devices: clio, floppy_twiggy, madam and scsi_cdrom_apple_ext
 - CPU
   . Analog Devices ADSP-2100: Correct some tabulaton that had rotted (adsp2100\adsp2100.cpp)
   . Dynamic Re-Compiling
@@ -78,6 +80,7 @@
   . MM5837 Digital Noise Source: Configuration interface simplifications (sound\mm5837.h)
   . TMS5110: Removed romclk_hack (sound\tms5110.cpp)
 - DEVICE
+  . Floppy: Minor code cleanup (tools\floptool.cpp)
   . Fujitsu MB87030 SCSI controller: Fixed some timings (drq write would shorten waits) (machine\mb87030.cpp)
   . Imgtool: Retired the get_chain method. This is no longer implemented by any supported filesystem, and no command made any use of the information it provided (floptool's flopblocks command is functionally comparable) (imgtool\imgtool.cpp).
   . Namco C123 (4x + 2x Tilemaps): Zerofill control regs (namco\namco_c123tmap.cpp)
@@ -85,7 +88,7 @@
   . SCSI Hard Disk: Allow to add a per-driver default HD model (still overriden by an IDNT metadata) (nscsi\hd.cpp).
 - New drivers: subsino_kr_h8.cpp
 - 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
-- 3do.cpp: Misc notes. Split 'Uncle' in own memory map (misc\3do.cpp). Fixed lambda capture (misc\3do_m.cpp). Converted 'Madam' and 'Clio' to address_map (misc\3do.cpp).
+- 3do.cpp: Misc notes. Split 'Uncle' in own memory map (misc\3do.cpp). Fixed lambda capture (misc\3do_m.cpp). Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices (misc\3do.cpp). Hookup DSPP. Added logmacro (misc\3do_clio.cpp). Moved diag port as devcb, disable by default (misc\3do_madam.cpp).
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
 - deco32.cpp
@@ -104,7 +107,7 @@
 - m10.cpp: Removed screen timing constexpr from class
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
-- royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai
+- royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai. Filled in Mahjong Raijinhai DIP switches from available manual pages.
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
 - Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
@@ -115,14 +118,15 @@
 - Qianxi Jielong: Added BG layer
 - Rolling Crash / Moon Base: Use rom PCB locations from moonbase and removed MB14241 Shifter IC
 - The Simpsons: Changed screen visible width to 320 again after confirming it on a 2nd PCB
-- Tropical Angel: Added screen raw params based on M52 and TODO notes
 - Traverse USA / Zippy Race: Normalize red color channel
+- Trivia ? Whiz: Removed 'Trivia ? Whiz (6221-00)'. Note: Same as clone 'Trivia ? Whiz (6221-00, with Sex trivia)'. Added 'Trivia ? Whiz (6221-03, U5-0)' (Merit 1985). Dumped newer program ROMs for Trivia Whiz as well as the question decoder PROM for the Trivia Whiz sets.
+- Tropical Angel: Added screen raw params based on M52 and TODO notes
 - unknown VRender0+ bowling game: Minor notes update
 - Western Venture: Provided good dump for Western Venture (Ver. AA.02.D) program ROMs
 - Fixed rom names in vicdual.cpp and megasys1.cpp
 - Description changes of Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 1), Donkey King Jr. (Nuova Videotron bootleg), 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Pink Panther (German) (Maygay) (M1A/B) (set 1), Revolution X (prototype, revision 5.0 5/23/94), Revolution X (revision 1.0 6/16/94), Sol Divide: Sword Of Darkness, Sol Divide: Sword Of Darkness (Korea), Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0), Vanguard (SNK, set 1) and Video Pool (Nuova Videotron bootleg of Video Hustler)
 - Renamed (dirtdash) to (dirtdashb), (dkongjrv) to (dkingjrv), (packysts) to (packyts) and (revx) to (revx1)
-- Dipswitch fixes in goldstar.cpp
+- Dipswitch fixes in goldstar.cpp, koikoi.cpp and royalmah.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Added an off-screen reload helper plugin for people playing lightgun games with other types of controls (plugins\offscreenreload\*).
@@ -141,7 +145,9 @@
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
   . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
   . Cleaned up devices build scripts a bit: Lua considers anything other than null or false to be "truthy". The tests against "null" were comparing to a non-existent global called "null" that evaluated to nil. Got bus.lua back in alphabetical order and got at least most of the trigger variables aligned with paths. At least don't put random stuff in the middle of the Acorn devices in machine.lua.
-  . Cleaned up some stuff (scripts\src\bus.lua, scripts\src\cpu.lua)
+  . Cleaned up some stuff (scripts\src\bus.lua and scripts\src\cpu.lua)
+  . Set global C++ locale when the standard library isn't broken. GNU libstdc++ only provides a useless stub locale implementation when using anything other than the glibc standard C library. However, llvm libc++ provides a locale implementation that works fine with UCRT (osd\windows\winmain.cpp).
+  . Added note about MinGW Clang/LLVM issues with CodeView/PDB symbols at high detail levels (docs\source\initialsetup\compilingmame.rst)
 
 
 
@@ -226,7 +232,7 @@
   . Added default backup RAM and EEPROM content for Hanguk Pro Yagu 98. Also correct texture ROM loading. The game now boot and runs.
   . When writing to IRQ mask register, wait two cycles before checking for sound IRQ. Fixes music missing in beginner stage of Virtua Cop 2 (sega\model2.cpp) (ID 09313).
   . Use object finder and suppress side effects for GTX protection handler
-- namcos2.cpp: Use abbreviated integer types consistently. Use single-pass C355 draw routine. Split driver state classes for different hardware configurations. Optimized drawing slightly. Improved ROM region names, updated notes, and cleaned up code (namco\namcos2.cpp). Use priority mechanism rather than multiple drawing passes (namco\namcos2_roz.cpp, namco\namcos2_sprite.cpp). Added priority value and mask parameters to drawing functions, and cleaned up code (namco\namcos2_roz.cpp). Added priority value and mixing callbacks. Draw sprites in a single pass using priority control. Cleaned up code and updated notes (namco\namcos2_sprite.cpp) [cam900].
+- namcos2.cpp: Use abbreviated integer types consistently. Use single-pass C355 draw routine. Split driver state classes for different hardware configurations. Optimized drawing slightly. Improved ROM region names, updated notes, and cleaned up code (namco\namcos2.cpp). Use priority mechanism rather than multiple drawing passes (namco\namcos2_roz.cpp, namco\namcos2_sprite.cpp). Added priority value and mask parameters to drawing functions, and cleaned up code (namco\namcos2_roz.cpp). Added priority value and mixing callbacks. Draw sprites in a single pass using priority control. Cleaned up code and updated notes (namco\namcos2_sprite.cpp).
 - namcos10.cpp: Move rate changes outside of stream update (sound\lc82310.cpp). Fixed fatalerror when trying to change the sample rate while in stream_update. Note: Kills g13jnr (ID 09292). Source style cleanup (sound\lc82310.cpp).
 - namcos12.cpp: Ensure m_regs is initialized and saved (machine\icd2061a.cpp)
 - namcos22.cpp: Hook up System22 outputs, based on SailorSat's work.
