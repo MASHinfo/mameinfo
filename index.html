@@ -1,5 +1,4 @@
-<html>
-<head>
+<html><head>
 
 <meta http-equiv="Content-Language" content="en-gb">
 
@@ -85,7 +84,7 @@
   . Sanyo LC7535: Use device_sound_interface. Removed custom volume callback. Added option to use a logarithmic gain scale. Use explictly sized variables (sound\lc7535.cpp).
   . SCSI Hard Disk: Allow to add a per-driver default HD model (still overriden by an IDNT metadata) (nscsi\hd.cpp).
 - New drivers: subsino_kr_h8.cpp
-- 20pacgal.cpp: Small cleanup. Added TODO note about timing. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function.
+- 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
 - 3do.cpp: Misc notes. Split 'Uncle' in own memory map (misc\3do.cpp). Fixed lambda capture (misc\3do_m.cpp). Converted 'Madam' and 'Clio' to address_map (misc\3do.cpp).
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
@@ -105,6 +104,7 @@
 - m10.cpp: Removed screen timing constexpr from class
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
+- royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
 - Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
@@ -115,6 +115,7 @@
 - Qianxi Jielong: Added BG layer
 - Rolling Crash / Moon Base: Use rom PCB locations from moonbase and removed MB14241 Shifter IC
 - The Simpsons: Changed screen visible width to 320 again after confirming it on a 2nd PCB
+- Tropical Angel: Added screen raw params based on M52 and TODO notes
 - Traverse USA / Zippy Race: Normalize red color channel
 - unknown VRender0+ bowling game: Minor notes update
 - Western Venture: Provided good dump for Western Venture (Ver. AA.02.D) program ROMs
@@ -140,7 +141,7 @@
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
   . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
   . Cleaned up devices build scripts a bit: Lua considers anything other than null or false to be "truthy". The tests against "null" were comparing to a non-existent global called "null" that evaluated to nil. Got bus.lua back in alphabetical order and got at least most of the trigger variables aligned with paths. At least don't put random stuff in the middle of the Acorn devices in machine.lua.
-
+  . Cleaned up some stuff (scripts\src\bus.lua, scripts\src\cpu.lua)
 
 
 
@@ -822,7 +823,7 @@
   . Extended memory commands for region and space (emu\debug\*). Reduced unnecessary duplication (debug\express.cpp).
   . Don't persist fallback expressions (debug\debugvw.cpp)
 
-</FONT></DIV></PRE></DIV>
+</font></div></pre></div>
 
 
 <br><br>
@@ -857,6 +858,7 @@
 
 <hr size="2">
 <br><br><br>
+
 
 
 </body></html>
