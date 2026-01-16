@@ -71,6 +71,8 @@
     . PowerPC DRC: Allow DRC cache size to be set externally at configuration time, so systems can override the default (cpu\powerpc/ppc.h and powerpc\ppccom.cpp).
     . 3DO DSPP, hyperstone E1-xx + Hynix GMS30C2xxx: Don't allocate DRC resources if recompiler is disabled (dspp\dspp.cpp and e132xs\e132xs.cpp). Simplify arithmetic right shift calculations (e132xs\e132xsop.hxx).
     . ARM7: Removed ARM7 from the list of DRC CPUs since its incomplete recompiler functionality was removed (scripts\src\cpu.lua)
+    . Analog Devices ADSP21062 'SHARC': Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too (sharc\sharcdrc.cpp).
+    . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
   . Texas Instruments TMS32032: Got rid of some superfluous parentheses (tms32031\32031ops.hxx)
   . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
@@ -89,7 +91,9 @@
   . VGA: Added imperfect feature graphics where it belongs (video\pc_vga_*)
 - New drivers: subsino_kr_h8.cpp
 - 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
-- 3do.cpp: Misc notes. Split 'Uncle' in own memory map (misc\3do.cpp). Fixed lambda capture (misc\3do_m.cpp). Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices (misc\3do.cpp). Hookup DSPP. Added logmacro. Hookup DSPP DACs (misc\3do_clio.cpp). Moved diag port as devcb, disable by default (misc\3do_madam.cpp). Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp).
+- 3do.cpp
+  . Misc notes. Split 'Uncle' in own memory map (misc\3do.cpp). Fixed lambda capture (misc\3do_m.cpp). Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices (misc\3do.cpp). Hookup DSPP. Added logmacro. Hookup DSPP DACs (misc\3do_clio.cpp). Moved diag port as devcb, disable by default (misc\3do_madam.cpp). Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp).
+  . Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets (misc\3do.cpp). Added player bus DMA (misc\3do_madam.cpp). Hookup expansion bus interrupt. Convert system timer to emu_timer (misc\3do_clio.cpp).
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
 - deco32.cpp
@@ -109,6 +113,7 @@
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
 - royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai. Filled in Mahjong Raijinhai DIP switches from available manual pages.
+- snk.cpp: Added 2 missing save state variables (snk\snk_v.cpp)
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
 - Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
