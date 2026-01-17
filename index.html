@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.285GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 16th January 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th January 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -61,7 +61,7 @@
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
 - Removed games: Trivia ? Whiz (6221-00)
 - New drivers: gamebox.cpp, lanmao.cpp and subsino_kr_h8.cpp
-- New devices: clio, cr560b, floppy_twiggy, madam and scsi_cdrom_apple_ext
+- New devices: clio, cr560b, floppy_twiggy, lc6554, madam and scsi_cdrom_apple_ext
 - CPU
   . Analog Devices ADSP-2100: Correct some tabulaton that had rotted (adsp2100\adsp2100.cpp)
   . Dynamic Re-Compiling
@@ -71,7 +71,7 @@
     . PowerPC DRC: Allow DRC cache size to be set externally at configuration time, so systems can override the default (cpu\powerpc/ppc.h and powerpc\ppccom.cpp).
     . 3DO DSPP, hyperstone E1-xx + Hynix GMS30C2xxx: Don't allocate DRC resources if recompiler is disabled (dspp\dspp.cpp and e132xs\e132xs.cpp). Simplify arithmetic right shift calculations (e132xs\e132xsop.hxx).
     . ARM7: Removed ARM7 from the list of DRC CPUs since its incomplete recompiler functionality was removed (scripts\src\cpu.lua)
-    . Analog Devices ADSP21062 'SHARC': Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too (sharc\sharcdrc.cpp).
+    . Analog Devices ADSP21062 'SHARC': Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP (sharc\sharcdrc.cpp).
     . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
   . Texas Instruments TMS32032: Got rid of some superfluous parentheses (tms32031\32031ops.hxx)
@@ -111,10 +111,12 @@
   . Multiply pitch in source and destination widths. Fixed 3D renders for chekflag and others. Improved non-TOPBEN handling. Fixed (MESS) hstrike difficulty select blending and partially fixed (MESS) battlesp main menu. Preliminary GOURZ support. Fixed clipping A1. Shows proper spinning cube in BIOS (atari\jagblit.ipp).
 - m10.cpp: Removed screen timing constexpr from class
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
+- neptunp2.cpp: Made 'La Perla del Caribe' show the first error
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
 - royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai. Filled in Mahjong Raijinhai DIP switches from available manual pages.
 - snk.cpp: Added 2 missing save state variables (snk\snk_v.cpp)
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
+- Amiga/CDTV: Added new CPU 'Sanyo LC6554' MCU core. Implemented front panel with VFD and control buttons. Play/Pause, Stop, Previous and Forward buttons not yet working because the "Remote Control Input Converter" isn't hooked up yet.
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
 - Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
 - IPM Invader: Fixed bases tile drawing for clone 'IPM Invader (M11)' (ID 09357)
