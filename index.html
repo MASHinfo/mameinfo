@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.285GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th January 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 18th January 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -74,7 +74,9 @@
     . Analog Devices ADSP21062 'SHARC': Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP (sharc\sharcdrc.cpp).
     . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
-  . Texas Instruments TMS32032: Got rid of some superfluous parentheses (tms32031\32031ops.hxx)
+  . Texas Instruments TMS32xxx
+    . Improved naming of TMS320 series DSPs. Name folders after families rather than the first family member emulated by MAME (yes, TMS320C1x and TMS320C2x are retrospective names). Follow TI's convention of including the "C" in the names. Don't try to jam all the disassembler source file names into 8.3. The TMS32010, TMS320M10 and TMS320C10 are different things, but unfortunately MAME hasn't made a distinction between them so far. As far as I can tell, early DECTalk devices used TMS32010 or TMS320M10 chips, while the Atari and Toaplan games used TMS320C10 chips, but this should be verified.
+    . Got rid of some superfluous parentheses (tms320c3x\320c3x_ops.ipp)
   . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
   . Zilog Z80180/Z8S180/Z80182 and Hitachi HD64180RP: Can't shortcut with m_icount=0 after SLP opcode due to possible background Timer/DMA (z180/z180.cpp)
 - SOUND
@@ -92,8 +94,11 @@
 - New drivers: subsino_kr_h8.cpp
 - 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
 - 3do.cpp
-  . Misc notes. Split 'Uncle' in own memory map (misc\3do.cpp). Fixed lambda capture (misc\3do_m.cpp). Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices (misc\3do.cpp). Hookup DSPP. Added logmacro. Hookup DSPP DACs (misc\3do_clio.cpp). Moved diag port as devcb, disable by default (misc\3do_madam.cpp). Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp).
-  . Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets (misc\3do.cpp). Added player bus DMA (misc\3do_madam.cpp). Hookup expansion bus interrupt. Convert system timer to emu_timer (misc\3do_clio.cpp).
+  . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Preps for VDLP display list parsing, added Amy stub (misc\3do.cpp).
+  . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
+  . Fixed lambda capture (misc\3do_m.cpp).
+  . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer (misc\3do_clio.cpp). 
+  . Moved diag port as devcb, disable by default. Added player bus DMA (misc\3do_madam.cpp).
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
 - deco32.cpp
