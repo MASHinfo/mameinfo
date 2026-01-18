@@ -61,7 +61,7 @@
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
 - Removed games: Trivia ? Whiz (6221-00)
 - New drivers: gamebox.cpp, lanmao.cpp and subsino_kr_h8.cpp
-- New devices: clio, cr560b, floppy_twiggy, lc6554, madam and scsi_cdrom_apple_ext
+- New devices: amy, clio, cr560b, floppy_twiggy, lc6554, madam and scsi_cdrom_apple_ext
 - New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
 - CPU
   . Analog Devices ADSP-2100: Correct some tabulaton that had rotted (adsp2100\adsp2100.cpp)
@@ -72,7 +72,9 @@
     . PowerPC DRC: Allow DRC cache size to be set externally at configuration time, so systems can override the default (cpu\powerpc/ppc.h and powerpc\ppccom.cpp).
     . 3DO DSPP, hyperstone E1-xx + Hynix GMS30C2xxx: Don't allocate DRC resources if recompiler is disabled (dspp\dspp.cpp and e132xs\e132xs.cpp). Simplify arithmetic right shift calculations (e132xs\e132xsop.hxx).
     . ARM7: Removed ARM7 from the list of DRC CPUs since its incomplete recompiler functionality was removed (scripts\src\cpu.lua)
-    . Analog Devices ADSP21062 'SHARC': Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP (sharc\sharcdrc.cpp).
+    . Analog Devices ADSP21062 'SHARC' 
+      . Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP (sharc\sharcdrc.cpp).
+      . Fixed SV flag for LSHIFT/ASHIFT in recompiler (interpreter was correct). Simplified generated code for FEXT with non-immediate bit position/length in recompiler. Fixed off-scale ASHIFT in recompiler. Fixed off-scale FEXT with sign extension in interpreter (sharc\sharcdrc.cpp and sharc\sharcops.hxx).
     . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
   . Texas Instruments TMS32xxx
@@ -99,7 +101,7 @@
   . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Preps for VDLP display list parsing, added Amy stub (misc\3do.cpp).
   . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
   . Fixed lambda capture (misc\3do_m.cpp).
-  . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer (misc\3do_clio.cpp). 
+  . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp). 
   . Moved diag port as devcb, disable by default. Added player bus DMA (misc\3do_madam.cpp).
   . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
