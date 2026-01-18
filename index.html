@@ -62,6 +62,7 @@
 - Removed games: Trivia ? Whiz (6221-00)
 - New drivers: gamebox.cpp, lanmao.cpp and subsino_kr_h8.cpp
 - New devices: clio, cr560b, floppy_twiggy, lc6554, madam and scsi_cdrom_apple_ext
+- New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
 - CPU
   . Analog Devices ADSP-2100: Correct some tabulaton that had rotted (adsp2100\adsp2100.cpp)
   . Dynamic Re-Compiling
@@ -80,6 +81,7 @@
   . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
   . Zilog Z80180/Z8S180/Z80182 and Hitachi HD64180RP: Can't shortcut with m_icount=0 after SLP opcode due to possible background Timer/DMA (z180/z180.cpp)
 - SOUND
+  . Atari C012294 POKEY: Don't flag SEROUT full when held in reset (sound\pokey.cpp)
   . Ensoniq ES5503: Fixed off-by-1 sample position adjustment on looping (Github #14582; sound\es5503.cpp)
   . MM5837 Digital Noise Source: Configuration interface simplifications (sound\mm5837.h)
   . TMS5110: Removed romclk_hack (sound\tms5110.cpp)
@@ -99,6 +101,7 @@
   . Fixed lambda capture (misc\3do_m.cpp).
   . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer (misc\3do_clio.cpp). 
   . Moved diag port as devcb, disable by default. Added player bus DMA (misc\3do_madam.cpp).
+  . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
 - deco32.cpp
@@ -154,6 +157,7 @@
     . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp).
   . Better support for external MMUs (emu\dimemory.cpp, emu\machine.cpp, debug\debugbuf.cpp, debug\debugcmd.cpp, debug\debugcon.cpp, debug\debugcpu.cpp, debug\dvdisasm.cpp, debug\dvmemory.cpp, debugger\osx\disassemblyview.mm, debugger\osx\disassemblyviewer.mm, debugger\osx\memoryview.mm, debugger\osx\memoryviewer.mm, debugger\qt\memorywindow.cpp, debugger\win\memoryviewinfo.cpp amd m68000\m68000.cpp).
   . Merged wayward speakers (midw8080\mw8080bw_a.cpp, sega\model1.cpp, nscsi\cd.cpp)
+- MAC OS X: Apply a default channel mapping for devices where macOS gives no layout information, like MacBook internal speakers. Fixes things being in mono when they shouldn't (sound\coreaudio_sound.cpp).
 - Compiling
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
   . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
