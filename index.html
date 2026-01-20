@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.285GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 19th January 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 20th January 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -55,8 +55,8 @@
 0.285GIT
 
 - New games: Moon Raker and Waku Waku Jumbo (Rev A)
-- New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)'
-- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao, Modern Cart and Relief Pitcher (System 1, prototype)
+- New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)' and Relief Pitcher (System 1, prototype)
+- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao and Modern Cart
 - New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Happy Farm (Ver. IN.01.01.A), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Revolution X (revision 2.0 9/8/94), Sparkle (v1.1.3), Super Poker (v305US), Tic Tac Trivia (6221-20, U5-0B, 11/17/85), Trivia ? Whiz (6221-03, U5-0) and Vanguard (SNK, set 2)
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
 - Removed games: Trivia ? Whiz (6221-00)
@@ -98,11 +98,11 @@
 - New drivers: subsino_kr_h8.cpp
 - 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
 - 3do.cpp
-  . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Preps for VDLP display list parsing, added Amy stub (misc\3do.cpp).
+  . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Hookup Portfolio SWI calls to DASM (misc\3do.cpp).
   . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
   . Fixed lambda capture (misc\3do_m.cpp).
   . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp). 
-  . Moved diag port as devcb, disable by default. Added player bus DMA (misc\3do_madam.cpp).
+  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation (misc\3do_madam.cpp).
   . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
@@ -120,6 +120,7 @@
   . Added JPIT1 and JPIT2 irq sources, fixes sound in (MESS) jaguar cybermor and mutntpng. Sort out JPIT irq section. JPIT setups needs either prescaler or divider set to work, fixes (MESS) jaguar pbfant sound. Allow changing serial frequency after setting SMODE. Allow playback of BIOS roaring sample. Clear DSP irq lines on JPIT and serial disabled (atari\jaguar_a.cpp).
   . Multiply pitch in source and destination widths. Fixed 3D renders for chekflag and others. Improved non-TOPBEN handling. Fixed (MESS) hstrike difficulty select blending and partially fixed (MESS) battlesp main menu. Preliminary GOURZ support. Fixed clipping A1. Shows proper spinning cube in BIOS (atari\jagblit.ipp).
 - m10.cpp: Removed screen timing constexpr from class
+- model1.cpp: Default NVRAM is 1-filled
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - neptunp2.cpp: Made 'La Perla del Caribe' show the first error
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
@@ -148,8 +149,10 @@
 - MAME
   . VIDEO RENDERING SYSTEM
     . Added an off-screen reload helper plugin for people playing lightgun games with other types of controls (plugins\offscreenreload\*).
-    . Make warning msg more generic and brief and put it in a collection(toggle). Added red background (layout\noscreens.lay)
-  . LUA engine: Better handling of options: Use "classic" locale for numeric conversions. Don't use capturing lambdas. Put integer overload of value() before float overload. Got rid of duplicated numeric options conversion code (mame\luaengine.cpp).
+    . Make warning msg more generic and brief and put it in a collection(toggle). Added red background and footnote with more verbose msg. No MAME lingo/slang in warning msg (layout\noscreens.lay)
+  . LUA engine
+    . Better handling of options: Use "classic" locale for numeric conversions. Don't use capturing lambdas. Put integer overload of value() before float overload. Got rid of duplicated numeric options conversion code (mame\luaengine.cpp).
+    . Ensuring that 'entry:default_value()' returns the correct type. 'entry:default_value()' was always returning string. A consequence of this problem is that the following LUA commands would error: manager.options.entries['beam_dot_size']:value(manager.options.entries['beam_dot_size']:default_value()) and manager.options.entries['frameskip']:value(manager.options.entries['frameskip']:default_value()). With this change, 'default_value()' will return objects of the correct type (mame\luaengine.cpp).
   . UI/OSD
     . Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp)
     . Shuffled numeric option conversions: Moved float/integer conversions into the option entries themselves. Fixed another bug where float values would be converted to strings with the global local, but converted from strings using the "classic" locale (util\options.cpp).
