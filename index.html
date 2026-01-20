@@ -56,11 +56,11 @@
 
 - New games: Moon Raker and Waku Waku Jumbo (Rev A)
 - New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)' and Relief Pitcher (System 1, prototype)
-- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao and Modern Cart
+- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao, Modern Cart and Multi Game 9 (ver 9.04 Eng).
 - New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Happy Farm (Ver. IN.01.01.A), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Revolution X (revision 2.0 9/8/94), Sparkle (v1.1.3), Super Poker (v305US), Tic Tac Trivia (6221-20, U5-0B, 11/17/85), Trivia ? Whiz (6221-03, U5-0) and Vanguard (SNK, set 2)
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
 - Removed games: Trivia ? Whiz (6221-00)
-- New drivers: gamebox.cpp, lanmao.cpp and subsino_kr_h8.cpp
+- New drivers: gamebox.cpp, lanmao.cpp, mgt_multigame.cpp and subsino_kr_h8.cpp
 - New devices: amy, clio, cr560b, floppy_twiggy, lc6554, madam and scsi_cdrom_apple_ext
 - New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
 - CPU
@@ -96,13 +96,15 @@
   . SCSI Hard Disk: Allow to add a per-driver default HD model (still overriden by an IDNT metadata) (nscsi\hd.cpp).
   . VGA: Added imperfect feature graphics where it belongs (video\pc_vga_*)
 - New drivers: subsino_kr_h8.cpp
+- 1943.cpp: Document and hook up buffered sprite RAM
 - 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
+- 39in1.cpp: Swap CGA and VGA option text
 - 3do.cpp
   . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Hookup Portfolio SWI calls to DASM (misc\3do.cpp).
   . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
   . Fixed lambda capture (misc\3do_m.cpp).
   . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp). 
-  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation (misc\3do_madam.cpp).
+  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes (misc\3do_madam.cpp).
   . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
@@ -121,11 +123,14 @@
   . Multiply pitch in source and destination widths. Fixed 3D renders for chekflag and others. Improved non-TOPBEN handling. Fixed (MESS) hstrike difficulty select blending and partially fixed (MESS) battlesp main menu. Preliminary GOURZ support. Fixed clipping A1. Shows proper spinning cube in BIOS (atari\jagblit.ipp).
 - m10.cpp: Removed screen timing constexpr from class
 - model1.cpp: Default NVRAM is 1-filled
+- model2.cpp: Delay IRQ mask update by 2 cycles. Avoids possibility of sound_ready_w() bypassing the 2 cycle delay and firing a sound interrupt too early.
 - mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
 - neptunp2.cpp: Made 'La Perla del Caribe' show the first error
 - raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
 - royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai. Filled in Mahjong Raijinhai DIP switches from available manual pages.
+- shougi.cpp: Hook up sharedram direction bit, small cleanup.
 - snk.cpp: Added 2 missing save state variables (snk\snk_v.cpp)
+- taitojc.cpp: Added wheel_motor for Side by Side and Side by Side 2
 - Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
 - Amiga/CDTV: Added new CPU 'Sanyo LC6554' MCU core. Implemented front panel with VFD and control buttons. Play/Pause, Stop, Previous and Forward buttons not yet working because the "Remote Control Input Converter" isn't hooked up yet.
 - Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
@@ -145,7 +150,7 @@
 - Fixed rom names in vicdual.cpp and megasys1.cpp
 - Description changes of Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 1), Donkey King Jr. (Nuova Videotron bootleg), 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Pink Panther (German) (Maygay) (M1A/B) (set 1), Revolution X (prototype, revision 5.0 5/23/94), Revolution X (revision 1.0 6/16/94), Sol Divide: Sword Of Darkness, Sol Divide: Sword Of Darkness (Korea), Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0), Vanguard (SNK, set 1) and Video Pool (Nuova Videotron bootleg of Video Hustler)
 - Renamed (dirtdash) to (dirtdashb), (dkongjrv) to (dkingjrv), (packysts) to (packyts) and (revx) to (revx1)
-- Dipswitch fixes in goldstar.cpp, koikoi.cpp and royalmah.cpp
+- Dipswitch fixes in 39in1.cpp, goldstar.cpp, koikoi.cpp and royalmah.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Added an off-screen reload helper plugin for people playing lightgun games with other types of controls (plugins\offscreenreload\*).
