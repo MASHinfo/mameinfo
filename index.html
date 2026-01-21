@@ -73,13 +73,13 @@
     . 3DO DSPP, hyperstone E1-xx + Hynix GMS30C2xxx: Don't allocate DRC resources if recompiler is disabled (dspp\dspp.cpp and e132xs\e132xs.cpp). Simplify arithmetic right shift calculations (e132xs\e132xsop.hxx).
     . ARM7: Removed ARM7 from the list of DRC CPUs since its incomplete recompiler functionality was removed (scripts\src\cpu.lua)
     . Analog Devices ADSP21062 'SHARC' 
-      . Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP (sharc\sharcdrc.cpp).
-      . Fixed SV flag for LSHIFT/ASHIFT in recompiler (interpreter was correct). Simplified generated code for FEXT with non-immediate bit position/length in recompiler. Fixed off-scale ASHIFT in recompiler. Fixed off-scale FEXT with sign extension in interpreter (sharc\sharcdrc.cpp and sharc\sharcops.hxx).
+      . Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP. Cleaned up formatting of 64-bit values and initialisation of opcode dispatch table (sharc\sharcdrc.cpp).
+      . Fixed SV flag for LSHIFT/ASHIFT in recompiler (interpreter was correct). Simplified generated code for FEXT with non-immediate bit position/length in recompiler. Fixed off-scale ASHIFT in recompiler. Fixed off-scale FEXT with sign extension in interpreter (sharc\sharcdrc.cpp and sharc\sharcops.hxx). 
     . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
   . Texas Instruments TMS32xxx
     . Improved naming of TMS320 series DSPs. Name folders after families rather than the first family member emulated by MAME (yes, TMS320C1x and TMS320C2x are retrospective names). Follow TI's convention of including the "C" in the names. Don't try to jam all the disassembler source file names into 8.3. The TMS32010, TMS320M10 and TMS320C10 are different things, but unfortunately MAME hasn't made a distinction between them so far. As far as I can tell, early DECTalk devices used TMS32010 or TMS320M10 chips, while the Atari and Toaplan games used TMS320C10 chips, but this should be verified.
-    . Got rid of some superfluous parentheses (tms320c3x\320c3x_ops.ipp)
+    . Got rid of some superfluous parentheses (tms320c3x\320c3x_ops.ipp). Marked TMS320C31 as parent ROM of TMS320VC33.
   . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
   . Zilog Z80180/Z8S180/Z80182 and Hitachi HD64180RP: Can't shortcut with m_icount=0 after SLP opcode due to possible background Timer/DMA (z180/z180.cpp)
 - SOUND
@@ -91,6 +91,7 @@
   . Floppy: Minor code cleanup (tools\floptool.cpp)
   . Fujitsu MB87030 SCSI controller: Fixed some timings (drq write would shorten waits) (machine\mb87030.cpp)
   . Imgtool: Retired the get_chain method. This is no longer implemented by any supported filesystem, and no command made any use of the information it provided (floptool's flopblocks command is functionally comparable) (imgtool\imgtool.cpp).
+  . Konami 033906 PCI bridge: Added read side effects check (machine\k033906.cpp), should fixes debugger crashes when accessing 0x3500000 in SHARC data space memory in all hornet.cpp sets. Correct k033906_device init order (ID 08830).
   . Namco C123 (4x + 2x Tilemaps): Zerofill control regs (namco\namco_c123tmap.cpp)
   . Sanyo LC7535: Use device_sound_interface. Removed custom volume callback. Added option to use a logarithmic gain scale. Use explictly sized variables (sound\lc7535.cpp).
   . SCSI Hard Disk: Allow to add a per-driver default HD model (still overriden by an IDNT metadata) (nscsi\hd.cpp).
@@ -104,7 +105,7 @@
   . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
   . Fixed lambda capture (misc\3do_m.cpp).
   . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp). 
-  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes (misc\3do_madam.cpp).
+  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes. Added CEL 16bpp packed source. Implemented bgnd and sign extend xpos & ypos (misc\3do_madam.cpp).
   . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369)
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
@@ -114,6 +115,7 @@
   . Use common xtals for Night Slashers. Confirmed Tattoo Assassins maincpu xtal. Lower soundcpu clock for Dragon Gun, Fighter's History, Locked 'n Loaded and Night Slashers.
 - deco156.cpp: Implement volume control for Heavy Smash
 - goldstar.cpp: Cleaned up various stuff
+- hornet.cpp: Added read side effects check (machine\k033906.cpp), should fixes debugger crashes when accessing 0x3500000 in SHARC data space memory in all hornet.cpp sets. Correct k033906_device init order (ID 08830).
 - jaguar.cpp
   . Rewrote EEPROM access, fixes (MESS) jaguar [cfodder] has no access to the SRAM (ID 09342). Fixed Player 2 buttons. Fixed quickload regression. Fixed random crashes in Fishin' Frenzy startup (access cojag_gun_input_r, leftovers?). Workaround for (MESS) battlesp/battlesg black screen. Fixed wave ROM endianness. Allows BIOS logo to correctly play notes. Make jaguarcd to boot from BIOS ROM, fixes screen size (atari\jaguar.cpp).
   . Don't set a pending irq if line is masked. Use set_input_line for irq 0 as well. Massage unaligned accesses towards Tom & Jerry. Makes (MESS) jaguar protect and protctse playable. R30 gets overwritten on irqs. Fixed shlq calculation. Former fix for (MESS) jaguar kasumi booting. Fixed mmult opcode, fixes BIOS ATARI letters, 3d renders in (MESS) superx3d and hstrike. Added N flag for abs opcode and simplify calculation. Accumulator readback is sign extended. Get rid of imultn hack. Make the branch hack confined to CoJag (cpu\jaguar\jaguar.cpp).
