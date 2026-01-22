@@ -54,8 +54,8 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.285GIT
 
-- New games: Moon Raker and Waku Waku Jumbo (Rev A)
-- New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)' and Relief Pitcher (System 1, prototype)
+- New games: Moon Raker, Relief Pitcher (System 1, prototype) and Waku Waku Jumbo (Rev A)
+- New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)'
 - New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao, Modern Cart and Multi Game 9 (ver 9.04 Eng).
 - New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Happy Farm (Ver. IN.01.01.A), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Revolution X (revision 2.0 9/8/94), Sparkle (v1.1.3), Super Poker (v305US), Tic Tac Trivia (6221-20, U5-0B, 11/17/85), Trivia ? Whiz (6221-03, U5-0) and Vanguard (SNK, set 2)
 - New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
@@ -105,7 +105,7 @@
   . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
   . Fixed lambda capture (misc\3do_m.cpp).
   . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp). 
-  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes. Added CEL 16bpp packed source. Implemented bgnd and sign extend xpos & ypos (misc\3do_madam.cpp).
+  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes. Added CEL 16bpp packed source. Implemented bgnd, sign extend xpos & ypos and 6bpp packed CEL (misc\3do_madam.cpp).
   . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369). Fixed hardware documents.
 - cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
