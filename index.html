@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.285GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 24th January 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 25th January 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,11 +56,18 @@
 
 - CPU
   . Dynamic Re-Compiling
-    . drcbec: Added support for invariant code and removed a bunch of crud that shouldn't be there. Added support for invariant code blocks (cpu\drcbec.cpp)
+    . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there (cpu\drcbec.cpp)
     . drcbex86, drcbex64 and drcbearm64: Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp)
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcuml: Added support for invariant code blocks (cpu\drcuml.cpp)
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
+- 3do.cpp: Hookup status bit for xbus (greatly reduce boot times) (misc\3do_clio.cpp). Added enough commands so it reaches cmd_read when disk is in (machine\cr560b.cpp).
+- mitchell.cpp: Added note about sprite DMA trigger
+- sidearms.cpp
+  . Correct Z80 clock (Guru README and now jwestfall). Removed old changelog and moved Guru README to driver notes.
+  . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
+- MAME
+  . LUA engine: Turn on sol's "safe numerics" (mame\luaengine.h)
 
 
 
