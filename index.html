@@ -64,12 +64,17 @@
     . drcuml: Added support for invariant code blocks (cpu\drcuml.cpp)
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
 - 1943.cpp: Improved interrupt timing.
-- 3do.cpp: Hookup status bit for xbus (greatly reduce boot times) (misc\3do_clio.cpp). Added enough commands so it reaches cmd_read when disk is in (machine\cr560b.cpp).
+- 3do.cpp
+  . Hookup status bit for xbus (greatly reduce boot times) (misc\3do_clio.cpp). Added enough commands so it reaches cmd_read when disk is in (machine\cr560b.cpp).
+  . Hookup basic semantics for CD-ROM DMA transfers (misc\3do.cpp)
+  . Added unpacked & coded 4bpp and 8bpp support and basic PAL support (misc\3do_madam.cpp)
 - mitchell.cpp: Added note about sprite DMA trigger
 - sidearms.cpp
   . Correct Z80 clock (Guru README and now Jim Westfall). Removed old changelog and moved Guru README to driver notes. Improved interrupt timing.
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
 - stv.cpp: Formatting (sega\saturn_v.cpp)
+- MAME
+  . Consolidate drivers into single files (lethalj.cpp)
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
