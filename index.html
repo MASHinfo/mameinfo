@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.285GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 25th January 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 26th January 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -54,21 +54,25 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
+- New clones: Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)
 - CPU
   . Dynamic Re-Compiling
+    . drccache: Initialised all data members (cpu\drccache.cpp)
     . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there (cpu\drcbec.cpp)
     . drcbex86, drcbex64 and drcbearm64: Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp)
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcuml: Added support for invariant code blocks (cpu\drcuml.cpp)
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
+- 1943.cpp: Improved interrupt timing.
 - 3do.cpp: Hookup status bit for xbus (greatly reduce boot times) (misc\3do_clio.cpp). Added enough commands so it reaches cmd_read when disk is in (machine\cr560b.cpp).
 - mitchell.cpp: Added note about sprite DMA trigger
 - sidearms.cpp
-  . Correct Z80 clock (Guru README and now jwestfall). Removed old changelog and moved Guru README to driver notes.
+  . Correct Z80 clock (Guru README and now Jim Westfall). Removed old changelog and moved Guru README to driver notes. Improved interrupt timing.
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
-- MAME
-  . LUA engine: Turn on sol's "safe numerics" (mame\luaengine.h)
-
+- stv.cpp: Formatting (sega\saturn_v.cpp)
+- Compiling
+  . Small comments cleanup to copy-pasted sprite drawing routines
+  . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
 
 
 
@@ -118,7 +122,7 @@
   . SCSI Hard Disk: Allow to add a per-driver default HD model (still overriden by an IDNT metadata) (nscsi\hd.cpp).
   . VGA: Added imperfect feature graphics where it belongs (video\pc_vga_*)
 - New drivers: subsino_kr_h8.cpp
-- 1943.cpp: Document and hook up buffered sprite RAM
+- 1943.cpp: Document and hook up buffered sprite RAM.
 - 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
 - 39in1.cpp: Swap CGA and VGA option text
 - 3do.cpp
@@ -188,6 +192,7 @@
   . LUA engine
     . Better handling of options: Use "classic" locale for numeric conversions. Don't use capturing lambdas. Put integer overload of value() before float overload. Got rid of duplicated numeric options conversion code (mame\luaengine.cpp).
     . Ensuring that 'entry:default_value()' returns the correct type. 'entry:default_value()' was always returning string. A consequence of this problem is that the following LUA commands would error: manager.options.entries['beam_dot_size']:value(manager.options.entries['beam_dot_size']:default_value()) and manager.options.entries['frameskip']:value(manager.options.entries['frameskip']:default_value()). With this change, 'default_value()' will return objects of the correct type (mame\luaengine.cpp).
+    . Turn on sol's "safe numerics" (mame\luaengine.h)
   . UI/OSD
     . Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp)
     . Shuffled numeric option conversions: Moved float/integer conversions into the option entries themselves. Fixed another bug where float values would be converted to strings with the global local, but converted from strings using the "classic" locale (util\options.cpp).
