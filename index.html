@@ -75,23 +75,28 @@
   . Added enough commands so it reaches cmd_read when disk is in. Better logging around ToC. Added command byte acks to some commands (machine\cr560b.cpp).
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
 - mitchell.cpp: Added note about sprite DMA trigger
-- segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array.
+- segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
+- segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
 - sidearms.cpp
   . Correct Z80 clock (Guru README and now Jim Westfall). Removed old changelog and moved Guru README to driver notes. Improved interrupt timing.
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
-- stv.cpp: Formatting (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries (sega\stvcd.cpp).
+- stv.cpp: Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline (sega\saturn_cd_hle.cpp).
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
+- Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12) and MX5000 (version R)
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
 - MAME
   . INPUT: Don't gate creating input device behind -mouse option, it breaks -mouse_device, -trackball_device, etc (input\input_win32.cpp).
-  . Consolidate drivers into single files (lethalj.cpp, segas24.cpp and taito_l.cpp)
+  . UI/OSD
+    . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
+    . Made hide_romless text clearer (ui\submenu.cpp).
+  . Consolidate drivers into single file (lethalj.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp and taito_l.cpp)
 - Compiling
-  . Small comments cleanup to copy-pasted sprite drawing routines
+  . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
 - Debugger: Check that you have a memory interface before trying to use it (debugger\win, debugger\osx and debugger\qt) (ID 09377)
 
@@ -231,13 +236,12 @@
   . Use "classic" locale for debug console (emu\debug\*) and ROM loading (emu\romentry.cpp).
 - MAC OS X: Apply a default channel mapping for devices where macOS gives no layout information, like MacBook internal speakers. Fixes things being in mono when they shouldn't (sound\coreaudio_sound.cpp).
 - Compiling
-  . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
   . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
   . Cleaned up devices build scripts a bit: Lua considers anything other than null or false to be "truthy". The tests against "null" were comparing to a non-existent global called "null" that evaluated to nil. Got bus.lua back in alphabetical order and got at least most of the trigger variables aligned with paths. At least don't put random stuff in the middle of the Acorn devices in machine.lua.
   . Cleaned up some stuff (scripts\src\bus.lua and scripts\src\cpu.lua)
   . Added note about MinGW Clang/LLVM issues with CodeView/PDB symbols at high detail levels (docs\source\initialsetup\compilingmame.rst)
-
-
+- Debugger
+  . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
 
 
 0.284
