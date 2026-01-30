@@ -56,6 +56,7 @@
 
 - New Non-Working games: Sea Wolf - Next Mission
 - New clones: MX5000 (version U), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
+- New drivers: seawolfnm.cpp
 - CPU
   . Dynamic Re-Compiling
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -82,7 +83,7 @@
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
-- Mega Double Poker: Marked Mega Double Poker not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit, and got rid of a bankdev.
+- Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12) and MX5000 (version R)
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
@@ -92,6 +93,8 @@
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
+- Debugger: Check that you have a memory interface before trying to use it (debugger\win, debugger\osx and debugger\qt) (ID 09377)
+
 
 
 
