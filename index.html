@@ -54,8 +54,8 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
-- New Non-Working games: Sea Wolf - Next Mission
-- New clones: MX5000 (version U), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
+- New Non-Working games: Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission and Silver Rush (ver. 23.08.25)
+- New clones: MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: seawolfnm.cpp
 - CPU
   . Dynamic Re-Compiling
@@ -65,6 +65,7 @@
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcuml: Added support for invariant code blocks (cpu\drcuml.cpp)
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
+  . Motorola MC68LC040: Fixed the 68LC040 so it actually has 68040 opcodes (m68000\m68kcpu.h)
 - DEVICE
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
 - 1943.cpp: Improved interrupt timing
@@ -74,6 +75,8 @@
   . Added unpacked & coded 4bpp and 8bpp support and basic PAL support. Added enum for DMA channels. Implemented get_pixel_6bpp_coded_lrform0 (misc\3do_madam.cpp)
   . Added enough commands so it reaches cmd_read when disk is in. Better logging around ToC. Added command byte acks to some commands (machine\cr560b.cpp).
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
+- docastle.cpp: Normalize blue color channel
+- goldstar.cpp: Fixed nullptr crash in Bingo (set 1) (mark *all* tilemaps dirty).
 - mitchell.cpp: Added note about sprite DMA trigger
 - segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
 - segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
