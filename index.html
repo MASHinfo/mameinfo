@@ -55,9 +55,9 @@
 0.286GIT
 
 - New Non-Working games: Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission and Silver Rush (ver. 23.08.25)
-- New clones: MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
+- New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: z8691 and z86c91
+- New devices: f82c836a, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states (sharc\sharc.cpp).
   . Dynamic Re-Compiling
@@ -68,12 +68,13 @@
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcuml: Added support for invariant code blocks. Include device tags in UML/native generated code log file names (kind of important when a system has two of the same kind of CPU) (cpu\drcuml.cpp).
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
+  . MIPS-III: Added missing header that was being #included indirectly (mips\mips3com.cpp)
   . Motorola MC68LC040: Fixed the 68LC040 so it actually has 68040 opcodes (m68000\m68kcpu.h)
   . Texas Instruments TMS34010: Fixed 32-bit pixel writes (tms34010\tms34010.cpp)
   . Zilog Z80: Renamed BUSRQ to BUSREQ and MEMRQ to MREQ
   . Zilog Z86xx: Added Z8691 and Z86C91 ROMless types (z8\z8.cpp)
 - SOUND
-  . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around (sound\msm5205.cpp)
+  . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around. Small cleanup. Make playmode_w param an u8 instead of int (sound\msm5205.cpp)
 - DEVICE
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
 - 1943.cpp: Improved interrupt timing
@@ -89,13 +90,13 @@
 - goldstar.cpp: Fixed nullptr crash in Bingo (set 1) and clone (set 2) (mark *all* tilemaps dirty) (ID 09378).
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
 - mitchell.cpp: Added note about sprite DMA trigger
-- model2.cpp: Got rid of now-obsolete SHARC 16-bit IOP workaround
+- model2.cpp: Got rid of now-obsolete SHARC 16-bit IOP workaround. Use render_polygon() rather than splitting polygons into triangles. Fixes/Reduces texture warping in hotd, overrev and waverunr (sega\model2_v.cpp). Also moved polylist dump code to sega\model2_m.cpp.
 - segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
 - segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
 - sidearms.cpp
   . Correct Z80 clock (Guru README and now Jim Westfall). Removed old changelog and moved Guru README to driver notes. Improved interrupt timing.
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
-- stv.cpp: Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp).
+- stv.cpp: Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp). Replaced macros in header with inline member functions. Reduced duplicate declarations (sega/stv.h and sega\saturn.h).
 - taito_f2.cpp: Fixed manufacturer title in cameltry and clone cameltrya (ID 09132)
 - taitosj.cpp: Hook up Z80 busreq/busack
 - Bionic Commando: Added presumed sprite DMA trigger
@@ -116,6 +117,7 @@
   . Hudson HuC6271 'Rainbow': Fixed initializer (video\huc6271.cpp).
   . Hudson HuC6272 'King': Fixed initializer and microprogram writes (16 halfwords). Reduced literal tags and improved logging. Gixed reading KRAM autoincrement value (video\huc6272.cpp).
 - PC hardware: Added quick ref for POST codes (pc\README.md)
+- Reality Tennis: Replaced macros with constexpr
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
@@ -146,6 +148,7 @@
 - New drivers: gamebox.cpp, lanmao.cpp, mgt_multigame.cpp and subsino_kr_h8.cpp
 - New devices: amy, clio, cr560b, floppy_twiggy, lc6554, m146805e2, madam, scsi_cdrom_apple_ext and xetec_c5181
 - New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
+- Bob Zed (What's new): https://youtu.be/46V7ug1pxIY
 - CPU
   . Analog Devices ADSP-2100: Correct some tabulaton that had rotted (adsp2100\adsp2100.cpp)
   . Dynamic Re-Compiling
