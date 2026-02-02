@@ -61,16 +61,19 @@
 - CPU
   . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states (sharc\sharc.cpp).
   . Dynamic Re-Compiling
+    . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
     . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there (cpu\drcbec.cpp)
     . drcbex86, drcbex64 and drcbearm64: Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp)
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
-    . drcuml: Added support for invariant code blocks (cpu\drcuml.cpp)
+    . drcuml: Added support for invariant code blocks. Include device tags in UML/native generated code log file names (kind of important when a system has two of the same kind of CPU) (cpu\drcuml.cpp).
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
   . Motorola MC68LC040: Fixed the 68LC040 so it actually has 68040 opcodes (m68000\m68kcpu.h)
   . Texas Instruments TMS34010: Fixed 32-bit pixel writes (tms34010\tms34010.cpp)
   . Zilog Z80: Renamed BUSRQ to BUSREQ and MEMRQ to MREQ
   . Zilog Z86xx: Added Z8691 and Z86C91 ROMless types (z8\z8.cpp)
+- SOUND
+  . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around (sound\msm5205.cpp)
 - DEVICE
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
 - 1943.cpp: Improved interrupt timing
@@ -113,6 +116,7 @@
   . Hudson HuC6271 'Rainbow': Fixed initializer (video\huc6271.cpp).
   . Hudson HuC6272 'King': Fixed initializer and microprogram writes (16 halfwords). Reduced literal tags and improved logging. Gixed reading KRAM autoincrement value (video\huc6272.cpp).
 - PC hardware: Added quick ref for POST codes (pc\README.md)
+- Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
@@ -121,7 +125,7 @@
   . UI/OSD
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
-  . Consolidate drivers into single file (lethalj.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp and taito_l.cpp)
+  . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp and taito_l.cpp)
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
