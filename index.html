@@ -38,9 +38,9 @@
 
 <a href="https://mashinfo.github.io/mameinfo/download/PCB-infos0153.zip"><font size="+1" face="Arial" color="#eeeeee"><b>PCB-infos 0.153 (2.11 MB)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Compile MAME with Clang 21 or GCC 15 on Windows 10 (25th Jan).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME64 or MAME(XP 32bit) with Clang 21 or GCC 15 on Windows 10 (Start a script and compile immediately) (25th Jan)</b></font></a><br><br>
+<a href="https://mashinfo.github.io/mameinfo/download/Compile MAME with Clang 21 or GCC 15 on Windows 10 (25th Jan).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME64 or MAME(XP 32bit) with Clang 21 or GCC 15 on Windows 10 (Start a script and compile immediately) (25th Jan)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Compile MAME with GCC 10.3 on Windows XP (25th Jan).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME with GCC 10.3 on Windows XP (Start a script and compile immediately) (25th Jan)</b></font></a><br><br>
+<a href="https://mashinfo.github.io/mameinfo/download/Compile MAME with GCC 10.3 on Windows XP (25th Jan).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME with GCC 10.3 on Windows XP (Start a script and compile immediately) (25th Jan)</b></font></a><br><br>
 
 <a href="https://mashinfo.github.io/mameinfo/download/Fix Root Certificates on XP.txt"><font size="+1" face="Arial" color="#eeeeee"><b>How to fix Root Certificates on XP</b></font></a><br><br>
 
@@ -57,7 +57,7 @@
 - New Non-Working games: Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission and Silver Rush (ver. 23.08.25)
 - New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: f82c836a, z8691 and z86c91
+- New devices: f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states (sharc\sharc.cpp).
   . Dynamic Re-Compiling
@@ -88,6 +88,7 @@
 - docastle.cpp: Normalize blue color channel
 - exedexes.cpp and gunsmoke.cpp: Added manual sprite DMA trigger
 - goldstar.cpp: Fixed nullptr crash in Bingo (set 1) and clone (set 2) (mark *all* tilemaps dirty) (ID 09378).
+- gomoku.cpp and wiping.cpp: Removed unused variables
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
 - mitchell.cpp: Added note about sprite DMA trigger
 - model2.cpp: Got rid of now-obsolete SHARC 16-bit IOP workaround. Use render_polygon() rather than splitting polygons into triangles. Fixes/Reduces texture warping in hotd, overrev and waverunr (sega\model2_v.cpp). Also moved polylist dump code to sega\model2_m.cpp.
@@ -119,6 +120,7 @@
 - PC hardware: Added quick ref for POST codes (pc\README.md)
 - Reality Tennis: Replaced macros with constexpr
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
+- Tube Panic: Refresh rate is ~59hz according to PCB video, so assume same screen raw params as Roller Jammer.
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
@@ -264,7 +266,7 @@
     . Fixed Cancel not working in input selection menus (plugins\commonui\init.lua)
     . Added support for non-wrapping analog inputs (plugins\inputmacro\*). Changed the "previous menu" item text to make what it does more obvious (ui\pluginopt.cpp).
     . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp).
-  . Better support for external MMUs (emu\dimemory.cpp, emu\machine.cpp, debug\debugbuf.cpp, debug\debugcmd.cpp, debug\debugcon.cpp, debug\debugcpu.cpp, debug\dvdisasm.cpp, debug\dvmemory.cpp, debugger\osx\disassemblyview.mm, debugger\osx\disassemblyviewer.mm, debugger\osx\memoryview.mm, debugger\osx\memoryviewer.mm, debugger\qt\memorywindow.cpp, debugger\win\memoryviewinfo.cpp amd m68000\m68000.cpp).
+  . Better support for external MMUs (emu\dimemory.cpp, emu\machine.cpp, debug\debugbuf.cpp, debug\debugcmd.cpp, debug\debugcon.cpp, debug\debugcpu.cpp, debug\dvdisasm.cpp, debug\dvmemory.cpp, debugger\osx\disassemblyview.mm, debugger\osx\disassemblyviewer.mm, debugger\osx\memoryview.mm, debugger\osx\memoryviewer.mm, debugger\qt\memorywindow.cpp, debugger\win\memoryviewinfo.cpp and m68000\m68000.cpp).
   . Merged wayward speakers (midw8080\mw8080bw_a.cpp, sega\model1.cpp, nscsi\cd.cpp)
   . Set global C++ locale when the standard library isn't broken. GNU libstdc++ only provides a useless stub locale implementation when using anything other than the glibc standard C library. However, llvm libc++ provides a locale implementation that works fine with UCRT. Suppress digit grouping. Too many things don't take it into consideration (osd\windows\winmain.cpp).
   . Use "classic" locale for debug console (emu\debug\*) and ROM loading (emu\romentry.cpp).
