@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.285</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated -  3rd February 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated -  4th February 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -54,12 +54,12 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
-- New Non-Working games: Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission and Silver Rush (ver. 23.08.25)
+- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission and Silver Rush (ver. 23.08.25)
 - New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
-- New drivers: mdartstr.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
+- New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
+- New devices: dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
 - CPU
-  . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states (sharc\sharc.cpp).
+  . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro). Fixed/optimised RECIPS flag calculation for interpreter. Fixed FIX for negative numbers when MODE1 TRUNC bit it set for interpreter and recompiler (should round towards negative infinity). Don't regenerate static helpers on cache flush (sharc\sharc.cpp).
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -83,6 +83,7 @@
   . Hookup status bit for xbus (greatly reduce boot times). Added enum for irqs and use template for request_fiq (misc\3do_clio.cpp).
   . Added unpacked & coded 4bpp and 8bpp support and basic PAL support. Added enum for DMA channels. Implemented get_pixel_6bpp_coded_lrform0 (misc\3do_madam.cpp)
   . Added enough commands so it reaches cmd_read when disk is in. Better logging around ToC. Added command byte acks to some commands (machine\cr560b.cpp).
+  . Preliminary split between regular (Clio) DSPP and M2 Bulldog (dspp\dspp.cpp)
 - armedf.cpp: Make spriteram size same for all games
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
 - docastle.cpp: Normalize blue color channel
@@ -100,10 +101,14 @@
 - stv.cpp: Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp). Replaced macros in header with inline member functions. Reduced duplicate declarations (sega/stv.h and sega\saturn.h).
 - taito_f2.cpp: Fixed manufacturer title in cameltry and clone cameltrya (ID 09132)
 - taitosj.cpp: Hook up Z80 busreq/busack
+- tubep.cpp
+  . Tube Panic: Refresh rate is ~59hz according to PCB video, so assume same screen raw params as Roller Jammer.
+  . Roller Jammer: Z80 m1+iorq is the int ack cycle. Removed erroneous scanline sound interrupt.
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
 - Filetto: Extend voice note
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
+- Invasion - The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
 - Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
@@ -120,12 +125,13 @@
 - PC hardware: Added quick ref for POST codes (pc\README.md)
 - Reality Tennis: Replaced macros with constexpr
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
-- Tube Panic: Refresh rate is ~59hz according to PCB video, so assume same screen raw params as Roller Jammer.
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
 - MAME
-  . INPUT: Don't gate creating input device behind -mouse option, it breaks -mouse_device, -trackball_device, etc (input\input_win32.cpp).
+  . INPUT
+    . Don't gate creating input device behind -mouse option, it breaks -mouse_device, -trackball_device, etc (input\input_win32.cpp).
+    . Removed barely used IPT_TILT1/2/3/4, combine IPT_GAMBLE_DOOR with IPT_INTERLOCK and rename to generic IPT_DOOR (emu\inpttype.ipp).
   . UI/OSD
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
