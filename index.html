@@ -54,7 +54,7 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
-- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission and Silver Rush (ver. 23.08.25)
+- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Siren Kids and Silver Rush (ver. 23.08.25)
 - New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
 - New devices: dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
@@ -96,16 +96,19 @@
 - model2.cpp: Got rid of now-obsolete SHARC 16-bit IOP workaround. Use render_polygon() rather than splitting polygons into triangles. Fixes/Reduces texture warping in hotd, overrev and waverunr (sega\model2_v.cpp). Also moved polylist dump code to sega\model2_m.cpp.
 - segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
 - segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
+- segaybd.cpp: Cleaned up.
 - sidearms.cpp
   . Correct Z80 clock (Guru README and now Jim Westfall). Removed old changelog and moved Guru README to driver notes. Improved interrupt timing.
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
-- stv.cpp: Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp). Replaced macros in header with inline member functions. Reduced duplicate declarations (sega/stv.h and sega\saturn.h).
+- stv.cpp
+  . Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp). Replaced macros in header with inline member functions. Reduced duplicate declarations (sega/stv.h and sega\saturn.h).
+  . Converted macro flags to enum. Reduced function namings. Handle host RA updates properly. RA is actually its own thing. Fixed LEF behaviour and PC readbacks from host side (scudsp\scudsp.cpp) 
 - taito_f2.cpp: Fixed manufacturer title in cameltry and clone cameltrya (ID 09132)
 - taitosj.cpp: Hook up Z80 busreq/busack
 - tubep.cpp
   . Tube Panic: Refresh rate is ~59hz according to PCB video, so assume same screen raw params as Roller Jammer.
   . Roller Jammer: Z80 m1+iorq is the int ack cycle. Removed erroneous scanline sound interrupt.
-- vicdual.cpp: Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco.
+- vicdual.cpp: Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco (ID 09382).
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
 - Filetto: Extend voice note
@@ -113,6 +116,7 @@
 - Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
 - Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
+- NBA Hangtime: Dumped security PICs
 - PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
   . Make some variables constant. Reduced preprocessor macros. Use abbreviated type names and BIT helpers (Common PC-Engine hardware. See reference at: http://daifukkat.su/pcfx/).
   . Added input clock for video hardware (battlera.cpp and ggconnie.cpp)
@@ -125,6 +129,7 @@
   . Hudson HuC6271 'Rainbow': Fixed initializer (video\huc6271.cpp).
   . Hudson HuC6272 'King': Fixed initializer and microprogram writes (16 halfwords). Reduced literal tags and improved logging. Gixed reading KRAM autoincrement value (video\huc6272.cpp).
 - PC hardware: Added quick ref for POST codes (pc\README.md)
+- PinMAME: Dumped security PICs for Corvette and Phantom Haus
 - Reality Tennis: Replaced macros with constexpr
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
@@ -136,7 +141,7 @@
   . ROMLOAD: Replaced various macros with constexprs and inline functions. Mark ROM_OPTIONAL as deprecated (emu\romentry.h and emu\romload.h). Constexpr at namespace scope implies static for variables and inline for functions (emu\romentry.h).
   . INPUT
     . Don't gate creating input device behind -mouse option, it breaks -mouse_device, -trackball_device, etc (input\input_win32.cpp).
-    . Removed barely used IPT_TILT1/2/3/4, combine IPT_GAMBLE_DOOR with IPT_INTERLOCK and rename to generic IPT_DOOR (emu\inpttype.ipp).
+    . Removed barely used IPT_TILT1/2/3/4, combine IPT_GAMBLE_DOOR with IPT_INTERLOCK and rename to generic IPT_DOOR (emu\inpttype.ipp). Added some content for Input Macro and Off-screen Reload plugins (docs\source\plugins\inputmacro.rst and offscreenreload.rst).
   . UI/OSD
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
