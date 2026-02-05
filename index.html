@@ -55,12 +55,15 @@
 0.286GIT
 
 - New Working games: Striker
-- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Siren Kids, Silver Rush (ver. 23.08.25) and Spanish Darts
+- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
 - New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
+- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
 - CPU
-  . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro). Fixed/optimised RECIPS flag calculation for interpreter. Fixed FIX for negative numbers when MODE1 TRUNC bit it set for interpreter and recompiler (should round towards negative infinity). Don't regenerate static helpers on cache flush. Better align FIX between interpreter and recompiler, pack/unpack recompiler ASTAT for saved states (sharc\sharc.cpp).
+  . Analog Devices ADSP21062 'Sharc'
+    . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
+    . Fixed/optimised RECIPS flag calculation for interpreter. Fixed FIX for negative numbers when MODE1 TRUNC bit it set for interpreter and recompiler (should round towards negative infinity). Don't regenerate static helpers on cache flush (sharc\sharc.cpp).
+    . Better align FIX between interpreter and recompiler, pack/unpack recompiler ASTAT for saved states. Cleaned up memory access a bit, use memory_access::specific and added ADSP21060 (larger internal SRAM) (sharc\sharc.cpp).
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -138,7 +141,7 @@
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
-- Dipswitch fixes in 4enraya.cpp
+- Dipswitch fixes in 4enraya.cpp and midwunit.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
