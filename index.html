@@ -54,12 +54,13 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
-- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Siren Kids and Silver Rush (ver. 23.08.25)
+- New Working games: Striker
+- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Siren Kids, Silver Rush (ver. 23.08.25) and Spanish Darts
 - New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
 - New devices: dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
 - CPU
-  . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro). Fixed/optimised RECIPS flag calculation for interpreter. Fixed FIX for negative numbers when MODE1 TRUNC bit it set for interpreter and recompiler (should round towards negative infinity). Don't regenerate static helpers on cache flush (sharc\sharc.cpp).
+  . Analog Devices ADSP21062 'Sharc': Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro). Fixed/optimised RECIPS flag calculation for interpreter. Fixed FIX for negative numbers when MODE1 TRUNC bit it set for interpreter and recompiler (should round towards negative infinity). Don't regenerate static helpers on cache flush. Better align FIX between interpreter and recompiler, pack/unpack recompiler ASTAT for saved states (sharc\sharc.cpp).
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -71,12 +72,13 @@
   . MIPS-III: Added missing header that was being #included indirectly (mips\mips3com.cpp)
   . Motorola MC68LC040: Fixed the 68LC040 so it actually has 68040 opcodes (m68000\m68kcpu.h)
   . Texas Instruments TMS34010: Fixed 32-bit pixel writes (tms34010\tms34010.cpp)
-  . Zilog Z80: Renamed BUSRQ to BUSREQ and MEMRQ to MREQ
+  . Zilog Z80: Renamed BUSRQ to BUSREQ and MEMRQ to MREQ (z80\z80.cpp). Refactored INT/IRQ (z80\z80n.cpp) and implemented configurable DMA halt (delay) for (MESS) specnext.cpp.
   . Zilog Z86xx: Added Z8691 and Z86C91 ROMless types (z8\z8.cpp)
 - SOUND
   . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around. Small cleanup. Make playmode_w param an u8 instead of int (sound\msm5205.cpp)
   . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp)
 - DEVICE
+  . Floppy: Added save state support (machine\upd765.cpp)
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
 - 1943.cpp: Improved interrupt timing
 - 3do.cpp
@@ -102,7 +104,7 @@
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
 - stv.cpp
   . Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp). Replaced macros in header with inline member functions. Reduced duplicate declarations (sega/stv.h and sega\saturn.h).
-  . Converted macro flags to enum. Reduced function namings. Handle host RA updates properly. RA is actually its own thing. Fixed LEF behaviour and PC readbacks from host side (scudsp\scudsp.cpp) 
+  . Converted macro flags to enum. Reduced function namings. Handle host RA updates properly. RA is actually its own thing. Fixed LEF behaviour and PC readbacks from host side. All ALU ops but AD2 doesn't update the upper 16-bit part (scudsp\scudsp.cpp).
 - taito_f2.cpp: Fixed manufacturer title in cameltry and clone cameltrya (ID 09132)
 - taitosj.cpp: Hook up Z80 busreq/busack
 - tubep.cpp
@@ -131,10 +133,12 @@
 - PC hardware: Added quick ref for POST codes (pc\README.md)
 - PinMAME: Dumped security PICs for Corvette and Phantom Haus
 - Reality Tennis: Replaced macros with constexpr
+- Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
 - Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
+- Dipswitch fixes in 4enraya.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
@@ -177,9 +181,9 @@
     . PowerPC DRC: Allow DRC cache size to be set externally at configuration time, so systems can override the default (cpu\powerpc/ppc.h and powerpc\ppccom.cpp).
     . 3DO DSPP, hyperstone E1-xx + Hynix GMS30C2xxx: Don't allocate DRC resources if recompiler is disabled (dspp\dspp.cpp and e132xs\e132xs.cpp). Simplify arithmetic right shift calculations (e132xs\e132xsop.hxx).
     . ARM7: Removed ARM7 from the list of DRC CPUs since its incomplete recompiler functionality was removed (scripts\src\cpu.lua)
-    . Analog Devices ADSP21062 'SHARC' 
+    . Analog Devices ADSP21062 'SHARC'
       . Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP. Cleaned up formatting of 64-bit values and initialisation of opcode dispatch table (sharc\sharcdrc.cpp).
-      . Fixed SV flag for LSHIFT/ASHIFT in recompiler (interpreter was correct). Simplified generated code for FEXT with non-immediate bit position/length in recompiler. Fixed off-scale ASHIFT in recompiler. Fixed off-scale FEXT with sign extension in interpreter (sharc\sharcdrc.cpp and sharc\sharcops.hxx). 
+      . Fixed SV flag for LSHIFT/ASHIFT in recompiler (interpreter was correct). Simplified generated code for FEXT with non-immediate bit position/length in recompiler. Fixed off-scale ASHIFT in recompiler. Fixed off-scale FEXT with sign extension in interpreter (sharc\sharcdrc.cpp and sharc\sharcops.hxx).
     . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
   . Intel 8051: Some variables were missing savestates after OG's refactor (MAME 0.283). Small cleanup to spacing. Clean up some single line comments (mcs51\i8051.cpp).
   . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
@@ -204,13 +208,13 @@
   . VGA: Added imperfect feature graphics where it belongs (video\pc_vga_*)
 - New drivers: subsino_kr_h8.cpp
 - 1943.cpp: Document and hook up buffered sprite RAM.
-- 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes 
+- 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes.
 - 39in1.cpp: Swap CGA and VGA option text
 - 3do.cpp
   . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Hookup Portfolio SWI calls to DASM. Replaced memory_bank with a memory_view for overlay handling. Added adbio output support and hookup kanji ROM for Japanese systems (misc\3do.cpp).
   . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
   . Fixed lambda capture (misc\3do_m.cpp).
-  . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp). 
+  . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp).
   . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes. Added CEL 16bpp packed source. Implemented bgnd, sign extend xpos & ypos, 6bpp packed CEL and coded 4bpp and 16bpp packed CEL. Hookup stopgap player 1 inputs (misc\3do_madam.cpp).
   . Moved drawing into Amy (misc\3do_amy.cpp)
 - cps2.cpp: Don't set sprite priorities before screen_update (ID 09369). Fixed hardware documents.
