@@ -54,11 +54,11 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
-- New Working games: Striker
+- New Working games: Cherry Bonus III (ver.2.20). Cherry Bonus III (ver.3.0) and Striker
 - New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
-- New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
+- New clones: Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, isa16_medalist_rom_disk, z8691 and z86c91
+- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, isa16_medalist_rom_disk, um8498f, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -69,7 +69,9 @@
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
     . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there (cpu\drcbec.cpp)
-    . drcbex86, drcbex64 and drcbearm64: Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp)
+    . drcbex86, drcbex64 and drcbearm64
+      . Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
+      . Call (rather than jumping to) the entry point handle. The UML HANDLE instruction points to a minimal function prologue, which expects the conditions immediately following a call. However, the back-ends were jumping to it directly after setting up the top-level stack frame. On x86-64 and i686, this resulted in the stack being misaligned until a HASHJMP or EXIT instruction was executed. Anything that could result in a C function being called (CALLC, DEBUG, BREAK, READ, READM, WRITE, WRITEM, FREAD, FWRITE) could crash due to stack misalignment, and RET would crash due to the return address not being in the expected location. On AArch64, the stack would not be misaligned, and calls to C functions would work correctly, but RET would result in exiting from generated code without restoring callee-preserved registers. The C back-end just hits an assertion failure if the entry point code executes a RET (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcuml: Added support for invariant code blocks. Include device tags in UML/native generated code log file names (kind of important when a system has two of the same kind of CPU) (cpu\drcuml.cpp).
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
@@ -83,6 +85,7 @@
   . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp)
 - DEVICE
   . Floppy: Added save state support (machine\upd765.cpp)
+  . RAM: Shorter savestate name for things that do save_pointer(NAME(reinterpret_cast...) (machine\ram.cpp)
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
 - 1943.cpp: Improved interrupt timing
 - 3do.cpp
@@ -93,13 +96,18 @@
   . Preliminary split between regular (Clio) DSPP and M2 Bulldog (dspp\dspp.cpp)
 - armedf.cpp: Make spriteram size same for all games
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
+- cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range (capcom\cps1.cpp).
+- cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp)
 - docastle.cpp: Normalize blue color channel
 - exedexes.cpp and gunsmoke.cpp: Added manual sprite DMA trigger
-- goldstar.cpp: Fixed nullptr crash in Bingo (set 1) and clone (set 2) (mark *all* tilemaps dirty) (ID 09378).
+- goldstar.cpp
+  . Fixed nullptr crash in Bingo (set 1) and clone (set 2) (mark *all* tilemaps dirty) (ID 09378).
+  . Fixed memory map. Added technical notes to clone Cherry Bonus III (ver.2.20). Promoted clones Cherry Bonus III (ver.2.20) and Cherry Bonus III (ver.3.0) to working.
 - gomoku.cpp and wiping.cpp: Removed unused variables
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
 - mitchell.cpp: Added note about sprite DMA trigger
 - model2.cpp: Got rid of now-obsolete SHARC 16-bit IOP workaround. Use render_polygon() rather than splitting polygons into triangles. Fixes/Reduces texture warping in hotd, overrev and waverunr (sega\model2_v.cpp). Also moved polylist dump code to sega\model2_m.cpp.
+- niyanpai.cpp: Cleaned up code a bit. Filled in DIP switch settings for 'Mahjong Housoukyoku Honbanchuu' from manual. Correct transliteration of Nyanpai.
 - segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
 - segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
 - segaybd.cpp: Cleaned up.
@@ -117,6 +125,7 @@
 - vicdual.cpp: Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco (ID 09382).
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
+- F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
 - Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
@@ -124,6 +133,7 @@
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Moon Raker: Added the starfield rom
 - NBA Hangtime: Dumped security PICs
+- Pango Fun: Create new UM8498F chipset (machine\um8498f.cpp) and get rid of pcat_base_state
 - PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
   . Make some variables constant. Reduced preprocessor macros. Use abbreviated type names and BIT helpers (Common PC-Engine hardware. See reference at: http://daifukkat.su/pcfx/).
   . Added input clock for video hardware (battlera.cpp and ggconnie.cpp)
@@ -137,13 +147,15 @@
   . Hudson HuC6272 'King': Fixed initializer and microprogram writes (16 halfwords). Reduced literal tags and improved logging. Gixed reading KRAM autoincrement value (video\huc6272.cpp).
 - PC hardware: Added quick ref for POST codes (pc\README.md)
 - PinMAME: Dumped security PICs for Corvette and Phantom Haus
+- Play 4 Texas Hold'em: Additional notes. Changed name to be same as manual. Updated year to 2011 based on last patch.
 - Reality Tennis: Replaced macros with constexpr
 - Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
-- Description changes of BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
+- WGP: Real Race Feeling: Increased 68000 clock
+- Description changes of Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
-- Dipswitch fixes in 4enraya.cpp and midwunit.cpp
+- Dipswitch fixes in 4enraya.cpp, midwunit.cpp and niyanpai.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
@@ -154,11 +166,14 @@
   . UI/OSD
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
+    . Limit frame updates on initial gameinfo/warning screens, avoid host CPU/GPU resource spiking (ui\ui.cpp).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp and taito_l.cpp)
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
-- Debugger: Check that you have a memory interface before trying to use it (debugger\win, debugger\osx and debugger\qt) (ID 09377)
+- Debugger
+  . Check that you have a memory interface before trying to use it (debugger\win, debugger\osx and debugger\qt) (ID 09377)
+  . Allow device_state_interface to participate in global symtable state (debug\debugcpu.cpp and debug\express.cpp)
 
 
 
