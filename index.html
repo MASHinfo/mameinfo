@@ -55,15 +55,16 @@
 0.286GIT
 
 - New Working games: Striker
-- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Medalist Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
+- New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
 - New clones: Chaoji Dou Dizhu Jiaqiang Ban (S206CN), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, z8691 and z86c91
+- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, isa16_medalist_rom_disk, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
     . Fixed/optimised RECIPS flag calculation for interpreter. Fixed FIX for negative numbers when MODE1 TRUNC bit it set for interpreter and recompiler (should round towards negative infinity). Don't regenerate static helpers on cache flush (sharc\sharc.cpp).
     . Better align FIX between interpreter and recompiler, pack/unpack recompiler ASTAT for saved states. Cleaned up memory access a bit, use memory_access::specific and added ADSP21060 (larger internal SRAM) (sharc\sharc.cpp).
+    . Always enable SHARC recompiler the Konami drivers konami\gticlub.cpp, konami\hornet.cpp and konami\zr107.cpp before start (sharc\sharc.cpp)
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -121,6 +122,7 @@
 - Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
 - Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
+- Moon Raker: Added the starfield rom
 - NBA Hangtime: Dumped security PICs
 - PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
   . Make some variables constant. Reduced preprocessor macros. Use abbreviated type names and BIT helpers (Common PC-Engine hardware. See reference at: http://daifukkat.su/pcfx/).
