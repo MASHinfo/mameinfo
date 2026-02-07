@@ -133,7 +133,7 @@
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Moon Raker: Added the starfield rom
 - NBA Hangtime: Dumped security PICs
-- Pango Fun: Create new UM8498F chipset (machine\um8498f.cpp) and get rid of pcat_base_state
+- Pango Fun: Create new UM8498F chipset (machine\um8498f.cpp). Get rid of pcat_base_state
 - PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
   . Make some variables constant. Reduced preprocessor macros. Use abbreviated type names and BIT helpers (Common PC-Engine hardware. See reference at: http://daifukkat.su/pcfx/).
   . Added input clock for video hardware (battlera.cpp and ggconnie.cpp)
@@ -167,6 +167,7 @@
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
     . Limit frame updates on initial gameinfo/warning screens, avoid host CPU/GPU resource spiking (ui\ui.cpp).
+    . Added throttled frame update to another startup event loop and sleep for 1ms (ui\ui.cpp).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp and taito_l.cpp)
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
