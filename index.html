@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated -  7th February 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated -  8th February 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -58,7 +58,7 @@
 - New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
 - New clones: Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, isa16_medalist_rom_disk, um8498f, z8691 and z86c91
+- New devices: adsp21060, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, um8498f, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -68,7 +68,7 @@
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
-    . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there (cpu\drcbec.cpp)
+    . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there. Restore floating point rounding mode if an exception is thrown, use C99 nearbyint/nearbyintf (cpu\drcbec.cpp)
     . drcbex86, drcbex64 and drcbearm64
       . Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
       . Call (rather than jumping to) the entry point handle. The UML HANDLE instruction points to a minimal function prologue, which expects the conditions immediately following a call. However, the back-ends were jumping to it directly after setting up the top-level stack frame. On x86-64 and i686, this resulted in the stack being misaligned until a HASHJMP or EXIT instruction was executed. Anything that could result in a C function being called (CALLC, DEBUG, BREAK, READ, READM, WRITE, WRITEM, FREAD, FWRITE) could crash due to stack misalignment, and RET would crash due to the return address not being in the expected location. On AArch64, the stack would not be misaligned, and calls to C functions would work correctly, but RET would result in exiting from generated code without restoring callee-preserved registers. The C back-end just hits an assertion failure if the entry point code executes a RET (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
@@ -96,8 +96,9 @@
   . Preliminary split between regular (Clio) DSPP and M2 Bulldog (dspp\dspp.cpp)
 - armedf.cpp: Make spriteram size same for all games
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
-- cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range (capcom\cps1.cpp).
-- cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp)
+- cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range. Small cleanup (capcom\cps1.cpp).
+- cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp). Small cleanup.
+- cps3.cpp: Small cleanup
 - docastle.cpp: Normalize blue color channel
 - exedexes.cpp and gunsmoke.cpp: Added manual sprite DMA trigger
 - goldstar.cpp
@@ -125,6 +126,7 @@
 - vicdual.cpp: Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco (ID 09382).
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
+- Countertop Champion 2: Hookup MicroTouch
 - F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
@@ -133,7 +135,7 @@
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Moon Raker: Added the starfield rom
 - NBA Hangtime: Dumped security PICs
-- Pango Fun: Create new UM8498F chipset (machine\um8498f.cpp). Get rid of pcat_base_state
+- Pango Fun: Create new UM8498F chipset (machine\um8498f.cpp). Get rid of pcat_base_state. Added ISA slots and replace baked in Trident ROM + bare VGA with actual AVGA1 (pc\pangofun.cpp). Added 'Cirrus Logic GD5401 AVGA1' card support (isa\svga_cirrus.cpp).
 - PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
   . Make some variables constant. Reduced preprocessor macros. Use abbreviated type names and BIT helpers (Common PC-Engine hardware. See reference at: http://daifukkat.su/pcfx/).
   . Added input clock for video hardware (battlera.cpp and ggconnie.cpp)
@@ -148,6 +150,7 @@
 - PC hardware: Added quick ref for POST codes (pc\README.md)
 - PinMAME: Dumped security PICs for Corvette and Phantom Haus
 - Play 4 Texas Hold'em: Additional notes. Changed name to be same as manual. Updated year to 2011 based on last patch.
+- P's Attack: Hookup EEPROM and CF slot rather than HDD
 - Reality Tennis: Replaced macros with constexpr
 - Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
@@ -167,8 +170,10 @@
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
     . Limit frame updates on initial gameinfo/warning screens, avoid host CPU/GPU resource spiking (ui\ui.cpp).
-    . Added throttled frame update to another startup event loop and sleep for 1ms (ui\ui.cpp).
+    . Added throttled frame update to another startup event loop and sleep for 1ms. Only sleep if no frame update (ui\ui.cpp). Added message if menu is empty (ui\confswitch.cpp).
+    . Only clip the cursor if we haven't already. On Windows, cursor clipping is global and needlessly invoking 'ClipCursor(nullptr)' will interfere with other applications that might also be trying to clip the cursor. With this change, MAME will only invoke 'ClipCursor(nullptr)' if MAME previously clipped the cursor (windows\window.cpp).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp and taito_l.cpp)
+- SDLMAME: Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned. Fixed font lookup (font\font_sdl3.cpp, lib\osdobj_common.cpp).
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
