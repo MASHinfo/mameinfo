@@ -97,6 +97,7 @@
 - alpha68k.cpp: Renamed Alpha68K II/III/V hardware (shared\snk68_spr.cpp to alpha68k_spr.cpp) and cleaned up systems using it. Implemented device_gfx_interface and device_video_interface. Reduced hard-coded tags and use clock frequency input. Moved color code masking to callback. Use fixed size integers in save states and suppress side effects for debugger reads. Reduced duplicated code and literal tag use. Use abbreviated integer type names.
 - armedf.cpp: Make spriteram size same for all games
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
+- cave.cpp and mcatadv.cpp: Correct tile RAM format comment. Low byte in First word of tile RAM is used for hi bits of tile code: 8x8 only? (video\tmap038.cpp).
 - cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range. Small cleanup (capcom\cps1.cpp).
 - cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp). Small cleanup.
 - cps3.cpp: Small cleanup
@@ -109,6 +110,7 @@
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
 - mitchell.cpp: Added note about sprite DMA trigger
 - model2.cpp: Got rid of now-obsolete SHARC 16-bit IOP workaround. Use render_polygon() rather than splitting polygons into triangles. Fixes/Reduces texture warping in hotd, overrev and waverunr (sega\model2_v.cpp). Also moved polylist dump code to sega\model2_m.cpp.
+- namcos23.cpp: Fake enough comms to make 'Race On!' boot. Removed presently-unused m_odd_frame member. Added texture flip/swap bits. Fixes Namco banners in Race On! and other places.
 - niyanpai.cpp: Cleaned up code a bit. Filled in DIP switch settings for 'Mahjong Housoukyoku Honbanchuu' from manual. Correct transliteration of Nyanpai.
 - segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
 - segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
@@ -118,7 +120,7 @@
   . OBJON and BGON enables were the wrong way around, watchdog is actually sprite DMA, vblank bit was on the wrong port and paletteram is writeonly (capcom\sidearms_v.cpp).
 - stv.cpp
   . Formatting cleanup (sega\saturn_v.cpp). Fixed directory parsing on cross sector boundaries. Use busy state around drive status changes. Renamed stvcd to saturn_cd_hle. Removed unnecessary device_memory_interface trampoline. MAX_BLOCKS cleanup. Use emu_timer in place of timer generic. Command 0x51 is confirmed it doesn't generate a DRDY, pause drive when in buffull state (sega\saturn_cd_hle.cpp). Lock out DMA if trying to access VDP1 RAM and other stuff at same time. Fixed (MESS) gunblaze booting (sega\saturn_scu.cpp). Replaced macros in header with inline member functions. Reduced duplicate declarations (sega/stv.h and sega\saturn.h).
-  . Converted macro flags to enum. Reduced function namings. Handle host RA updates properly. RA is actually its own thing. Fixed LEF behaviour and PC readbacks from host side. All ALU ops but AD2 doesn't update the upper 16-bit part (scudsp\scudsp.cpp).
+  . Convert macro flags to enum. Reduced function namings. Handle host RA updates properly. RA is actually its own thing. Fixed LEF behaviour and PC readbacks from host side. All ALU ops but AD2 doesn't update the upper 16-bit part. Tidy some expressions (scudsp\scudsp.cpp).
 - taito_f2.cpp: Fixed manufacturer title in cameltry and clone cameltrya (ID 09132)
 - taitosj.cpp: Hook up Z80 busreq/busack
 - tubep.cpp
@@ -152,7 +154,6 @@
 - PinMAME: Dumped security PICs for Corvette and Phantom Haus
 - Play 4 Texas Hold'em: Additional notes. Changed name to be same as manual. Updated year to 2011 based on last patch.
 - P's Attack: Hookup EEPROM and CF slot rather than HDD
-- Race On!: Fake enough comms to make 'Race On!' boot
 - Reality Tennis: Replaced macros with constexpr
 - Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
@@ -177,7 +178,7 @@
     . Added throttled frame update to another startup event loop and sleep for 1ms. Only sleep if no frame update (ui\ui.cpp). Added message if menu is empty (ui\confswitch.cpp).
     . Only clip the cursor if we haven't already. On Windows, cursor clipping is global and needlessly invoking 'ClipCursor(nullptr)' will interfere with other applications that might also be trying to clip the cursor. With this change, MAME will only invoke 'ClipCursor(nullptr)' if MAME previously clipped the cursor (windows\window.cpp).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp and taito_l.cpp)
-- SDLMAME: Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned. Fixed font lookup (font\font_sdl3.cpp, lib\osdobj_common.cpp).
+- SDLMAME: Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned. Fixed font lookup (font\font_sdl3.cpp, lib\osdobj_common.cpp). Fixed key up not being sent on some systems (input\input_sdl3.cpp).
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
