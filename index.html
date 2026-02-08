@@ -94,6 +94,7 @@
   . Added unpacked & coded 4bpp and 8bpp support and basic PAL support. Added enum for DMA channels. Implemented get_pixel_6bpp_coded_lrform0 (misc\3do_madam.cpp)
   . Added enough commands so it reaches cmd_read when disk is in. Better logging around ToC. Added command byte acks to some commands (machine\cr560b.cpp).
   . Preliminary split between regular (Clio) DSPP and M2 Bulldog (dspp\dspp.cpp)
+- alpha68k.cpp: Renamed Alpha68K II/III/V hardware (shared\snk68_spr.cpp to alpha68k_spr.cpp) and cleaned up systems using it. Implemented device_gfx_interface and device_video_interface. Reduced hard-coded tags and use clock frequency input. Moved color code masking to callback. Use fixed size integers in save states and suppress side effects for debugger reads. Reduced duplicated code and literal tag use. Use abbreviated integer type names.
 - armedf.cpp: Make spriteram size same for all games
 - balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
 - cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range. Small cleanup (capcom\cps1.cpp).
@@ -154,6 +155,7 @@
 - Reality Tennis: Replaced macros with constexpr
 - Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
+- Tournament Table: Fixed paddle. Doesn't work since MAME 0.257 (ID 09383).
 - WGP: Real Race Feeling: Increased 68000 clock
 - Description changes of Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
@@ -166,6 +168,7 @@
   . INPUT
     . Don't gate creating input device behind -mouse option, it breaks -mouse_device, -trackball_device, etc (input\input_win32.cpp).
     . Removed barely used IPT_TILT1/2/3/4, combine IPT_GAMBLE_DOOR with IPT_INTERLOCK and rename to generic IPT_DOOR (emu\inpttype.ipp). Added some content for Input Macro and Off-screen Reload plugins (docs\source\plugins\inputmacro.rst and offscreenreload.rst).
+    . Added PLAYER4 analog direction control defaults (emu\inpttype.ipp)
   . UI/OSD
     . Added nine extended Latin and IPA characters and added CC0-1.0 license comment (uismall.bdf).
     . Made hide_romless text clearer (ui\submenu.cpp).
