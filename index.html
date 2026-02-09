@@ -56,7 +56,7 @@
 
 - New Working games: Cherry Bonus III (ver.2.20). Cherry Bonus III (ver.3.0) and Striker
 - New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
-- New clones: Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)' and Touryuumon (V1.1, Apr 14 2005)
+- New clones: Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005) and Vs. Hogan's Alley (Italian bootleg)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
 - New devices: adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, um8498f, z8691 and z86c91
 - CPU
@@ -72,6 +72,7 @@
     . drcbex86, drcbex64 and drcbearm64
       . Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
       . Call (rather than jumping to) the entry point handle. The UML HANDLE instruction points to a minimal function prologue, which expects the conditions immediately following a call. However, the back-ends were jumping to it directly after setting up the top-level stack frame. On x86-64 and i686, this resulted in the stack being misaligned until a HASHJMP or EXIT instruction was executed. Anything that could result in a C function being called (CALLC, DEBUG, BREAK, READ, READM, WRITE, WRITEM, FREAD, FWRITE) could crash due to stack misalignment, and RET would crash due to the return address not being in the expected location. On AArch64, the stack would not be misaligned, and calls to C functions would work correctly, but RET would result in exiting from generated code without restoring callee-preserved registers. The C back-end just hits an assertion failure if the entry point code executes a RET (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
+      . Restore floating point environment when calling out to C code (cpu\drcbec.cpp, cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcuml: Added support for invariant code blocks. Include device tags in UML/native generated code log file names (kind of important when a system has two of the same kind of CPU) (cpu\drcuml.cpp).
     . hyperstone E1-xx and PowerPC DRC: Made static helper code invariant (e132xs\e132xsdrc.cpp, powerpc\ppcdrc.cpp)
@@ -162,9 +163,9 @@
 - Reality Tennis: Replaced macros with constexpr
 - Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
-- Tournament Table: Fixed paddle. Doesn't work since MAME 0.257 (ID 09383).
+- Tournament Table: Fixed paddle. Doesn't work since MAME 0.257. Added PLAYER4 analog direction control defaults (emu\inpttype.ipp) (ID 09383).
 - WGP: Real Race Feeling: Increased 68000 clock
-- Description changes of Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
+- Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
 - Dipswitch fixes in 4enraya.cpp, midwunit.cpp, namcos23.cpp and niyanpai.cpp
