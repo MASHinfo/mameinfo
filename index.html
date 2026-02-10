@@ -139,8 +139,10 @@
 - F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
+- HeliFire: Lower MCU clock
 - Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
 - Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
+- Mario Bros.: Correct some romlabels. Added TODO note.
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Moon Raker: Added the starfield rom
 - NBA Hangtime: Dumped security PICs
@@ -164,14 +166,16 @@
 - Striker: Fixed address map. Promoted game to working. Note: This PCB features flying wires going between the Z80, the GM76C28A-10 RAM and a GD74HCT138 3 to 8 line decoder/demultiplexer. It reads 2 times the address 0x60f0/60f1 during RAM test at boot (show "RAM NO GOOD" if wrong value), at coin up and at bet.
 - Tiger Road: MSM5205 in clone 'Tora e no Michi (Japan)' is hooked up same as Trojan (capcom\lwings.c) (also tried with capcom\sf.c, but got bad sound).
 - Tournament Table: Fixed paddle. Doesn't work since MAME 0.257. Added PLAYER4 analog direction control defaults (emu\inpttype.ipp) (ID 09383).
+- Vector games: Added LUA bindings for vector-screen interfaces. Added a callback mechanism to expose vector drawing to the LUA interface, allowing external hardware devices to interface with MAME's vector rendering code (video\vector.cpp and mame\luaengine.cpp).
 - WGP: Real Race Feeling: Increased 68000 clock
 - Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
-- Fixed rom names in ghosteo.cpp
+- Fixed rom names in ghosteo.cpp and mario.cpp
 - Renamed (mx5000) to (mx5000r) and (touryuu) to (touryuua)
 - Dipswitch fixes in 4enraya.cpp, midwunit.cpp, namcos23.cpp and niyanpai.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
+    . Added LUA bindings for vector-screen interfaces. Added a callback mechanism to expose vector drawing to the LUA interface, allowing external hardware devices to interface with MAME's vector rendering code (video\vector.cpp and mame\luaengine.cpp).
   . ROMLOAD: Replaced various macros with constexprs and inline functions. Mark ROM_OPTIONAL as deprecated (emu\romentry.h and emu\romload.h). Constexpr at namespace scope implies static for variables and inline for functions (emu\romentry.h).
   . INPUT
     . Don't gate creating input device behind -mouse option, it breaks -mouse_device, -trackball_device, etc (input\input_win32.cpp).
@@ -191,7 +195,7 @@
 - Debugger
   . Check that you have a memory interface before trying to use it (debugger\win, debugger\osx and debugger\qt) (ID 09377)
   . Allow device_state_interface to participate in global symtable state (debug\debugcpu.cpp and debug\express.cpp)
-
+  . Bulk replace uint8/16/32_t to u8/16/32 (machine\cs4031.cpp, f82c836.cpp, um8498f.cpp and wd7600.cpp)
 
 
 
