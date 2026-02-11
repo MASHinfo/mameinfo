@@ -58,7 +58,7 @@
 - New Non-Working games: Doki Doki! Flower (DFL1, Ver. A), Dart Star (Rev 3.25), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
 - New clones: Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, um8498f, z8691 and z86c91
+- New devices: adsp21060, cem3320_lpf4, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, um8498f, va_lpf4, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -66,6 +66,7 @@
     . Better align FIX between interpreter and recompiler, pack/unpack recompiler ASTAT for saved states. Cleaned up memory access a bit, use memory_access::specific and added ADSP21060 (larger internal SRAM) (sharc\sharc.cpp).
     . Always enable SHARC recompiler in the Konami drivers konami\gticlub.cpp, konami\hornet.cpp and konami\zr107.cpp before start.
     . Improved memory access code: Exploit data memory layout to bypass the memory system for both 32-bit and 16-bit SRAM accesses. Exploit the way the SHARC toolchain lays out executable code and data in SRAM to greatly reduce unnecessary cache flushes. Implemented Rn = NOT Rx (used by Sega Model 2B games). Align 32-bit program memory accesses with the most significant bit of the bus (corresponds to interpreter change in MAME 0.278 GitHub #13770) (sharc\sharcdrc.cpp). Better handling of cache reset at end of block (sharc\sharc.cpp).
+    . Fixed more instructions: Fixed multiply/average and multiply/absolute for interpreter - the ALU operations produce a floating point result. Implemented move from multiplier register, multiply/average, average and FDEP with immediate field specification for recompiler. Use a more accurate approach for the absolute value calculation in multiply/average and average rather than hoping the C library does the right thing for the interpreter and recompiler (sharc/sharc.cpp, sharc/sharcdrc.cpp, sharc/compute.hxx).
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -99,7 +100,9 @@
   . Preliminary split between regular (Clio) DSPP and M2 Bulldog (dspp\dspp.cpp)
 - alpha68k.cpp: Renamed Alpha68K II/III/V hardware (shared\snk68_spr.cpp to alpha68k_spr.cpp) and cleaned up systems using it. Implemented device_gfx_interface and device_video_interface. Reduced hard-coded tags and use clock frequency input. Moved color code masking to callback. Use fixed size integers in save states and suppress side effects for debugger reads. Reduced duplicated code and literal tag use. Use abbreviated integer type names.
 - armedf.cpp: Make spriteram size same for all games
-- balsente.cpp: Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
+- balsente.cpp
+  . Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
+  . Using the new filter implementation in sound\va_vcf.cpp (sound\cem3394.cpp).
 - cave.cpp and mcatadv.cpp: Correct tile RAM format comment. Low byte in First word of tile RAM is used for hi bits of tile code: 8x8 only? (video\tmap038.cpp).
 - cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range. Small cleanup (capcom\cps1.cpp).
 - cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp). Small cleanup.
@@ -111,7 +114,7 @@
   . Fixed memory map. Added technical notes to clone Cherry Bonus III (ver.2.20). Promoted clones Cherry Bonus III (ver.2.20) and Cherry Bonus III (ver.3.0) to working.
 - gomoku.cpp and wiping.cpp: Removed unused variables
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
-- mario.cpp: Correct some romlabels. Added TODO note. Updated driver notes.
+- mario.cpp: Coin1/2 were the wrong way around. Added NVRAM. Correct some romlabels. Added TODO note. Updated driver notes. 
 - matmania.cpp: Added xtal and improved some clocks (ID 09387).
 - mitchell.cpp: Added note about sprite DMA trigger
 - model2.cpp
