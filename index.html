@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 12th February 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 13th February 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -54,11 +54,12 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.286GIT
 
+- New games: Monkichicchi no Fuwafuwa Puzzle (Japan, prototype?)
 - New Working games: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0) and Striker
 - New Non-Working games: Dart Star (Rev 3.25), Doki Doki! Flower (DFL1, Ver. A), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
-- New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
+- New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), G.I. Joe (Asia, AAB), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: adsp21060, cem3320_lpf4, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, um8498f, va_lpf4, z8691 and z86c91
+- New devices: adsp21060, cem3320_lpf4, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, it8671f, um8498f, va_lpf4, voodoo_3000_x86, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -68,6 +69,7 @@
     . Improved memory access code: Exploit data memory layout to bypass the memory system for both 32-bit and 16-bit SRAM accesses. Exploit the way the SHARC toolchain lays out executable code and data in SRAM to greatly reduce unnecessary cache flushes. Implemented Rn = NOT Rx (used by Sega Model 2B games). Align 32-bit program memory accesses with the most significant bit of the bus (corresponds to interpreter change in MAME 0.278 GitHub #13770) (sharc\sharcdrc.cpp). Better handling of cache reset at end of block (sharc\sharc.cpp).
     . Fixed more instructions: Fixed multiply/average and multiply/absolute for interpreter - the ALU operations produce a floating point result. Implemented move from multiplier register, multiply/average, average and FDEP with immediate field specification for recompiler. Use a more accurate approach for the absolute value calculation in multiply/average and average rather than hoping the C library does the right thing for the interpreter and recompiler (sharc\sharc.cpp, sharc\sharcdrc.cpp, sharc\compute.hxx).
     . Allow multiple loops to end on the same instruction. This is required by Last Bronx, which has code that de-duplicates the common part of multiple successive loops. It reduces the performance of do-nothing spin loops a bit but not too much - the DRC still has substantially better performance than the interpreter. Unfortunately, this exposes a pre-existing issue with how ASTAT conditions are handled in the SHARC front-end which causes the Midnight Run and Racing Jam DSP programs to crash. Fixing it will require major changes. Use -nodrc for now, I'll probably have to disable to recompiler before the next release until this can be fixed (sharc\sharc.cpp).
+    . Tidied code a bit: Helper functions for getting commonly extracted opcode fields. More symbolic constants and fewer magic numbers. More constexpr helper functions, fewer macros and safer macros. More const local variables (cpu\sharc).
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -90,11 +92,13 @@
 - DEVICE
   . Floppy: Added save state support (machine\upd765.cpp)
   . Intel 82371EB PIIX4E PCI to ISA/EIO southbridge: Preliminary integration of RTC (machine\i82371eb_isa.cpp)
+  . Lowpass Filter: Improved LPF4 implementation. Using the new filter implementation in sound\va_vcf.cpp for CEM-3394 analog synth. Fixed 'drive' and improved documentation. 'drive' is now applied and unaplied outside the filter's feedback loop. Caching bass gain compensation. Annotated code with the relevant chapters from "The Art of VA Filter Design" (sound\va_vcf.cpp).
   . RAM: Shorter savestate name for things that do save_pointer(NAME(reinterpret_cast...) (machine\ram.cpp)
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
   . VGA
     . Get rid of macros, optimize char selection base in text mode and optimize pixel fetches in SVGA modes (video\pc_vga.cpp).
     . Fixed start address and bank select. Moved EEPROM hookup to ISA cards (video\pc_vga_ati.cpp). Attempt to improve SVGA modes (video\ati_mach32.cpp). 
+  . Voodoo 3: Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp)
 - 1943.cpp: Improved interrupt timing
 - 3do.cpp
   . Hookup basic semantics for CD-ROM DMA transfers (misc\3do.cpp)
@@ -143,10 +147,13 @@
 - tubep.cpp
   . Tube Panic: Refresh rate is ~59hz according to PCB video, so assume same screen raw params as Roller Jammer.
   . Roller Jammer: Z80 m1+iorq is the int ack cycle. Removed erroneous scanline sound interrupt.
-- vicdual.cpp: Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco (ID 09382).
+- vicdual.cpp
+  . Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco (ID 09382).
+  . Correct 'Lives' dipswitch and sound flag in clone Super Crash (bootleg of Head On). Use inputs from supcrash for clone Colision (bootleg of Head On).
+- Biomechanical Toy: Added PLD for 'Biomechanical Toy' variants
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
-- Come On Baby: Manually rebuild HDD dump
+- Come On Baby: Manually rebuild HDD dump. Fixed PCI card mapping. Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp). Initial implementation of an ITE 8671F Giga I/O. Added keyboard and mouse IRQ lines (machine\it8671f.cpp/h).
 - Countertop Champion 2: Hookup MicroTouch. Confirm title in comments.
 - F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
@@ -154,7 +161,7 @@
 - HeliFire: Lower MCU clock. Fixes sound pitch is too high and tempo is too fast (ID 09386).
 - Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
 - Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
-- Mario Bros.: Consolidate driver into single file. Updated notes. Coin1/2 were the wrong way around. Added NVRAM. Removed some unneeded variables and clock macros. Removed OLD_SOUND discrete sound emulation and MCU macros (nintendo\mario_a.cpp). Added shared base memorymap. Removed some mario_ function prefixes. Changed clone Masao audio clocks. Correct some romlabels.
+- Mario Bros.: Consolidate driver into single file. Updated notes. Coin1/2 were the wrong way around. Added NVRAM. Removed some unneeded variables and clock macros. Removed OLD_SOUND discrete sound emulation and MCU macros (nintendo\mario_a.cpp). Added shared base memorymap. Removed some mario_ function prefixes. Use retry_access trick to sync 2-way cpu comms. Changed clone Masao audio clocks. Correct some romlabels.
 - Mega Double Poker: Marked Mega Double Poker and clone not working. Note: They've failed to boot for a while now. Also reduced duplication and literal tags a bit and got rid of a bankdev.
 - Moon Raker: Added the starfield rom
 - NBA Hangtime: Dumped security PICs
@@ -183,8 +190,8 @@
 - WGP: Real Race Feeling: Increased 68000 clock
 - Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp and mario.cpp
-- Renamed (backfirt) to (backfirtb), (mx5000) to (mx5000r), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
-- Dipswitch fixes in 4enraya.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, tecmo.cpp and niyanpai.cpp
+- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (mx5000) to (mx5000r), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
+- Dipswitch fixes in 4enraya.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, tecmo.cpp, niyanpai.cpp and vicdual.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
@@ -201,7 +208,7 @@
     . Added throttled frame update to another startup event loop and sleep for 1ms. Only sleep if no frame update (ui\ui.cpp). Added message if menu is empty (ui\confswitch.cpp).
     . Only clip the cursor if we haven't already. On Windows, cursor clipping is global and needlessly invoking 'ClipCursor(nullptr)' will interfere with other applications that might also be trying to clip the cursor. With this change, MAME will only invoke 'ClipCursor(nullptr)' if MAME previously clipped the cursor (windows\window.cpp).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, mario.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp, taito_l.cpp, tecmo.cpp and wgp.cpp)
-- SDLMAME: Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned. Fixed font lookup (font\font_sdl3.cpp, lib\osdobj_common.cpp). Fixed key up not being sent on some systems (input\input_sdl3.cpp).
+- SDLMAME: Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned. Fixed font lookup (font\font_sdl3.cpp, lib\osdobj_common.cpp). Fixed key up not being sent on some systems. Fixed assert on new instance of joystick connected (input\input_sdl3.cpp).
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
   . Fixed last remaining tautological compare warnings for Clang/ARM64 (nscsi\tape.cpp and util\ioprocs.cpp). Promoted tautological comparison warning to an error (scripts\genie.lua)
