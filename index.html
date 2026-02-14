@@ -57,7 +57,7 @@
 - New games: Monkichicchi no Fuwafuwa Puzzle (Japan, prototype?)
 - New Working games: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0) and Striker
 - New Non-Working games: Dart Star (Rev 3.25), Doki Doki! Flower (DFL1, Ver. A), Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
-- New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), G.I. Joe (Asia, AAB), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Mario Bros. (Japan, older), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
+- New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), G.I. Joe (Asia, AAB), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Major Poker (set 1, v2.2), Mario Bros. (Japan, older), New Lucky 8 Lines (set 21, encrypted bootleg), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
 - New drivers: mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
 - New devices: adsp21060, cem3320_lpf4, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, isa16_medalist_rom_disk, it8671f, um8498f, va_lpf4, voodoo_3000_x86, z8691 and z86c91
 - CPU
@@ -91,7 +91,7 @@
   . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp)
 - DEVICE
   . Floppy: Added save state support (machine\upd765.cpp)
-  . Intel 82371EB PIIX4E PCI to ISA/EIO southbridge: Preliminary integration of RTC (machine\i82371eb_isa.cpp)
+  . Intel 82371EB PIIX4E: Preliminary integration of RTC (machine\i82371eb_isa.cpp). Added I/O BAR registers (machine\i82371eb_usb.cpp).
   . Lowpass Filter: Improved LPF4 implementation. Using the new filter implementation in sound\va_vcf.cpp for CEM-3394 analog synth. Fixed 'drive' and improved documentation. 'drive' is now applied and unaplied outside the filter's feedback loop. Caching bass gain compensation. Annotated code with the relevant chapters from "The Art of VA Filter Design" (sound\va_vcf.cpp).
   . RAM: Shorter savestate name for things that do save_pointer(NAME(reinterpret_cast...) (machine\ram.cpp)
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
@@ -150,6 +150,7 @@
 - vicdual.cpp
   . Small cleanup to spacing. Mux input ports. Fixed dipswitch read in Invinco (ID 09382).
   . Correct 'Lives' dipswitch and sound flag in clone Super Crash (bootleg of Head On). Use inputs from supcrash for clone Colision (bootleg of Head On) (ID 09389).
+- Big Karna: Use measured screen hz
 - Biomechanical Toy: Added PLD for 'Biomechanical Toy' variants
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
@@ -190,9 +191,9 @@
 - Tournament Table: Added PLAYER4 analog direction control defaults (emu\inpttype.ipp) (MT09383).
 - Vector games: Added LUA bindings for vector-screen interfaces. Added a callback mechanism to expose vector drawing to the LUA interface, allowing external hardware devices to interface with MAME's vector rendering code (video\vector.cpp and mame\luaengine.cpp).
 - WGP: Real Race Feeling: Increased 68000 clock
-- Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), Mario Bros. (Japan, revision C), Mario Bros. (US, revision F), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
+- Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), Mario Bros. (Japan, revision C), Mario Bros. (US, revision F), Major Poker (set 2, v2.0), Major Poker (set 3, Micro Manufacturing intro), Major Poker (set 4, Micro Manufacturing intro), Major Poker (set 5, Micro Manufacturing intro), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp and mario.cpp
-- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
+- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (majorpkr) to (majorpkr20), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
 - Dipswitch fixes in 4enraya.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, tecmo.cpp, niyanpai.cpp and vicdual.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
