@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th February 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 18th February 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -55,12 +55,12 @@
 0.286GIT
 
 - New games: Monkichicchi no Fuwafuwa Puzzle (Japan, prototype?)
-- New Working games: Chaoji Da Manguan II (China, V765C), Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Jungle King (V302US), Long Hu Zhengba 2 (China, VS210M), Long Hu Zhengba 2 (China, VS220M), Manguan Caishen (China, V103CS), Manguan Caishen (China, V106CS), Manguan Caishen (China, V110C), Shuang Long Qiang Zhu 2 VS (China, VS203J, set 2) and Striker
+- New Working games: Chaoji Da Manguan II (China, V765C), Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Jungle King (V302US), Long Hu Zhengba 2 (China, VS210M), Long Hu Zhengba 2 (China, VS220M), Manguan Caishen (China, V103CS), Manguan Caishen (China, V106CS), Manguan Caishen (China, V110C), Shuang Long Qiang Zhu 2 VS (China, VS203J, set 2), Striker and Super Shuffle.
 - New Non-Working games: Dart Star (Rev 3.25), Doki Doki! Flower (DFL1, Ver. A), Luckey Bingo, Panda 2, Pitching Try (v1.3CJ), Polar Star (Ver 3,2B, Fantasy Island), Sea Wolf - Next Mission, Silver Rush (ver. 23.08.25), Siren Kids and Spanish Darts
 - New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), G.I. Joe (Asia, AAB), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Major Poker (set 1, v2.2), Mahjong Kaguyahime (Japan 880425), Mario Bros. (Japan, older), New Lucky 8 Lines (set 21, encrypted bootleg), Pit Boss Superstar (9221-10-01A, California version), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
 - Removed games: Silverball (8.01)
-- New drivers: dharma_z180.cpp, mdartstr.cpp, namcos6.cpp, pitchtry.cpp and seawolfnm.cpp
-- New devices: acpi_piix4, adsp21060, cem3320_lpf4, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, igs_incalt, isa16_medalist_rom_disk, it8671f, rt1000b, toaplan_dsp, um8498f, va_lpf4, voodoo_3000_x86, z8691 and z86c91
+- New drivers: dharma_z180.cpp, mdartstr.cpp, namcos6.cpp, pitchtry.cpp, seawolfnm.cpp and sshuffle.cpp
+- New devices: acpi_piix4, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, igs_incalt, isa16_medalist_rom_disk, it8671f, rt1000b, toaplan_dsp, um8498f, va_lpf4, voodoo_3000_x86, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -75,6 +75,7 @@
     . Overhauled PC stack implementation: Always access top-of-stack through the pseudo-register value. Better behaviour when PC stack is empty. Implemented effects of writing to PCSTKP. Mask PC stack values to 24 bits. Try to get PC stack into a consistent state after loading a saved state. Also fixed loops with initial counter value of zero (should iterate 2^32 times) (cpu\sharc).
     . Implemented a bit more channel 6 DMA. Fixes changing settings in Pilot Kids service mode menus.
     . Overhauled loop stack handling. Always access top-of-stack through pseudo-registers. Better behaviour when stack is empty or full. Implemented more read/write top-of-stack and explicit push/pop operations. Try to get loop stack into a consistent state after loading a saved state (cpu\sharc).
+    . Better ASTAT handling: Flag pin bits are unaffected by push/pop status. Only flags set to input follow inputs on flag pins. Implemented ASTAT write for recompiler. Show ASTAT value in debugger when recompiler is enabled. Also don't allocated DRC cache when recompiler is disabled (cpu\sharc).
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
@@ -96,7 +97,7 @@
   . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around. Small cleanup. Make playmode_w param an u8 instead of int (sound\msm5205.cpp)
   . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp)
 - DEVICE
-  . Floppy: Added save state support (machine\upd765.cpp)
+  . Floppy: Added save state support (machine\upd765.cpp). Subscribe to remap FN (isa\fdc.cpp).
   . GP9001 VDP: Cleaned up and simplified code: Removed unnecessary custom_priority_bitmap and priority remap table and use screen priority bitmap. Improved logging and reduced literal tag usage. Also suppress side effects for debugger reads for Toaplan drivers using the device.
   . Intel 82371EB PIIX4E: Preliminary integration of RTC. Added config map registers and use option setter for internal RTC use (machine\i82371eb_isa.cpp). Added I/O BAR registers (machine\i82371eb_usb.cpp). Use own ACPI implementation (machine\i82371eb_acpi.cpp).
   . Lowpass Filter: Improved LPF4 implementation. Using the new filter implementation in sound\va_vcf.cpp for CEM-3394 analog synth. Fixed 'drive' and improved documentation. 'drive' is now applied and unaplied outside the filter's feedback loop. Caching bass gain compensation. Annotated code with the relevant chapters from "The Art of VA Filter Design" (sound\va_vcf.cpp).
@@ -120,11 +121,11 @@
   . Fixed sound cutting off at low levels. Reduced duplication in volume calculation. Made it possible to set modulation to 0% (sound\cem3394.cpp).
   . Using the new filter implementation in sound\va_vcf.cpp. Removed artificial pulse width limiting (sound\cem3394.cpp).
 - cave.cpp and mcatadv.cpp: Correct tile RAM format comment. Low byte in First word of tile RAM is used for hi bits of tile code: 8x8 only? (video\tmap038.cpp).
+- cdi.cpp: Adjusted spin-up time to avoid soft-locks, fixes audio softlock in (MESS) Fun Tower and Misc Minor Edits. Simplify XA functions, use SECTOR_SIZE instead of magic numbers and log missing emphais. Removed newly-added unused member but left the comment. Fixed signed/unsigned mismatch (philips\cdicdic.cpp). Updated debugging log statements (philips\mcd212.cpp).
 - cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range. Small cleanup (capcom\cps1.cpp).
 - cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp). Small cleanup.
 - cps3.cpp: Small cleanup
 - docastle.cpp: Normalize blue color channel
-- ez2d.cpp: Fixed PIIX4 config space mapping
 - exedexes.cpp and gunsmoke.cpp: Added manual sprite DMA trigger
 - goldstar.cpp
   . Fixed nullptr crash in Bingo (set 1) and clone (set 2) (mark *all* tilemaps dirty) (ID 09378).
@@ -133,6 +134,7 @@
 - igs017.cpp
   . Improved protection emulation for M68K-based games. Implemented alternate inc protection type. Completed IGS029 simulation for most games. Reworked address remap functions to make them save state-friendly.
   . Promoted Chaoji Da Manguan II (China, V765C), Jungle King (V302US), Long Hu Zhengba 2 (China, VS210M), Long Hu Zhengba 2 (China, VS220M), Manguan Caishen (China, V103CS), Manguan Caishen (China, V106CS), Manguan Caishen (China, V110C) and Shuang Long Qiang Zhu 2 VS (China, VS203J, set 2) to working.
+  . Redumped text ROM for clone Manguan Caishen (China, V110C)
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
 - matmania.cpp: Added xtal and improved some clocks (ID 09387).
 - mitchell.cpp: Added note about sprite DMA trigger
@@ -144,6 +146,7 @@
   . Fixes Fake enough comms to make 'Race On!' boot. Added texture flip/swap bits. Namco banners in Race On! and other places. Update DIPs for Race On! to deactivate wheel test.
   . Fixed handle controls in Final Furlong 2 and clone
 - niyanpai.cpp: Cleaned up code a bit. Filled in DIP switch settings for 'Mahjong Housoukyoku Honbanchuu' from manual. Correct transliteration of Nyanpai.
+- Qianxi Jielong: Fixed palette. Added Oki ROM banking.
 - segahang.cpp, segaorun.cpp and segas16a.cpp: Moved driver_device overrides to protected
 - segas24.cpp: Put layer sort in a lambda. Changed a fixed size vector to array. Moved video hw section to top of file.
 - segaybd.cpp: Cleaned up.
@@ -169,8 +172,9 @@
 - Biomechanical Toy: Added PLD for 'Biomechanical Toy' variants
 - Bionic Commando: Added presumed sprite DMA trigger
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
-- Come On Baby: Manually rebuild HDD dump. Fixed PCI card mapping. Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp). Initial implementation of an ITE 8671F Giga I/O. Added keyboard and mouse IRQ lines (machine\it8671f.cpp/h).
+- Come On Baby: Manually rebuild HDD dump. Fixed PCI card mapping. Hookup serial ports. Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp). Initial implementation of an ITE 8671F Giga I/O. Added keyboard and mouse IRQ lines (machine\it8671f.cpp/h).
 - Countertop Champion 2: Hookup MicroTouch. Confirm title in comments.
+- Ez2dancer 2nd Move: Fixed PIIX4 config space mapping
 - F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
@@ -214,11 +218,12 @@
 - Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), Knuckle Bash 2 (bootleg of Knuckle Bash), Mario Bros. (Japan, revision C), Mario Bros. (US, revision F), Major Poker (set 2, v2.0), Major Poker (set 3, Micro Manufacturing intro), Major Poker (set 4, Micro Manufacturing intro), Major Poker (set 5, Micro Manufacturing intro), MX5000 (version R), Nyanpai (Japan), Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp, mario.cpp, namcos1.cpp and superqix.cpp
 - Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (majorpkr) to (majorpkr20), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
-- Dipswitch fixes in 4enraya.cpp, igs017.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, tecmo.cpp, niyanpai.cpp and vicdual.cpp
+- Dipswitch fixes in 4enraya.cpp, igs017.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, (pullttrig) to (pulltrig), tecmo.cpp, niyanpai.cpp and vicdual.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
     . Added LUA bindings for vector-screen interfaces. Added a callback mechanism to expose vector drawing to the LUA interface, allowing external hardware devices to interface with MAME's vector rendering code (video\vector.cpp and mame\luaengine.cpp).
+    . Fixed polygons with shared vertices not rendering correctly and correctly map parameter values to each extent (video\poly.h).
   . MEMORY SYSTEM: On switch, do nothing if selected slot is same as before (emu\emumem_mview.cpp).
   . ROMLOAD: Replaced various macros with constexprs and inline functions. Mark ROM_OPTIONAL as deprecated (emu\romentry.h and emu\romload.h). Constexpr at namespace scope implies static for variables and inline for functions (emu\romentry.h).
   . INPUT
