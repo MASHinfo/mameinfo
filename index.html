@@ -60,7 +60,7 @@
 - New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30), Dragon Punch (Japan, ver. 1.30, bootleg), G.I. Joe (Asia, AAB), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Major Poker (set 1, v2.2), Mahjong Kaguyahime (Japan 880425), Mario Bros. (Japan, older), New Lucky 8 Lines (set 21, encrypted bootleg), Pit Boss Superstar (9221-10-01A, California version), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
 - Removed games: Silverball (8.01)
 - New drivers: dharma_z180.cpp, mdartstr.cpp, namcos6.cpp, pitchtry.cpp, seawolfnm.cpp and sshuffle.cpp
-- New devices: acpi_piix4, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, igs_incalt, isa16_medalist_rom_disk, it8661f, it8671f, rt1000b, toaplan_bcu, toaplan_dsp, toaplan_fcu, toaplan_video_controller, um8498f, va_lpf4, voodoo_3000_x86, z8691 and z86c91
+- New devices: acpi_piix4, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, gd5401, igs_incalt, isa16_medalist_rom_disk, it8661f, it8671f, nmk_irq, rt1000b, toaplan_bcu, toaplan_dsp, toaplan_fcu, toaplan_video_controller, um8498f, va_lpf4, voodoo_3000_x86, z8691 and z86c91
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -100,7 +100,7 @@
   . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around. Small cleanup. Make playmode_w param an u8 instead of int (sound\msm5205.cpp)
   . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp)
 - DEVICE
-  . Floppy: Added save state support (machine\upd765.cpp). Subscribe to remap FN (isa\fdc.cpp).
+  . Floppy: Added save state support (machine\upd765.cpp). Subscribe to remap FN. Issue a remap for later variants and fixed regression (isa\fdc.cpp).
   . GP9001 VDP: Cleaned up and simplified code: Removed unnecessary custom_priority_bitmap and priority remap table and use screen priority bitmap. Improved logging and reduced literal tag usage. Also suppress side effects for debugger reads for Toaplan drivers using the device.
   . Intel 82371EB PIIX4E: Preliminary integration of RTC. Added config map registers and use option setter for internal RTC use (machine\i82371eb_isa.cpp). Added I/O BAR registers (machine\i82371eb_usb.cpp). Use own ACPI implementation (machine\i82371eb_acpi.cpp).
   . Lowpass Filter: Improved LPF4 implementation. Using the new filter implementation in sound\va_vcf.cpp for CEM-3394 analog synth. Fixed 'drive' and improved documentation. 'drive' is now applied and unaplied outside the filter's feedback loop. Caching bass gain compensation. Annotated code with the relevant chapters from "The Art of VA Filter Design" (sound\va_vcf.cpp).
@@ -129,6 +129,9 @@
 - cps1.cpp: Changed comments to C++ style (capcom\cps1_v.cpp). Correct gfxdecode palette range. Small cleanup (capcom\cps1.cpp).
 - cps2.cpp: CPS2 bgpen is 0xbff just like CPS1 (capcom\cps1_v.cpp). Small cleanup.
 - cps3.cpp: Small cleanup
+- ddealer.cpp and nmk16.cpp
+  . Lifted set_scroll_rows out of drawing loop (nmk\nmk16_v.cpp)
+  . Refactored ddealer.cpp and nmk16.cpp video interrupt generation into separate device (nmk\nmk_irq.cpp).
 - docastle.cpp: Normalize blue color channel
 - exedexes.cpp and gunsmoke.cpp: Added manual sprite DMA trigger
 - fireshrk.cpp, rallybik.cpp and twincobr.cpp
@@ -145,6 +148,7 @@
   . Improved protection emulation for M68K-based games. Implemented alternate inc protection type. Completed IGS029 simulation for most games. Reworked address remap functions to make them save state-friendly.
   . Promoted Chaoji Da Manguan II (China, V765C), Jungle King (V302US), Long Hu Zhengba 2 (China, VS210M), Long Hu Zhengba 2 (China, VS220M), Manguan Caishen (China, V103CS), Manguan Caishen (China, V106CS), Manguan Caishen (China, V110C) and Shuang Long Qiang Zhu 2 VS (China, VS203J, set 2) to working.
   . Redumped text ROM for clone Manguan Caishen (China, V110C)
+- lindbergh.cpp: Port over UHCI I/O map from i82371eb USB (machine\pci-usb.cpp)
 - lwings.cpp: Improved interrupt timing. Added screen raw params, manual sprite DMA trigger and paletteram is write-only. Moved video hardware section to the top of the driver. Make spriteram size same for all games. Added sprite dma delay. Small cleanup.
 - matmania.cpp: Added xtal and improved some clocks, fixes Mania Challenge sound pitch is too high and tempo is too fast (ID 09387).
 - mitchell.cpp: Added note about sprite DMA trigger
@@ -153,12 +157,11 @@
   . Got rid of now-obsolete SHARC 16-bit IOP workaround. Use render_polygon() rather than splitting polygons into triangles. Fixes/Reduces texture warping in hotd, overrev and waverunr (sega\model2_v.cpp). Also moved polylist dump code to sega\model2_m.cpp.
   . Enabled SHARC recompiler for Model 2B (can be disabled again before release if too many things are broken) (sega\model2.cpp)
   . Tentatively promoted some games to working and cleaned up code. Added blanket imperfect graphics flag to all games and imperfect sound to all games with SCSP. Added a side effects check, more ATTR_COLD and register game-specific things for save states (sega\model2.cpp).
-  . Improved analog controls for Rail Chase 2 and Gunblade NY
+  . Improved analog controls for Rail Chase 2 and Gunblade NY. Use full precision reciprocal for perspective correction (sega\model2rd.ipp).
 - namcos23.cpp
   . Removed presently-unused m_odd_frame member. Added texture flip/swap bits. Removed stub handlers that were causing graphical issues in some games.
   . Fixes Fake enough comms to make 'Race On!' boot. Added texture flip/swap bits. Namco banners in Race On! and other places. Update DIPs for Race On! to deactivate wheel test.
   . Fixed handle controls in Final Furlong 2 and clone
-- nmk16.cpp: Lifted set_scroll_rows out of drawing loop (nmk\nmk16_v.cpp)
 - nyanpai.cpp
   . Cleaned up code a bit. Filled in DIP switch settings for 'Mahjong Housoukyoku Honbanchuu' from manual. Correct transliteration of Nyanpai.
   . Cleanups: Use struct for each layer and made palette RAM into memory share. Reduced duplication and unnecessary code. Sync file/driver name with updated metadata. Use device_mixer_interface for sound routing (nichibutsu\nichisnd.cpp).
@@ -174,7 +177,7 @@
 - sunwise.cpp: Expanded NVRAM area to cover the entire static RAM. Update notes.
 - taito_f2.cpp: Fixed manufacturer title in cameltry and clone cameltrya (ID 09132)
 - taitosj.cpp: Hook up Z80 busreq/busack
-- tmnt2.cpp: Don't reuse 'i' variable in tmnt2_prot_w. Changed xlock/ylock check and improved palette dimming, fixes tmnt2 foreground graphics in Sewer Surfin' don't appear (ID 09385).
+- tmnt2.cpp: Don't reuse 'i' variable in tmnt2_prot_w. Changed xlock/ylock check and improved palette dimming, fixes tmnt2 foreground graphics in Sewer Surfin' don't appear (ID 09385). Updated notes. Small cleanup.
 - toaplan1.cpp
   . Moved common parts of memory maps to helper functions. Reduced duplication, improved logging and correct DSP ROM size.
   . Encapsuated BCU, FCU, and Video controller hardware as devices. Reduced duplication in machine configuration. Fixed 'Out Zone (Zero Wing TP-015 PCB conversion)' raw params - it uploads same video timing parameter values as parent set to CRTC. Made sprite size LUT RAM as memory_share_creator. Use separate palette devices for each layer. Improved notes, reduced duplication and unnecessary functions.
@@ -191,6 +194,7 @@
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
 - Come On Baby: Manually rebuild HDD dump. Fixed PCI card mapping. Hookup serial ports. Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp). Initial implementation of an ITE 8671F Giga I/O. Added keyboard and mouse IRQ lines (machine\it8671f.cpp/h).
 - Countertop Champion 2: Hookup MicroTouch. Confirm title in comments.
+- Densha de GO!: Added Japanese text and bulb color. Added shared group and the 1/2/3 lamps. Make brake pressure xx.x instead of xxxx (layout\dendego.lay)
 - Ez2dancer 2nd Move: Fixed PIIX4 config space mapping
 - F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
@@ -254,6 +258,7 @@
     . Limit frame updates on initial gameinfo/warning screens and avoid host CPU/GPU resource spiking (ui\ui.cpp).
     . Added throttled frame update to another startup event loop and sleep for 1ms. Only sleep if no frame update (ui\ui.cpp). Added message if menu is empty (ui\confswitch.cpp).
     . Only clip the cursor if we haven't already. On Windows, cursor clipping is global and needlessly invoking 'ClipCursor(nullptr)' will interfere with other applications that might also be trying to clip the cursor. With this change, MAME will only invoke 'ClipCursor(nullptr)' if MAME previously clipped the cursor (windows\window.cpp).
+  . PLUGINS: hiscore.dat update (plugins\hiscore\hiscore.dat)
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, mario.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp, taito_l.cpp, tecmo.cpp and wgp.cpp)
 - SDLMAME
   . Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned.
