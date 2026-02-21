@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 20th February 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 21st February 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -52,7 +52,16 @@
 <font size="4" face="Arial" color="#FF0000"><strong>New in MAME: &nbsp;&nbsp;&nbsp;</strong></font><br>
 <div style="MARGIN: 5px 2px 20px">
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
-0.286GIT
+0.287GIT
+- CPU
+  . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+ (i386\i386.cpp).
+- DEVICE
+  . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
+- New devices: aha2940
+
+
+
+0.286
 
 - New games: Monkichicchi no Fuwafuwa Puzzle (Japan, prototype?)
 - New Working games: Chaoji Da Manguan II (China, V765C), Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Daytona USA (with Saturn advertisements), Daytona USA Special Edition (Revision A), Daytona USA, Daytona USA (Revision A), Dead or Alive (Export, Model 2A, Revision A), Dead or Alive (Model 2A), Dead or Alive (Model 2A, Revision A), Dead or Alive (Model 2B, Revision B), Dead or Alive (Model 2B, Revision C), Gunblade NY (Revision A), Jungle King (V302US), Long Hu Zhengba 2 (China, VS210M), Long Hu Zhengba 2 (China, VS220M), Manguan Caishen (China, V103CS), Manguan Caishen (China, V106CS), Manguan Caishen (China, V110C), Pilot Kids (Model 2A), Pilot Kids (Model 2B, Revision A), Shuang Long Qiang Zhu 2 VS (China, VS203J, set 2), Striker, Virtua Cop (Revision A), Virtua Cop (Revision B), Virtua Cop 2, Virtua Striker (Revision A), Virtua Striker, Zero Gunner (Export, Model 2A), Zero Gunner (Export, Model 2B), Zero Gunner (Japan, Model 2A) and Zero Gunner (Japan, Model 2B)
@@ -60,7 +69,7 @@
 - New clones: Back Fire (Tecmo), Beastie Feastie (Pac-Man conversion, set 2), Big Twin (no girls conversion, set 2), Chaoji Dou Dizhu Jiaqiang Ban (S206CN), Dragon Punch (Japan, ver. 1.30, bootleg), G.I. Joe (Asia, AAB), Hot Mind (Hard Times hardware, set 2), MX5000 (version U), Major Poker (set 1, v2.2), Mahjong Kaguyahime (Japan 880425), Mario Bros. (Japan, older), New Lucky 8 Lines (set 21, encrypted bootleg), Pit Boss Superstar (9221-10-01A, California version), Polar Star (Ver 3,2B, MooRry Fantasy), 'Tarzan Chuang Tian Guan 2 Jiaqiang Ban (V306CN, alternate GFX)', Touryuumon (V1.1, Apr 14 2005), Vs. Hogan's Alley (Italian bootleg) and WGP 2: Real Race Feeling (World)
 - Removed games: Silverball (8.01)
 - New drivers: dharma_z180.cpp, mdartstr.cpp, namcos6.cpp, pitchtry.cpp, seawolfnm.cpp and sshuffle.cpp
-- New devices: acpi_piix4, acpi_pipc, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, fdc37c665ir, gd5401, igs_incalt, isa16_medalist_rom_disk, it8661f, it8671f, nmk_irq, rt1000b, toaplan_bcu, toaplan_dsp, toaplan_fcu, toaplan_video_controller, trio64dx_pci, um8498f, va_lpf4, voodoo_3000_x86, vt82c586b_acpi, vt82c586b_ide, vt82c586b_isa, vt82c586b_usb, vt82c598mvp_bridge, vt82c598mvp_host, z8691 and z86c91.
+- New devices: acpi_piix4, acpi_pipc, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, fdc37c665ir, gd5401, igs_incalt, isa16_medalist_rom_disk, it8661f, it8671f, nmk_irq, pc97338, rt1000b, toaplan_bcu, toaplan_dsp, toaplan_fcu, toaplan_video_controller, trio64dx_pci, um8498f, va_lpf4, voodoo_3000_x86, vt82c416, vt82c586b_acpi, vt82c586b_ide, vt82c586b_isa, vt82c586b_usb, vt82c598mvp_bridge, vt82c598mvp_host, z8691 and z86c91.
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -80,7 +89,7 @@
   . Dynamic Re-Compiling
     . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
-    . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there. Restore floating point rounding mode if an exception is thrown, use C99 nearbyint/nearbyintf (cpu\drcbec.cpp)
+    . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there. Restore floating point rounding mode if an exception is thrown, use C99 nearbyint/nearbyintf. Work around older clang that doesn't support the floating point environment access pragma (cpu\drcbec.cpp)
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
     . drcbex86, drcbex64 and drcbearm64
       . Added support for invariant code blocks and made helper code invariant (cpu\drcbex86.cpp, cpu\drcbex64.cpp and cpu\drcbearm64.cpp).
@@ -104,15 +113,18 @@
 - DEVICE
   . Floppy: Added save state support (machine\upd765.cpp). Subscribe to remap FN. Issue a remap for later variants and fixed regression (isa\fdc.cpp).
   . GP9001 VDP: Cleaned up and simplified code: Removed unnecessary custom_priority_bitmap and priority remap table and use screen priority bitmap. Improved logging and reduced literal tag usage. Also suppress side effects for debugger reads for Toaplan drivers using the device.
-  . Intel 82371EB PIIX4E: Preliminary integration of RTC. Added config map registers and use option setter for internal RTC use (machine\i82371eb_isa.cpp). Added I/O BAR registers (machine\i82371eb_usb.cpp). Use own ACPI implementation (machine\i82371eb_acpi.cpp).
+  . Intel 8251 USART: Fixed uninitialised data accesses (machine\i8251.cpp)
+  . Intel 82371EB PIIX4E: Preliminary integration of RTC. Added config map registers and use option setter for internal RTC use. Hookup fast A20 (machine\i82371eb_isa.cpp). Added I/O BAR registers (machine\i82371eb_usb.cpp). Use own ACPI implementation (machine\i82371eb_acpi.cpp).
   . Lowpass Filter: Improved LPF4 implementation. Using the new filter implementation in sound\va_vcf.cpp for CEM-3394 analog synth. Fixed 'drive' and improved documentation. 'drive' is now applied and unaplied outside the filter's feedback loop. Caching bass gain compensation. Annotated code with the relevant chapters from "The Art of VA Filter Design" (sound\va_vcf.cpp).
   . RAM: Shorter savestate name for things that do save_pointer(NAME(reinterpret_cast...) (machine\ram.cpp)
+  . S3 86C775 Trio64V2/DX: Moved out Trio64/DX roms from isa\svga_s3.cpp and create Trio64V2/DX (pci\trio_pci.cpp). Added Trio64/DX to EuroPlay 2001. Fixed device ID - The one reported in datasheet is for the original Trio32 86C732.
   . Sega 315-5195 Memory Mapper: Update_mapping after loadstate (sega\315_5195.h)
   . VGA
     . Get rid of macros, optimize char selection base in text mode and optimize pixel fetches in SVGA modes (video\pc_vga.cpp).
     . Fixed start address and bank select. Moved EEPROM hookup to ISA cards (video\pc_vga_ati.cpp). Attempt to improve SVGA modes (video\ati_mach32.cpp).
     . Bulk replace typo for sis6326 VGA def. Fixed SVGA 8bpp mode and start address latch and 24bpp mode for 6326 (video\pc_vga_sis.cpp).
     . Fixed interrupt pin (pci\virge_pci.cpp)
+  . VIA Apollo MVP3: Initial chipset definition. Added config map registers and initial PCI Bridge device (machine\vt82c598mvp.cpp). Preliminary VT82C586B IDE hookup. Added config map registers and allow HDD boot (machine\vt82c586b_ide.cpp). Initial 'Intel 82371EB PIIX4E USB Host Controller' support (machine\vt82c586b_usb.cpp). Hookup 'VIA Apollo MVP3' chipset for startouch.cpp. Type in ACPI_PIPC remaining registers. Hookup software SMI events (machine\vt82c586b_acpi.cpp).
   . Voodoo 3: Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp)
 - 1943.cpp: Improved interrupt timing
 - 3do.cpp
@@ -160,7 +172,7 @@
   . Enabled SHARC recompiler for Model 2B (can be disabled again before release if too many things are broken) (sega\model2.cpp)
   . Tentatively promoted some games to working and cleaned up code. Added blanket imperfect graphics flag to all games and imperfect sound to all games with SCSP. Added a side effects check, more ATTR_COLD and register game-specific things for save states (sega\model2.cpp).
   . Improved analog controls for Rail Chase 2 and Gunblade NY. Use full precision reciprocal for perspective correction (sega\model2rd.ipp).
-  . Added analog minmax and increase sensitivity to Daytona USA
+  . Added analog minmax and increase sensitivity to Daytona USA. Use 8251 ready output line status rather than pretending to be able to read the status register asynchronously (sega\model2.cpp).
 - namcos23.cpp
   . Removed presently-unused m_odd_frame member. Added texture flip/swap bits. Removed stub handlers that were causing graphical issues in some games.
   . Fixes Fake enough comms to make 'Race On!' boot. Added texture flip/swap bits. Namco banners in Race On! and other places. Update DIPs for Race On! to deactivate wheel test.
@@ -198,13 +210,14 @@
 - Cloak & Dagger: Video/Resnet comes from emu, not devices.
 - Come On Baby: Manually rebuild HDD dump. Fixed PCI card mapping. Hookup serial ports. Hookup Voodoo 3 3000 PCI roms (video\voodoo_pci.cpp). Initial implementation of an ITE 8671F Giga I/O. Added keyboard and mouse IRQ lines (machine\it8671f.cpp/h).
 - Countertop Champion 2: Hookup MicroTouch. Confirm title in comments.
-- Densha de GO!: Added Japanese text and bulb color. Added shared group and the 1/2/3 lamps. Make brake pressure xx.x instead of xxxx (layout\dendego.lay)
+- Densha de GO!: Added Japanese text and bulb color. Added shared group and the 1/2/3 lamps. Make brake pressure xx.x instead of xxxx (layout\dendego.lay). Update controller state in INPUT_CHANGED_MEMBER instead of screen_update and tweak lamp brightness.
 - Dottori Kun: Added ASCII PCB layout
 - Ez2dancer 2nd Move: Fixed PIIX4 config space mapping
 - F-1 Grand Prix: Redumped clone F-1 Grand Prix (Playmark bootleg)
 - Filetto: Extend voice note
 - Finalizer: Changed MCU type to M58715. Updated notes (mcs48\mcs48.cpp).
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
+- Go Go Strike: Identified motherboard type and retire pcat_base_state use
 - HeliFire: Lower MCU clock, fixes sound pitch is too high and tempo is too fast (ID 09386).
 - Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
 - Knuckle Bash 2 (bootleg): Moved kbash2-specific MSM6295 bankswitching into kbash2_state and improved kbash2 system description.
@@ -266,6 +279,7 @@
     . Limit frame updates on initial gameinfo/warning screens and avoid host CPU/GPU resource spiking (ui\ui.cpp).
     . Added throttled frame update to another startup event loop and sleep for 1ms. Only sleep if no frame update (ui\ui.cpp). Added message if menu is empty (ui\confswitch.cpp).
     . Only clip the cursor if we haven't already. On Windows, cursor clipping is global and needlessly invoking 'ClipCursor(nullptr)' will interfere with other applications that might also be trying to clip the cursor. With this change, MAME will only invoke 'ClipCursor(nullptr)' if MAME previously clipped the cursor (windows\window.cpp).
+    . Reverb configuration: Fixed uninitialised data accesses (audio_effects\reverb.cpp). Don't crash on the network devices menu when there are no network interfaces (GitHub #14959) (ui\miscmenu.cpp).
   . PLUGINS: hiscore.dat update (plugins\hiscore\hiscore.dat). Refactored LUA hooks for vector devices (plugins\vector\init.lua + plugins\vector\plugin.json).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, mario.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp, starcrus.cpp, taito_l.cpp, tecmo.cpp and wgp.cpp)
 - SDLMAME
