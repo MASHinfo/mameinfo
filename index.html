@@ -55,7 +55,8 @@
 0.287GIT
 
 - New games: Triv III
-- New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Thunder V, Ultraman Club 3 and Versus
+- New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Thunder V, Ultraman Club 3 and Versus.
+- New clones: Ghosts'n Goblins (World? set 1)
 - New drivers: agro.cpp, pachislo_z80.cpp and sammy_pachislo_z80.cpp 
 - CPU
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
@@ -64,11 +65,13 @@
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
 - New devices: aha2940
 - kaneko16.cpp: Added licensees to metadata and tidied code
+- statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups.
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h)
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
-- Description changes of 'B.C. Kid (World) / Bonk's Adventure - Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin - Special Arcade Version (Japan)' and Bonk's Adventure - Arcade version (prototype)
+- Description changes of 'B.C. Kid (World) / Bonk's Adventure - Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin - Special Arcade Version (Japan)', Bonk's Adventure - Arcade version (prototype), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3) and Ghosts'n Goblins (World? set 4). 
+- Renamed (gnga) to (gngb) and (gng) to (gnga)
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
 
