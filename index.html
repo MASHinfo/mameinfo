@@ -18,7 +18,7 @@
 <bgsound src="" loop="-1">
 
 <center>
-<font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286GIT</u></font>
+<font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286</u></font>
 <br><font size="2" face="Arial" color="#FFFFFF">Updated - 25th February 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
@@ -30,11 +30,11 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo + MAMEUI-inifiles-0286GIT (19th Feb).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0286GIT (19th Feb) (4.44 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0286.zip"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo 0.286 (3.76 MB)</b></font></a><br><br>
 
-<a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0285.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.285 Category-, Version and Alltime inifiles (1008 kB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0286.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.286 Category-, Version and Alltime inifiles (1012 kB)</b></font></a><br><br>
 
-<a href="https://mashinfo.github.io/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.285 (6.38 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.286 (6.41 MB)</b></font></a><br><br>
 
 <a href="https://mashinfo.github.io/mameinfo/download/PCB-infos0153.zip"><font size="+1" face="Arial" color="#eeeeee"><b>PCB-infos 0.153 (2.11 MB)</b></font></a><br><br>
 
@@ -462,6 +462,148 @@
   . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
 
 
+0.285
+
+- New games: Moon Raker, Relief Pitcher (System 1, prototype) and Waku Waku Jumbo (Rev A)
+- New Working games: 'Maque Wangchao / Chaoji Da Manguan 2 - Jiaqiang Ban (China, V100C)' and The Pirates of Dark Water (SNES bootleg)
+- New Non-Working games: Diamond Heart Plus (v18.0), Gamebox, Lan Mao, Modern Cart and Multi Game 9 (ver 9.04 Eng).
+- New clones: Cherry Bonus III (ver.2.20), Cherry Bonus III (ver.3.0), Devil Fish (Nuova Videotron bootleg), Dingo (Nuova Videotron bootleg), Dirt Dash (World, DT2 Ver.C), Empire City: 1931 (US, bootleg), Happy Farm (Ver. IN.01.01.A), Jungle King (Nuova Videotron bootleg), Puzz Loop (Korea, bootleg), Revolution X (revision 2.0 9/8/94), Sparkle (v1.1.3), Super Poker (v305US), Tic Tac Trivia (6221-20, U5-0B, 11/17/85), Trivia ? Whiz (6221-03, U5-0) and Vanguard (SNK, set 2)
+- New AGEMAME games: 21 Club (Barcrest) (German) (MPU4) (GTW 2.7), Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 2), Cup Final (Nova) (MPU4) (set 3), Pink Panther (German) (Maygay) (M1A/B) (set 2) and Roadrunner
+- Removed games: Trivia ? Whiz (6221-00)
+- New drivers: gamebox.cpp, lanmao.cpp, mgt_multigame.cpp and subsino_kr_h8.cpp
+- New devices: amy, clio, cr560b, floppy_twiggy, lc6554, m146805e2, madam, scsi_cdrom_apple_ext and xetec_c5181
+- New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
+- New DATs: GameInit.dat (https://www.progettosnaps.net/gameinit/)
+- Bob Zed (What's new): https://youtu.be/46V7ug1pxIY
+- CPU
+  . Analog Devices ADSP-2100: Correct some tabulaton that had rotted (adsp2100\adsp2100.cpp)
+  . Dynamic Re-Compiling
+    . drccache: Defer allocating to start, allow forcing W^X mode. Added helpers for allocating structures/objects in the cache. Supply desired alignment when allocating cache memory (not fully implemented). Log some statistics on destruction (cpu\drccache.cpp). Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp). Minimise the number of pages that need protection changes. Only mark pages writable starting from the beginning of unused space. Honour requested alignment for allocations (cpu\drccache.cpp).
+    . drcbeut: Allocate (misnamed) hash table blocks from the permanent cache area so they aren't intermixed with executable code. Allow back-end to specify preferred alignment for hash table blocks (cpu\drcbeut.cpp).
+    . drcbearm64: Shuffled generated code for HASHJMP a bit to be less sensitive to load latency (cpu\drcbearm64.cpp)
+    . PowerPC DRC: Allow DRC cache size to be set externally at configuration time, so systems can override the default (cpu\powerpc/ppc.h and powerpc\ppccom.cpp).
+    . 3DO DSPP, hyperstone E1-xx + Hynix GMS30C2xxx: Don't allocate DRC resources if recompiler is disabled (dspp\dspp.cpp and e132xs\e132xs.cpp). Simplify arithmetic right shift calculations (e132xs\e132xsop.hxx).
+    . ARM7: Removed ARM7 from the list of DRC CPUs since its incomplete recompiler functionality was removed (scripts\src\cpu.lua)
+    . Analog Devices ADSP21062 'SHARC'
+      . Fixed bug in shift, obvious optimisations: Fixed shift with variable count when count is positive (should shift left, was shifting right). Use recently-introduced UML bit field extract instructions. Don't follow arithmetic with redundant compare to zero if only zero flag is required. Let the back-end take care of fetching source from memory or immediate for simple arithmetic. Assume the back-end knows how to generate conditional CALLH. Use BIT helper. Don't assume x86-like magic sequence breaking on self-XOR. Correct a comment that didn't match the code. Handle corner cases for FEXT. The interpreter probably needs updating, too. Fixed MIN and MAX when Rn and Ry are the same register. Handle corner cases for FDEP. Cleaned up formatting of 64-bit values and initialisation of opcode dispatch table (sharc\sharcdrc.cpp).
+      . Fixed SV flag for LSHIFT/ASHIFT in recompiler (interpreter was correct). Simplified generated code for FEXT with non-immediate bit position/length in recompiler. Fixed off-scale ASHIFT in recompiler. Fixed off-scale FEXT with sign extension in interpreter (sharc\sharcdrc.cpp and sharc\sharcops.hxx).
+    . UML: Correct syntax for generating UML conditional CALLH instructions (docs\source\techspecs\uml_instructions.rst)
+  . Intel 8051: Some variables were missing savestates after OG's refactor (MAME 0.283). Small cleanup to spacing. Clean up some single line comments (mcs51\i8051.cpp).
+  . Motorola MC68008: Fixed crash when trying to set PC from debugger (m68000\m68000.cpp)
+  . Texas Instruments TMS32xxx
+    . Improved naming of TMS320 series DSPs. Name folders after families rather than the first family member emulated by MAME (yes, TMS320C1x and TMS320C2x are retrospective names). Follow TI's convention of including the "C" in the names. Don't try to jam all the disassembler source file names into 8.3. The TMS32010, TMS320M10 and TMS320C10 are different things, but unfortunately MAME hasn't made a distinction between them so far. As far as I can tell, early DECTalk devices used TMS32010 or TMS320M10 chips, while the Atari and Toaplan games used TMS320C10 chips, but this should be verified.
+    . Got rid of some superfluous parentheses (tms320c3x\320c3x_ops.ipp). Marked TMS320C31 as parent ROM of TMS320VC33.
+  . Zilog Z80: Fixed IRQ state if comes from daisy chain (z80\z80.cpp)
+  . Zilog Z80180/Z8S180/Z80182 and Hitachi HD64180RP: Can't shortcut with m_icount=0 after SLP opcode due to possible background Timer/DMA (z180/z180.cpp)
+- SOUND
+  . Atari C012294 POKEY: Don't flag SEROUT full when held in reset (sound\pokey.cpp)
+  . Ensoniq ES5503: Fixed off-by-1 sample position adjustment on looping (Github #14582; sound\es5503.cpp)
+  . MM5837 Digital Noise Source: Configuration interface simplifications (sound\mm5837.h)
+  . TMS5110: Removed romclk_hack (sound\tms5110.cpp)
+- DEVICE
+  . Floppy: Minor code cleanup (tools\floptool.cpp)
+  . Fujitsu MB87030 SCSI controller: Fixed some timings (drq write would shorten waits) (machine\mb87030.cpp)
+  . Imgtool: Retired the get_chain method. This is no longer implemented by any supported filesystem, and no command made any use of the information it provided (floptool's flopblocks command is functionally comparable) (imgtool\imgtool.cpp).
+  . Konami 033906 PCI bridge: Added read side effects check (machine\k033906.cpp), should fixes debugger crashes when accessing 0x3500000 in SHARC data space memory in all hornet.cpp sets. Correct k033906_device init order (ID 08830).
+  . Namco C123 (4x + 2x Tilemaps): Zerofill control regs (namco\namco_c123tmap.cpp)
+  . Sanyo LC7535: Use device_sound_interface. Removed custom volume callback. Added option to use a logarithmic gain scale. Use explictly sized variables (sound\lc7535.cpp).
+  . SCSI Hard Disk: Allow to add a per-driver default HD model (still overriden by an IDNT metadata) (nscsi\hd.cpp).
+  . VGA: Added imperfect feature graphics where it belongs (video\pc_vga_*)
+- New drivers: subsino_kr_h8.cpp
+- 1943.cpp: Document and hook up buffered sprite RAM.
+- 20pacgal.cpp: Small cleanup. Added screen raw params after Guru measured video timing. Removed useless do_pen_lookup function. Updated notes.
+- 39in1.cpp: Swap CGA and VGA option text
+- 3do.cpp
+  . Misc notes. Split 'Uncle' in own memory map. Converted 'Madam' and 'Clio' to address_map. Split Madam and Clio into own devices. Split BIOSes by model types, retire original 3do_ntsc/3do_pal romsets. All new dumps provided by [3dodev]. HC-21 is an unreleased USA model. Added kanji region stub for alg sets. Fixed execution for IS_BIOS_ROOT romsets. Preps for VDLP display list parsing, added Amy stub. Hookup Portfolio SWI calls to DASM. Replaced memory_bank with a memory_view for overlay handling. Added adbio output support and hookup kanji ROM for Japanese systems (misc\3do.cpp).
+  . Initial hookup of a CR-560-B CDROM drive (machine\cr560b.cpp)
+  . Fixed lambda capture (misc\3do_m.cpp).
+  . Hookup DSPP. Added logmacro. Hookup DSPP DACs. Hookup expansion bus interrupt. Convert system timer to emu_timer. Use slack as system timer tick unit (misc\3do_clio.cpp).
+  . Moved diag port as devcb, disable by default. Added player bus DMA. Initial checkin for Cel engine emulation. Improved Cel pixel writes. Added CEL 16bpp packed source. Implemented bgnd, sign extend xpos & ypos, 6bpp packed CEL and coded 4bpp and 16bpp packed CEL. Hookup stopgap player 1 inputs (misc\3do_madam.cpp).
+  . Moved drawing into Amy (misc\3do_amy.cpp)
+- cps2.cpp: Don't set sprite priorities before screen_update (ID 09369). Fixed hardware documents.
+- cv1k.cpp: Fixed device naming and minor cleanups. Changed ep1c* files filename to cv1k_v*, because this file is emulation core for cave CV1000 hardware specific and more closer to describe actual purpose, also ep1c is part family name of Altera Cyclone (1) FPGAs. Suppress side effects for debugger reads, use logmacro.h for replace plain logerror function. Reduced some duplicates and unnecessary device finder. Make some variables constant. Use reference to replace pointers and util::sext for signed values. Added notes (cave\cv1k_v.cpp). Fixed metadata for describe region. Use shorter typename value for consistency and reduced duplicates. Improved naming and logging. Reduced literal tag usage and unnecessary functions. Added notes (cave\cv1k.cpp).
+- cvs.cpp: Lower TMS5100 clock (no xtal). Note: TMS5100 is around 620kHz from an R/C osc with a VR, slightly differs per PCB.
+- deco32.cpp
+  . Fixed volume control for Dragon Gun and Locked 'n Loaded (ID 05422)
+  . Updated Dragon Gun for new LC7535 interface and support switching the gun OKI output between gun speaker and main speaker.
+  . Use common xtals for Night Slashers. Confirmed Tattoo Assassins maincpu xtal. Lower soundcpu clock for Dragon Gun, Fighter's History, Locked 'n Loaded and Night Slashers.
+- deco156.cpp: Implement volume control for Heavy Smash
+- goldstar.cpp: Cleaned up various stuff
+- hornet.cpp: Added read side effects check (machine\k033906.cpp), should fixes debugger crashes when accessing 0x3500000 in SHARC data space memory in all hornet.cpp sets. Correct k033906_device init order (ID 08830).
+- jaguar.cpp
+  . Rewrote EEPROM access, fixes (MESS) jaguar [cfodder] has no access to the SRAM (ID 09342). Fixed Player 2 buttons. Fixed quickload regression. Fixed random crashes in Fishin' Frenzy startup (access cojag_gun_input_r, leftovers?). Workaround for (MESS) battlesp/battlesg black screen. Fixed wave ROM endianness. Allows BIOS logo to correctly play notes. Make jaguarcd to boot from BIOS ROM, fixes screen size (atari\jaguar.cpp).
+  . Don't set a pending irq if line is masked. Use set_input_line for irq 0 as well. Massage unaligned accesses towards Tom & Jerry. Makes (MESS) jaguar protect and protctse playable. R30 gets overwritten on irqs. Fixed shlq calculation. Former fix for (MESS) jaguar kasumi booting. Fixed mmult opcode, fixes BIOS ATARI letters, 3d renders in (MESS) superx3d and hstrike. Added N flag for abs opcode and simplify calculation. Accumulator readback is sign extended. Get rid of imultn hack. Make the branch hack confined to CoJag (cpu\jaguar\jaguar.cpp).
+  . Stop opcode populates object code too. Correct RMW masks. Regular bitmap rewrite of 16bpp and 24bpp using pitch base. Bump number of object processor max entries to 200, fixes (MESS) jaguar raiden ranking screen and ttoonadv missing gameplay GFXs. Moved out object pointer from process functions. Implemented BCOMPEN, fixes (MESS) jaguar missil3d text and original version GFXs. Implemented pitch in scaled 8bpp bitmap and blending in scaled 16bpp. Partially fixes (MESS) jaguar mutntpng and phase0 main menus, respectively. Avoid potential crash in (MESS) raiden. Fixed object code returns (atari\jagobj.ipp).
+  . Attempt to make scanline_update safer. Mask host irqs if correlated bit in INT1 isn't enabled. PIT GPU timer are after regular clock with no internal divider, fixes (MESS) jaguar raiden BGM tempo. Disable PIT on prescaler == 0xffff. Blitter readback fix for (MESS) jaguar avsp. Upcast PIT and JPIT to u64 resolution, fixes hang regression in (MESS) jaguarcd. Stop drawing at display end, fixes valdiser gameplay flickering. Partial implementation of suspend state in object processor, fixes (MESS) kasumi rowscroll floor. Moved line buffer array as variable and clear it when starting object processor, fixed (MESS) valdiser playfield (atari\jaguar_v.cpp).
+  . Added JPIT1 and JPIT2 irq sources, fixes sound in (MESS) jaguar cybermor and mutntpng. Sort out JPIT irq section. JPIT setups needs either prescaler or divider set to work, fixes (MESS) jaguar pbfant sound. Allow changing serial frequency after setting SMODE. Allow playback of BIOS roaring sample. Clear DSP irq lines on JPIT and serial disabled. Extend CoJag Jerry irq hack note (atari\jaguar_a.cpp).
+  . Multiply pitch in source and destination widths. Fixed 3D renders for chekflag and others. Improved non-TOPBEN handling. Fixed (MESS) hstrike difficulty select blending and partially fixed (MESS) battlesp main menu. Preliminary GOURZ support. Fixed clipping A1. Shows proper spinning cube in BIOS (atari\jagblit.ipp).
+- lethalj.cpp: Added support for savestates
+- m10.cpp: Removed screen timing constexpr from class
+- model1.cpp: Default NVRAM is 1-filled
+- model2.cpp: Delay IRQ mask update by 2 cycles. Avoids possibility of sound_ready_w() bypassing the 2 cycle delay and firing a sound interrupt too early.
+- mpu4bwb.cpp: Removed preprocessor line continuation backslash that's asking for trouble
+- neptunp2.cpp: Made 'La Perla del Caribe' show the first error
+- raiden2.cpp: Moved systems with blending to a separate state class and reduced code duplication (seibu\raiden2.cpp). Draw sprites using priority for xsedae (no blending) (seibu\raiden2_v.cpp). Removed static member declarations that aren't actually defined (seibu\raiden2.h).
+- royalmah.cpp: Correct some DIP switch settings for Mahjong Tensinhai and Mahjong Raijinhai. Filled in Mahjong Raijinhai DIP switches from available manual pages.
+- segas16b.cpp: Moved game specific savestates to game specific init
+- shadoww_ms.cpp: Fleshed out driver. Most glaring remaining problem is sound isn't hooked up.
+- shougi.cpp: Hook up sharedram direction bit, small cleanup.
+- snk.cpp: Added 2 missing save state variables (snk\snk_v.cpp)
+- taitojc.cpp: Added wheel_motor for Side by Side and Side by Side 2
+- Ace: Improved colors, increased score panel size and added border graphics and confsettings. Small cleanup. Correction to in2 offsets and leave sound triggers unmapped. TODO: Discrete sound is unemulated. What are the unknown inputs in IN2 for? Extra coin sensors? The cabinet does not have a start button. Is the border correct? There's one photo online with gaps in the border. Does it mean planes can fly through at one point, or was it just a PCB malfunction? The flyer shows alternating white/black border objects, but PCB references don't.
+- Alien3 The Gun: Added PORT_MINMAX to the Y direction to avoid the value going out of range. Fixes aiming reticle rolls over from top of screen to bottom in alien3, Service Mode shows value for UP goes beyond max FF value back to 00 (ID 08679).
+- Amiga/CDTV: Added new CPU 'Sanyo LC6554' MCU core. Implemented front panel with VFD and control buttons. Play/Pause, Stop, Previous and Forward buttons not yet working because the "Remote Control Input Converter" isn't hooked up yet.
+- Choplifter: Note that IC7, IC13 and IC19 (315-5025) are not PLDs, but are a custom graphics shifter.
+- Clay Shoot: Added PIT8253 sound and increased Z80 clock. Removed tag lookups. Changed ad sticks to paddles and fake skill switch toggles to confsetting. Added dsw locations. TODO: Missing SN76477 sound effects.
+- Donkey Kong Junior: Redumped GFX ROMS for clone Donkey King Jr. (Nuova Videotron bootleg). Note: Missing gfx now appear on screen (i.e. title screen). Measured clocks for clone Donkey King Jr. (Nuova Videotron bootleg).
+- IPM Invader: Fixed bases tile drawing for clone 'IPM Invader (M11)' (ID 09357)
+- Ken Sei Mogura: Added separate views for the moles. Tweak colors a bit (layout\kenseim.lay)
+- Knuckle Joe: Added screen raw params from video measurements. Normalize red color channel for 2nd half of palette. Added note about overclocked Z80.
+- Maque Wangchao / Chaoji Da Manguan 2: Improvements. Hooked up protection device emulation and Oki ROM banking. Redumped Oki ROM. Promoted game to working.
+- The Pirates of Dark Water (SNES bootleg): Promoted 'The Pirates of Dark Water (SNES bootleg)' to working
+- Qianxi Jielong: Added BG layer
+- Rolling Crash / Moon Base: Use rom PCB locations from moonbase and removed MB14241 Shifter IC
+- The Simpsons: Changed screen visible width to 320 again after confirming it on a 2nd PCB
+- Traverse USA / Zippy Race: Normalize red color channel
+- Trivia ? Whiz: Removed 'Trivia ? Whiz (6221-00)'. Note: Same as clone 'Trivia ? Whiz (6221-00, with Sex trivia)'. Added 'Trivia ? Whiz (6221-03, U5-0)' (Merit 1985). Dumped newer program ROMs for Trivia Whiz as well as the question decoder PROM for the Trivia Whiz sets.
+- Tropical Angel: Added screen raw params based on M52 and TODO notes
+- unknown VRender0+ bowling game: Minor notes update
+- Western Venture: Provided good dump for Western Venture (Ver. AA.02.D) program ROMs
+- Fixed rom names in 8080bw.cpp, astrcorp.cpp, clayshoo.cpp, cle68k.cpp, megasys1.cpp and vicdual.cpp
+- Description changes of Crown Jewels Deluxe (Barcrest) (German) (MPU4) (CJG 0.4, set 1), Deathsmiles (Japan, 2007/10/09 MASTER VER), Deathsmiles MegaBlack Label (Japan, 2008/10/06 MEGABLACK LABEL VER), DoDonPachi Dai-Fukkatsu Black Label (Japan, 2010/1/18 BLACK LABEL), DoDonPachi Dai-Fukkatsu Ver 1.0 (Japan, 2008/05/16 MASTER VER), DoDonPachi Dai-Fukkatsu Ver 1.5 (Japan, 2008/06/23 MASTER VER 1.5), Donkey King Jr. (Nuova Videotron bootleg), Espgaluda II (Japan, 2005/11/14 MASTER VER, newer CV1000-B PCB), Espgaluda II (Japan, 2005/11/14 MASTER VER, original CV1000-B PCB), Espgaluda II (Japan, 2005/11/14.MASTER VER.), 'The Fallen Angels (World) / Daraku Tenshi: The Fallen Angels (Japan)', Ibara (Japan, 2005/03/22 MASTER VER..), Ibara (Japan, 2005/03/22 MASTER VER.., '06. 3. 7 ver.), Ibara Kuro Black Label (Japan, 2006/02/06 MASTER VER.), Ibara Kuro Black Label (Japan, 2006/02/06. MASTER VER.), Medal Mahjong Moukari Bancho (Japan, 2007/06/05 MASTER VER.), Muchi Muchi Pork! (Japan, 2007/ 4/17 MASTER VER.), Mushihime-Sama (Japan, 2004/10/12 MASTER VER), Mushihime-Sama (Japan, 2004/10/12 MASTER VER.), Mushihime-Sama (Japan, 2004/10/12.MASTER VER.), Mushihime-Sama Futari Black Label - Another Ver (World, 2009/11/27 INTERNATIONAL BL), Mushihime-Sama Futari Black Label (Japan, 2007/12/11 BLACK LABEL VER), Mushihime-Sama Futari Ver 1.0 (Japan, 2006/10/23 MASTER VER.), Mushihime-Sama Futari Ver 1.5 (Japan, 2006/12/8 MASTER VER 1.54), Mushihime-Sama Futari Ver 1.5 (Japan, 2006/12/8.MASTER VER. 1.54.), Packy no Treasure Slot (Japan, main ver. 1.3, video ver. 1.1), Pink Panther (German) (Maygay) (M1A/B) (set 1), Pink Sweets: Ibara Sorekara (Japan, 2006/04/06 MASTER VER.), Pink Sweets: Ibara Sorekara (Japan, 2006/04/06 MASTER VER...), Pink Sweets: Ibara Sorekara (Japan, 2006/04/06 MASTER VER....), Pink Sweets: Ibara Sorekara (Japan, 2006/xx/xx MASTER VER.), Puzzle! Mushihime-Tama (Japan, 2005/09/09 MASTER VER), Puzzle! Mushihime-Tama (Japan, 2005/09/09.MASTER VER), Revolution X (prototype, revision 5.0 5/23/94), Revolution X (revision 1.0 6/16/94), Sol Divide: Sword Of Darkness (Korea), Sol Divide: Sword Of Darkness, Sonic Blast Man no Janken Battle (Japan, main ver. 1.1, video ver. 1.0), Vanguard (SNK, set 1) and Video Pool (Nuova Videotron bootleg of Video Hustler)
+- Renamed (dirtdash) to (dirtdashb), (dkongjrv) to (dkingjrv), (packysts) to (packyts) and (revx) to (revx1)
+- Dipswitch fixes in 39in1.cpp, goldstar.cpp, koikoi.cpp, royalmah.cpp, shadoww_ms.cpp and snesb.cpp
+- MAME
+  . VIDEO RENDERING SYSTEM
+    . Added an off-screen reload helper plugin for people playing lightgun games with other types of controls (plugins\offscreenreload\*).
+    . Make warning msg more generic and brief and put it in a collection(toggle). Added red background and footnote with more verbose msg. No MAME lingo/slang in warning msg (layout\noscreens.lay)
+  . LUA engine
+    . Better handling of options: Use "classic" locale for numeric conversions. Don't use capturing lambdas. Put integer overload of value() before float overload. Got rid of duplicated numeric options conversion code (mame\luaengine.cpp).
+    . Ensuring that 'entry:default_value()' returns the correct type. 'entry:default_value()' was always returning string. A consequence of this problem is that the following LUA commands would error: manager.options.entries['beam_dot_size']:value(manager.options.entries['beam_dot_size']:default_value()) and manager.options.entries['frameskip']:value(manager.options.entries['frameskip']:default_value()). With this change, 'default_value()' will return objects of the correct type (mame\luaengine.cpp).
+    . Turn on sol's "safe numerics" (mame\luaengine.h)
+  . UI/OSD
+    . Added -[no]drc_rwx option to allow forcing W^X mode when writable executable pages are permitted (emu\emuopts.cpp)
+    . Shuffled numeric option conversions: Moved float/integer conversions into the option entries themselves. Fixed another bug where float values would be converted to strings with the global local, but converted from strings using the "classic" locale (util\options.cpp).
+    . Use "classic" locale for numeric conversions, suppor UI Clear to set default. Note that setting the default just sets the option to its default value at "command line" priority - the options system doesn't support peeling off a layer (ui\submenu.cpp).
+    . Start converting "usage" info and comments into new "required_ram" and "required_os" info (Software List; ui\utils.cpp)
+  . PLUGINS
+    . Fixed Cancel not working in input selection menus (plugins\commonui\init.lua)
+    . Added support for non-wrapping analog inputs (plugins\inputmacro\*). Changed the "previous menu" item text to make what it does more obvious (ui\pluginopt.cpp).
+    . Removed core off-screen reload hack now that the same thing can be achieved more flexibly with plugins (emu\inputdev.cpp and emu\emuopts.cpp).
+  . Better support for external MMUs (emu\dimemory.cpp, emu\machine.cpp, debug\debugbuf.cpp, debug\debugcmd.cpp, debug\debugcon.cpp, debug\debugcpu.cpp, debug\dvdisasm.cpp, debug\dvmemory.cpp, debugger\osx\disassemblyview.mm, debugger\osx\disassemblyviewer.mm, debugger\osx\memoryview.mm, debugger\osx\memoryviewer.mm, debugger\qt\memorywindow.cpp, debugger\win\memoryviewinfo.cpp and m68000\m68000.cpp).
+  . Merged wayward speakers (midw8080\mw8080bw_a.cpp, sega\model1.cpp, nscsi\cd.cpp)
+  . Set global C++ locale when the standard library isn't broken. GNU libstdc++ only provides a useless stub locale implementation when using anything other than the glibc standard C library. However, llvm libc++ provides a locale implementation that works fine with UCRT. Suppress digit grouping. Too many things don't take it into consideration (osd\windows\winmain.cpp).
+  . Use "classic" locale for debug console (emu\debug\*) and ROM loading (emu\romentry.cpp).
+- MAC OS X: Apply a default channel mapping for devices where macOS gives no layout information, like MacBook internal speakers. Fixes things being in mono when they shouldn't (sound\coreaudio_sound.cpp).
+- Compiling
+  . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
+  . Cleaned up devices build scripts a bit: Lua considers anything other than null or false to be "truthy". The tests against "null" were comparing to a non-existent global called "null" that evaluated to nil. Got bus.lua back in alphabetical order and got at least most of the trigger variables aligned with paths. At least don't put random stuff in the middle of the Acorn devices in machine.lua.
+  . Cleaned up some stuff (scripts\src\bus.lua and scripts\src\cpu.lua)
+  . Added note about MinGW Clang/LLVM issues with CodeView/PDB symbols at high detail levels (docs\source\initialsetup\compilingmame.rst)
+- Debugger
+  . Allow "0" to be specified as a parameter for numeric options (tools\unidasm.cpp)
+
+
 0.284
 
 - New games: Jammin' (prototype)
@@ -651,7 +793,7 @@
 - cps1.cpp: Use three buttons per player for Final Fight (ID 09294). Note: The third button connection is always wired on the CPS-1 mainboard and does work in the game, even if it's an undocumented easter egg. In many cases, the board sets were installed in generic JAMMA cabinets with standard stick plus three buttons control panels, allowing players to use the third button. Final Fight button 3 is not officially documented and does not exist on the control panel, probably a leftover. Pressing it will allow you to escape from grabs and choke holds instantly. To access the hidden pattern test modes, turn the "Service Mode" dip to ON and hold down "P1 Button 1" ('Ctrl') or "P1 Button 2" ('Alt') during the bootup test. Button 1 will load the Scroll (Background) test and Button 2 will load an Obj (Sprite) viewer.
 - cps3.cpp: Provide an hack free status read (machine\wd33c9x.cpp)
 - goldstar.cpp
-  . Cherry Master '97 improvements: Decoded and bitswapped the bipolar PROMs creating a RGB555 palette. Fixed title and foreground graphics colors. Video register from port to get the proper graphics modes. Adjusted and placed the reels properly. Added hopper support, mechanical counters and lamps. Fixed the reels colors and the screen update to use the vidreg for modes. More work on memory map, ports, hooked video registers, worked video hardware, reels tile info, screen update and palette/color index for different elements. Added double-up girls support with scroll, new inputs from the scratch and buttons-lamps control panel layout. Added Cherry Master '97 'Double Up Game', 'Double Up Type', 'Double Up Girls' factory forced DIP switches. Splitted inputs for Cherry Master '97 sets 2 & 3.  Fixed DIP switches polarity and defaults for cmast97, cmast97a and cmast97b. Splitted inputs for Cheri Mondo '97. Added 'Reels Speed' DIP switch to cmast97, cmast97a and cmast97b. Fixed the Cherry Master '97 reels background colors. Added new register written by port 03h to properly assign the reels background colors by bonus. Simplified the vidreg handling. Adding cmast97 correct settings. Fixed some lack of def strings in cmast97 DIP switches. Fixed the cmast97 double up graphics bug when the girls are disabled through DIP switches. Promoted Cherry Master '97 (V1.7, set 1) and clones Cherry Master '97 (V1.7, set 3, no girls) and Cheri Mondo '97 (V1.4I) to working.
+  . Cherry Master '97 improvements: Decoded and bitswapped the bipolar PROMs creating a RGB555 palette. Fixed title and foreground graphics colors. Video register from port to get the proper graphics modes. Adjusted and placed the reels properly. Added hopper support, mechanical counters and lamps. Fixed the reels colors and the screen update to use the vidreg for modes. More work on memory map, ports, hooked video registers, worked video hardware, reels tile info, screen update and palette/color index for different elements. Added double-up girls support with scroll, new inputs from the scratch and buttons-lamps control panel layout. Added Cherry Master '97 'Double Up Game', 'Double Up Type', 'Double Up Girls' factory forced DIP switches. Splitted inputs for Cherry Master '97 sets 2 & 3. Fixed DIP switches polarity and defaults for cmast97, cmast97a and cmast97b. Splitted inputs for Cheri Mondo '97. Added 'Reels Speed' DIP switch to cmast97, cmast97a and cmast97b. Fixed the Cherry Master '97 reels background colors. Added new register written by port 03h to properly assign the reels background colors by bonus. Simplified the vidreg handling. Adding cmast97 correct settings. Fixed some lack of def strings in cmast97 DIP switches. Fixed the cmast97 double up graphics bug when the girls are disabled through DIP switches. Promoted Cherry Master '97 (V1.7, set 1) and clones Cherry Master '97 (V1.7, set 3, no girls) and Cheri Mondo '97 (V1.4I) to working.
   . Cherry Master 97 (bootlegs running in different hardware) huge improvements: New machine config, machine start, bankswitching, memory map, port map, video registers, screen update, graphics decode, inputs, ROM load fix, lamps and button-lamps control panel. Added Double Up Type DIP switch (3 / 5 cards) and added the missing layout. Promoted Cherry Master '97 (v1.6, bootleg) and Cherry Master '97 (v1.8, bootleg) to working.
   . Jackpot Knight improvements: Fixed title and foreground colors and reels colors. Improved reels placement. More work on ports map, hooked video registers, worked video hardware, new machine config, proper screen update and proper graphics decode. Improved inputs. Added a new port to handle the Jackpot Knight reels background colors. Added Reels Speed DIP switch. Added 'Reels Speed' DIP switch. Switched DIP switches to Skill/Stops mode for default. Added buttons-lamps control panel. Promoted Jackpot Knight (V1.1) to working.
   . New Fruit Bonus '96 Special Edition: Removed all loaned bipolar PROMs from clones nfb96se, nfb96sea, nfb96seb, nfb96sec, carb2002 and carb2003 and decoded the proper device data for palette. Fixed the rom load of clones nfb96se, nfb96sea, nfb96seb, nfb96sec, carb2002 and carb2003 taking care of the proper graphics bitplanes. Removed the imperfect color flag of the above games. Marked clone carb2003 reels graphics ROMs as bad dump. Flagged the game as imperfect graphics. Temporal workaround bypassing some checks for clone noved.
@@ -709,259 +851,24 @@
 - Compiling
   . Cleaned up code (cpu\t11\t11ops.hxx, video\poly.h, igs\spoker.cpp, sega\model2.h, sega\model2_v.cpp, sega\model2rd.ipp)
 
-
-
-0.282
-
-- New games: Baccarat Special, Lucky Pierrot (Japan, v1.1.0B) and Miracle Seven - Heaven's Gate Turbo (Japan, v2.0.0)
-- New Working games: 3 Cards Poker 96 (V1.0), 3 Cards Poker 96 (V1.6), Bonus Chance (W-8, set 1), Bonus Chance (W-8, set 2), Cherry Bonus (A.A.I. bootleg), Cherry Bonus II (V2.00 06/01), Fever Chance (W-6, Japan, set 1), Fever Chance (W-6, Japan, set 2), Fever Chance (W-6, Taiwan), Haunted House (IGS, V101US), Haunted House (IGS, V107US), Haunted House (IGS, V109US), Jungle King 2004 (V101US), Mega Lines (Wing W-7 System), New Draw 8 Lines (Version 2.1), Nove Diamante (bootleg), Royal 5+ / X'mas 5 (V101US), Skill Chance (W-7, set 1, 62-98 main), Skill Chance (W-7, set 2, 53-98 main), Wild Cat 3 and Wild Cat S (CMV4 hardware)
-- New Non-Working games: 100&Medal GekiKazaaan!! (MDA-C0098D), 100&Medal Kazaaan!!, Arabian Jewel (MDA-C0090), Around The World, Battle Kids, Champion (darts machine, v7.71), Chaoji Jielong (V100CN), Crystal Maze, Flash Gun, Hanafuda Hana Tsubaki (Japan), Manguan Fuxing (V104T), Monopoly the Medal 2nd Edition (MDA-C0056A), Pluto 6 Devkit/Evaluation Board, Saikyou Saisoku Battle Racer, Space Computer (ver. 1.8a), Star Basket, Treasure Hunting (US.09.A), Treasure Island Jackpots, and Tsuribori Taikai (JAE 980605 V1.000)
-- New clones: 100&Medal GekiKazaaan!! (MDA-C0098), 100&Medal GekiKazaaan!! (MDA-C0098C), 100&Medal Kazaaan!! (MDA-C0091A), Arabian Jewel (main), Arabian Jewel (satellite), Bingo Galaxy (MDA-C0039B), Bingo Galaxy (MDA-C0039C), Cherry Master (ED-96, Corsica CM v8.23), Cherry Master 2005 (Ver. 1.00H), Cuty Line (LC-88 bootleg, ver.7.07C), Doraemon Slot, E.D.F.: Earth Defense Force (set 3), Fever Chance (W-6, cross-system for W-4), Galaktron (Sede 3), Hanafuda Hana Ginga (Japan, ver 1.00, rev 1), Magic Tree (V200PR), Samurai Aces (Korea?), Slot no Oujisama / Slot Prince (Japan, SLO1 Ver. A), Sugorotic JAPAN (STJ1 Ver.B), Tang Tang (ver. 0526, 26/05/2000, set 2), Tarzan II (V101XB), UFO Catcher 7 (rev. A) and UFO Catcher 7 (rev. C)
-- New PinMAME games: 'Adventures of Rocky and Bullwinkle and Friends (Belgium 1.10, display I1.03)' and 'Maverick, The Movie (Germany 4.04, Display Rev. 4.00)'
-- New drivers: fcourtfev.cpp, fdek_h8s.cpp and flashgun.cpp
-- New devices: 24c65, hasp_savquest, heath_gp19_tlb, heath_igc_super19_tlb_device, heath_igc_tlb_device, heath_igc_ultra_tlb_device, heath_igc_watz_tlb_device, heath_imaginator_tlb, heath_super19_tlb, heath_superset_tlb, heath_tlb, heath_tlb_connector, heath_ultra_tlb, heath_watz_tlb, lsi11, mm5740, namcos1_sprite, permedia2, serial_heath_h19, st_m29w640ft, st0032, systemy2, toaplan_txtilemap and winbond_w29c020c
-- New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
-- Bob Zed (What's new): https://youtu.be/60y20tKb9F4
-- CPU
-  . DEC T11
-    . Handle unaligned accesses to I/O page. Certain devices on bk, uknc require this, as they do not handle the WTBT bus signal and always decode full address (t11\t11.cpp).
-    . Improved interrupt handling in K1801VM1 CPU core. Added interrupt processing and EIS instructions to K1801VM2 core (t11\t11.cpp).
-  . Dynamic Re-Compiling
-    . drcbec
-      . Fixed code for ROLC that played fast and loose with integer promotion, producing incorrect results for some compilers/targets (cpu\drcbec.cpp).
-      . Fixed default floating point rounding mode not applying after RESTORE (cpu\drcbec.cpp).
-    . drcbex86
-      . Clear the zero and carry flags for unordered floating point comparisons for consistency with the documentation and the other back-ends (cpu\drcbex86.cpp).
-      . Mask flags when setting via SETFLGS or RESTORE to avoid possible buffer overrun, slightly optimised SETFLGS with an immediate operand. Optimised FCMP when only the unordered flags is required (cpu\drcbex86.cpp).
-      . Optimised GETFLGS: LEA to avoid the need to save/restore flags for more flag combinations, choose registers more wisely to avoid unnecessary copies and reduce REX prefixes, use more efficient strategy to save and restore flags. Removed assert that made SETFLGS impossible to use in debug builds. Removed casts that are no longer necessary (cpu\drcbex86.cpp).
-    . drcbex64
-      . Clear the zero and carry flags for unordered floating point comparisons for consistency with the documentation and the other back-ends. Slightly optimised flag calculation for some shifts and rotates (cpu\drcbex64.cpp).
-      . Simplified and ptimised flag calculations for rotate instructions (cpu\drcbex64.cpp)
-      . Mask flags when setting via SETFLGS or RESTORE to avoid possible buffer overrun, slightly optimised SETFLGS with an immediate operand. Optimised FCMP when only the unordered flags is required (cpu\drcbex64.cpp).
-      . Avoid slow microcoded pushfq/popfq altogether. Also avoid some false dependencies and reduce near cache usage by almost 4KiB (cpu\drcbex64.cpp).
-      . Optimised a couple more cases of GETFLGS and replaced a few magic numbers with constants. Use 2-operand and 3-operand forms of imul. Also changed scratch register use a bit. Optimised MULU/MULS flag calculation. Removed assert that made SETFLGS impossible to use in debug builds. Removed casts that are no longer necessary (cpu\drcbex64.cpp).
-    . drcbearm64
-      . Use bfxil to save an instruction for smae cases of CARRY and ROLINS (cpu\drcbearm64.cpp)
-      . Fixed default floating point rounding mode not applying after RESTORE. Optimised generated code for SETFLGS a little (cpu\drcbearm64.cpp).
-      . Save an instruction when calculating carry flag for shifts with immediate count. Optimised MULU/MULS flag calculation. Handle degenerate forms of ROLAND/ROLINS when simplifier is disabled. Removed assert that made SETFLGS impossible to use in debug builds (cpu\drcbearm64.cpp).
-      . Further optimised 32-bit multiplication and flag calculation for all multiplication instructions. Fixed 32-bit SEXT sign extending to 64 bits. Removed casts that are no longer necessary (cpu\drcbearm64.cpp).
-      . Don't try to get offset of unbound labels even if it won't be used (cpu\drcbearm64.cpp)
-    . ST0016: Moved ROM banking from drivers into device. External ROM is now read through an address space. Also reduced literal tags, suppress side effects for debugger reads and cleaned up code.
-    . UML: Truncate immediate operands for CARRY (cpu\uml.cpp). Marked BREAK as clobbering all flags and marked LOAD, LOADS, STORE, SET, FLOAD and FSTORE as not modifying flags. CPUs already depend on SET not modifying flags (cpu\uml.cpp).
-    . PowerPC drc: Generate a simpler multiplication opcode for MULLI (powerpc\ppcdrc.cpp)
-    . x86/x64 code logging helpers: Encapsulated as a class, don't use unsafe sprintf, optimised a little, made comments and data ranges vectors (cpu\x86log.cpp).
-    . Doc: Documented the last of the UML instructions (docs\source\techspecs\uml_instructions.rst)
-  . Hitachi HD63705Z0: Use logmacro logging (m6805\hd6305.cpp)
-  . hyperstone E1: Optimised generated code for multiplication and DSP instructions a little. Fixed recompiler not sign-extending EHMAC inputs (interpreter was correct) (e132xs\e132xs.h, e132xs\e132xsdrc_ops.hxx).
-  . Intel 8086: Avoid clearing working registers upon device reset (i86\i86.cpp). Note: This change is required in order for BIOS for the AT&T 6300 Plus to work. The 6300 Plus has external logic to reset the 80286 via the reset pin, so that it can return to Real Mode from protected mode. Upon return to Real Mode, the BIOS code is clearly depending on the fact that SP register is preserved upon reset (the BIOS does however explicitly load the SS register after reset, before it is used). The 8086 and 80286 documentation call out which registers are to be initialized upon reset, and SS is one of them. For AX, BX, CX, DX, BP, SP, SI and DI, the behaviour is not specified. However, based on what the 6300 Plus BIOS is doing, it appears the actual hardware behaviour is to leave them untouched. Although we can only be fully confident that the real 286 behaves this way with respect to the SP register, it's likely that the other registers which do not have explicitly defined initialization behavior are also not touched during reset. Note that this observed behaviour only pertains to reset via the reset pin, and not to power-on initialization.
-  . Intel 80960KA/KB
-    . Only trigger interrupts if the input changes to the asserted state (i960\i960.cpp). logr and logrl use base 2 and always use correct rounding mode (i960/i960.cpp).
-    . Split check_irqs() into two separate functions, fixes "Fatal error: I960: 2f2f2f2e: Unhandled 00" during Self-Test in vf2o, overrev and sgt24h (ID 08347). Pending interrupts are only checked after returning from an interrupt, while executing modpc if it causes the current priority to be lowered, and after receiving a test pending interrupts IAC message (i960\i960.cpp).
-    . Fixed typo in ROUNDRL instruction (i960\i960.cpp)
-  . MCS-51
-    . Fixed destination RAM type in XCHD A, @R0/@R1. The initial value is read from internal RAM (IRAM_IR). The final value must be written to the internal RAM too (IRAM_IW instead of IRAM_W) (mcs51\mcs51ops.hxx).
-    . Renamed the external data bus from io to data. Start turning the internal maps into real maps. Modernization step 1+2 (mcs51\mcs51.cpp)
-  . NEC uPD7810: Added internal layout and complete driver implementation for (MESS) Roland PG-1000 (upd7810\upd7810.cpp, roland\roland_pg1000.cpp)
-  . Texas Instruments TMS7000: Clean up code in disassembler (tms7000\7000dasm.cpp)
-  . Toshiba TMP95C06x: Fixed uninitialised members. Also got a lot of stuff out of the header that doesn't need to be there (tlcs900\dasm900.cpp). Show SFR symbols in disassembled code for names for TMP95C061, TMP95C063 and TMP96C141.
-  . Zilog Z80: Cleaned up unnecessary internal state validation (SA_BUSACK) which caused INT skip (z80\z80.cpp)
-- DEVICE
-  . 8042 Keyboard/Mouse Controller: Can't possibly receive if the timer isn't running. Fixed PCIAGP boot without debug tricks (machine\8042kbdc.cpp).
-  . Flash ROM: Added ST_M29W640FT and implemented unlock bypass command. Support for Winbond W29C020C + preliminary Winbond SDP mode (machine\intelfsh.cpp)
-  . Floppy
-    . Support quad density floppies as an option. Disable option ROM on fixed disk controller (onboard BIOS has built-in support). Use a lambda instead of short function (isa\fdc.cpp).
-    . Added rudimentary error checking to floppy_create, allow mount to return nullptr on failure. Fixed error return for floppy_create (tools\floptool.cpp, tools\image_handler.cpp). Sanity check for debug builds (formats\fsblk_vec.cpp).
-    . Added 8bit DMA and NOP unknown FDC commands to (MESS) MPC-3000 (machine\upd765.cpp). Added uPD72069 data rate control (machine\upd765.cpp)
-    . New filesystem-based commands: Added flophashes and hdhashes commands to compute CRC-32 and SHA-1 hashes for each file on a floppy or hard disk image. Added flopchmeta command to change the metadata for a file, directory or volume on a floppy image. Added floprename and flopremove commands (tools\floptool.cpp).
-  . Hitachi HD44780 LCD Controller: Reorganized the classes so that the a0* bad dump do not propagate to systems not using it (video\hd44780.cpp). Removed the parent roms stuff because we do not have a parent concrete device anymore (video\hd44780.h).
-  . IGS017_IGS031: Don't hardcode tilemap ROM size in decryption function (igs\igs017_igs031.cpp), fixes 'Krazy Keno' which has bigger ROM [Osso].
-  . Intel 8259 PIC: Side effect protection
-  . ITE IT8705F LPC Super I/O: Fixed FDC DRQ line setup. Hookup ISA DMA bindings (machine\it8705f.cpp).
-  . Konami 056832 Tilemap Generator: Got rid of a redundant function with duplicated code (konami\k054156_k054157_k056832.cpp)
-  . NMK112: Use configured banking rather than writing to ROM regions. Handle non power of two ROM sizes properly (machine\nmk112.cpp).
-  . NVRAM: Removed DEFAULT_RANDOM init (machine\nvram.cpp)
-  . RS-232 Port: Added option for (MESS) Heath H19 terminal. Changed to the option function to a static method.
-  . SEI80BU Encrypted Z80 Interface: Moved SEI80BU emulation into its own source file (seibu\sei80bu.cpp). SEI80BU is not always part of the Z80-based sound system, e.g. seibu\mustache.cpp. Also added input frequencies for SEI80BU devices (uses the same clock as the Z80).
-  . Seta ST0020/ST0032 Sprites: Made ST0020 and ST0032 separate devices. Use util::sext for sign extension. Suppress side effects for debugger reads, use logmacro.h for configurable logging (seta\st0020.cpp).
-  . SiS 950 LPC Super-South Bridge: Hookup ISA DMA bindings (machine\sis950_lpc.cpp)
-  . Taito TC0110PCR: Use callback and configuration for color format and address shift. Also use logmacro.h for logging and suppress side effects for debugger reads (taito\tc0110pcr.cpp).
-  . Toaplan Text tilemap generator: Merged common text layer emulation in GP9001-based drivers into a device (toaplan\toaplan_txtilemap.cpp)
-  . Winbond W83977TF Super I/O: Hookup FDC, GPIO1, FDC irq and drq lines. Ensure Super I/O port to be installed after the others. Hookup ISA DMA bindings and fixed floppy fails (machine\w83977tf.cpp).
-  . Z80 CTC: Improved interrupts handling in (MESS) specnext (machine\z80ctc.h)
-  . Zilog Z80 DMA Controller: Always return live status regardless of when read command was sent (ID 09143). Refactor read register emulation. Minor logging refinements and cleanups (machine\z80dma.cpp). Keep member declarations together (machine\z80dma.h).
-- SOUND
-  . Ensoniq 5505/5506 to 5510 interface: Route es5505 bus to a separate 'aux' stereo output. The VFX-SD and later keyboards in the family have not only a main stereo output, but also a second 'aux' stereo output that bypasses effects processing and has separate output jacks from the keyboard. This allows some sound to be routed for separate effects processing or recording (sound\esqpump.cpp and ensoniq\esq5505.cpp).
-  . Ensoniq ES5505/6: Devices generate 20bit samples, not 16-bit ones.
-  . Yamaha SWP30 sound chip: Overhaul. Use util::sext and explicit specializations for std::clamp and std::min. Removed crashing debug fopen/fprinf and srcclean (sound\swp30.cpp)
-- astrcorp.cpp: Adding passwords in ASCII format
-- astropc.cpp: Split passwords from astrcorp.c in astropc.c notes where they belongs and added romset IDs. Added missing passwords ASCII tables.
-- blmbycar.cpp and wrally.cpp
-  . Use device_video_interface to obtain screen. Also lifted a calculation out of the inner sprite drawing loop and cleaned up code (gaelco\gaelco_wrally_sprites.cpp). Implemented device_gfx_interface (gaelco\gaelco_wrally_sprites.cpp).
-  . Suppress side effects for debugger reads and cleaned up code (gaelco\blmbycar.cpp). Cleaned up code (gaelco\wrally.cpp).
-- dassault.cpp: Fixed priority write function. Fixes regression since MAME 0.194 (Get rid of nonbuffered_palette_w in video\decocomn.cpp).
-- dbz.cpp: Reduced duplication and cleaned up code. Use object finder arrays and templates to reduce duplication and reduce literal tags. Use BIT helper, improved ROM region names and made more local variables const.
-- ddenlovr.cpp and dynax.cpp
-  . Correct half the DIP switches for Mahjong Jongoh based on an auction photo of the manual
-  . Added preliminary hanaroku panel support to Hanafuda Hana Ginga
-  . Better representation of the buttons that are actually present (dynax\hanafuda.cpp)
-- es9501.cpp
-  . Changed IRQ handling so that 'Dream 9 Flower' does palette updates and inputs. Dumped correct EEPROM for the Dream 9 Flower and clone.
-  . Real 93C56 EEPROM dump for Special Dream 9 (v1.0.7G). Added real EEPROM dump for Star Ball (v1.0.0S).
-- gaelco2.cpp
-  . Moved dual monitor variant to a separate driver state class. Lifted a calculation out of the inner sprite drawing loop. Reduced duplication and suppress side effects for debugger reads.
-  . Make use of DS5002FP programs built from Gaelco archives for the first 2 World Rally 2 sets, older sets still use the ROM found on dumped boards.
-- giclassic.cpp: Added missing member to saved states
-- goldstar.cpp
-  . Driver improvements. A huge work on tilemap system, machines config, memory maps, video start, screen update, tile get info, gfxdecode and different video registers to give extended graphics support (mostly girls) to Poker Master and derivative hardwares. Now the sets that support girls are pkrmasta, missbingo, missbingoc, crazybon, crazybona and crazybonb. First titanic pass to reorganize and clean goldstar.cpp driver.
-  . New machine config for '3 Cards Poker 96'. Correct settings for NVRAM. Bypassed the '3 Cards Poker 96' protections. Improved, optimized and unified the protection bypass for both sets. Unified the inputs for both sets. Simulated protection instead of patching it out. Promoted 3 Cards Poker 96 (V1.6) and 3 Cards Poker 96 (V1.0) to working.
-  . Extended graphics/girls support (8.u53 rom) to all Lucky Line III sets. Created buttons-lamps control panel layout. Extended NVRAM. Also added a dump of original 6264 NVRAM for future analysis.
-  . Fixed the constant noise sound problem in Lucky Lady (Wing, encrypted) and Tic Tac Toe (Sundance bootleg of New Lucky 8 Lines).
-  . More work toward clone cutylineb. Memory map and machine config. Redumped cutylinea and cutylineb bipolar PROMs. Removed the loaned girls ROM from clones cutylinea and cutylineb, due to is inexistent on the PCB. Added workaround to get clone cutylinea running the attract. Added temporary hacks to clones cutylinea, cutylineb and cutylinec, to get them working. Unfortunately the double-up feature is still not present. Added new inputs and DIP switches bank #1 to clones cutylinea, cutylineb and cutylinec. Added 'Auto Reset Point', 'Bonus Condition', 'Coinage', 'D-UP Game Rate', 'Key In', 'Main Game Rate', 'Max Credits', 'Max Key In', 'Min Bet for Bonus', 'Rolling Speed' and 'Show Max Credits' DIP switches to cutylinea and marked the whole DIP switches bank #3 as unused.
-  . Promoted Cherry Bonus II (V2.00 06/01) to working. DSW settings for cmast91, crazybonb, ll3, ll3a, ll3b and missbingoc. Fixed the game rate % settings for clone ll3c. Correct the polarity of DIPSW1 pin 1 for cmast91. Added inputs for cll from cmast91.
-  . Remapped and improved Mega Bonus Star II inputs. Added hopper support.
-  . Skill Chance/Mega Lines improvements: Improved memory map, port map, preliminary inputs and fixed the reels bitplanes order and colors for megaline, skillch and skillcha. Improved the skillch/skillcha foreground bitplanes order and colors. Migrated megaline and skillch sets to wingco class. Created a new screen update to work with the new reels parameters and video registers. Fixed memory/port map. Remapped the inputs ports. Reworked the game inputs to be accurate. Added hopper support. Worked the video register to enable/disable respective graphics. Reworked the screen update with the VREG functions. Fixed the double-up single reel/rolling numbers. Added the 4x output ports. Added bookkeeping/mech counters. Added 2 sets of lamps. Fixed the Skill Chance foreground colors. Added a buttons-lamps control panel layaut. Cleaned up the driver. DIP switches locations for megaline/skillch sets. Added NVRAM support. Separate inputs for megaline. Correct main game rate DIP switches settings and set defaults for hopper limit, coin A and key in. Added workarounds to break the different games protections. Added button-lamps control panel to skillch and megaline. Promoted megaline, skillch and skillcha to working. Worked the proper reels gfx banking protection for megaline, skillch and skillcha.
-  . Bingo (Wing) improvements: Added proper memory map. Derivated machine config from lucky8. Fixed the loud noise issue.
-  . New Lucky 8 Lines / New Super 8 Lines improvements: Fixed the loud noise issue in ns8linew and ns8linewb. Fixed the hopper jam error in all sets.
-  . Cherry Angel improvements: Improved memory map, port map, inputs and created new machine config. The parent and clones are playable, but still remain some protections.
-  . Wild Cat S improvements: New machine config, memory, port maps and proper inputs for clone Wild Cat S. Created output port handler. Added video register. Bypassed protections. Created a buttons-lamps control panel layout. Fixed the gfx bitplanes and colors. Added DIP switches to clone Wild Cat S. Promoted Wild Cat S (CMV4 hardware) to working.
-  . Wild Cat sets improvements: Bypassed wcat3 protections. Fixed the wcat and wcat3 gfx bitplanes. Fixed the wcat and wcat3 colors. Allow wcat3 init PPI2 properly. Reworked and separated inputs for wcat3. Complete inputs for wcat3. Buttons-lamps control panel layout for wcat3. Added wcat3 DIP switches. Promoted Wild Cat 3 to working.
-  . Wing W-6 System improvements: Switched the system to wingco class. Created new screen update to fit the video events/stats. Created special function for reels scroll RAM protection. Relocated the reel #1 for D-UP mode. Applied mirror for the reel scroll RAM displaced offset. Created output ports. Added DIP switches & DIP locations. Added hopper support. Switched the bipolar PROM nibbles, fixing the palette. Bypassed some protections. Added lamps support. Added mechanical counters. Added buttons-lamps control panel. Implemented the SM7831 Arithmetic Processor device emulation. Removed all the previous hacks and workarounds at init. Placed SM7831 read and write routines together. Promoted Fever Chance (W-6, Japan, set 1) and clones Fever Chance (W-6, Japan, set 2) and Fever Chance (W-6, Taiwan) to working.
-  . Wing W-8 System improvements: Rewrote the whole memory map and I/O port map. Added new dedicated video start. Bypassed the system protection. Created the 2-states, 6 PROMs palette. Calculated and applied the video resnet. Added new dedicated screen update. Added the 4x SN76489 sound support. Inputs and DSW from the scratch. Added the 3rd GFX bank to the gfxdecode for extended graphics. New tile get info for the special protection tilemap. Hooked the output ports. Hooked Coins A-B-C-D, Key In and Key Out mech counters. Added NVRAM and hopper support. Rearranged the ROM load for GFX banks ROMs and bipolar PROMs. Added the Stop 1-2-3 and Stop All buttons. Partially bypassed the hopper protection. Aligned the controls according to the real control panel. Remapped the reset switch, that was overlapped by mistake. Documented the Wing W-8 System video RESNET. Added ASCII schematics. Reworked the ROM load. Added an extra graphics bank for extended reels graphics. Fixed double-up reel colors. Removed the imperfect colors flag. Created derivative reel tile info. Created button-lamps control panel layout. Promoted Bonus Chance (W-8, set 1) and clone Bonus Chance (W-8, set 2) to working state.
-  . Fixed the clones moonlghtb and moonlghtc colors. Fixed bitswapped reels graphics for clones super9 and super9a.
-  . Cleaned up 'Fever Soccer' code: Fixed sprite wraparound, simplified graphics decoding and use BIT helper.
-  . Decoded the contents of prom met47s01.u66 in clone New Draw 8 Lines (Version 2.1) creating an accurate palette and fixing colors for the foreground graphics. Inputs from the scratch. Extracted the color system PLD contents and decoded the reels palette. Added function to transform on the fly the scrambled SN76489 commands, fixing the sound. Created buttons-lamps control panel layout. Fixed stops buttons border intensity in the buttons-lamps control panel layout. Added 'Double Up Game' and 'New Selective Hold Feature' dipswitch. Figured out the 'Coin A Rate', 'Double Up Game Type' (Reels or Hi-Lo Cards), 'Key In' and 'Main Game Pay Rate' dipswitches. Fixed the Coin A input. Promoted New Draw 8 Lines (Version 2.1) to working. DIP switches for clone F-16 Super 8 Lines.
-  . Cherry Bonus improvements: New memory map, machine config, inputs and protection bypass. Splitted inputs for Cherry Bonus (A.A.I. bootleg). Improved Cherry Bonus inputs adding the STOP buttons. Update Cherry Bonus (A.A.I. bootleg) settings. Promoted Cherry Bonus (A.A.I. bootleg) to working.
-  . Updated Poker Master (Tony-Poker V3.A, hack?) settings. The polarity for DIP switches 1 & 2 has been corrected.
-  . Magical Odds huge improvements: Huge work in tile get info/video start/screen update, to integrate the dynamic reels background color system. Reformatted the reels system to fix the kinetic title effect. Fixed palette decoding and graphics decode accordingly. Added a third graphics bank for title tiles. Reworked inputs to get the necessary to get the game working and match the standards. Removed MACHINE_WRONG_COLORS and MACHINE_IMPERFECT_GRAPHICS flags. Correct spot area for title effect (magodds, magoddsa & magoddsb).
-  . Fixed DIP switches polarity for clone Nove Diamante (bootleg). Workaround to bypass the Nove Diamante link error. Fixed Nove Diamante reels graphics. Removed the loaned bipolar PROMS in Nove Diamante and decoded the color data EPROM from the game PCB, splitting the byte nibbles creating 4bit data for the game palette. Promoted clone Nove Diamante (bootleg) to working.
-- hng64.cpp: 
-  . Decode samples. Bump 8-bit incoming samples to 16-bit and adjust output scaling. Improves audible detail and output volume. Replaced the lpf by a chamberlin, it makes more sense. Adjusted final mix to capture the true highest bits, don't retrigger the filter envelope on writes and decode the loop parameters. More plausible loop point calculation. Updated documentation. Further work on loop parameters. The crowd in Xtreme Rally now sounds reasonable. Additional cleanup, proper logging, device map and multichannel output. Also changed owners/licensing given extensive rewrite since 0.280. Added DMA support. 16-bit linear sample format supported. Remap the channel mapping to make sense. Better logging. Cleanup, improved logging, fixed missing address mask, fixed issue with 16-bit playback and added enum for output channels. Make into a device_memory_interface with a side of memory_access cache (sound\l7a1045_l6028_dsp_a.cpp).
-  . Improved MIPS/V53 communications, fixes many problems with Xtreme Rally. Spin the MIPS for the actual required time to prevent overruns, which is much lower (snk\hng64.cpp).
-  . Cleaned up code: Use template for tilemap info function. Use logmacro.h for configurable logging. Suppress side effects for debugger reads. Reduced literal tags. Use abbreviated integer types consistently (snk\hng64.cpp/h, hng64_3d.ipp, hng64_a.cpp, hng64_sprite.ipp and hng64_v.cpp).
-  . Patch up a bit: Fixed BIOS region in ROM in ROM finder constructor. Use object finders for texture and vertex ROMs. Fixed endianness bug casting 8-bit vertex ROM region to u16. Fixed ridiculously dangerous code depending on variable shadowing. Got rid of some completely unnecessary casts that could break stuff later.
-  . Preliminary hookup for rear/LFE and individual gun sound outputs (snk\hng64.cpp). Follow along with the DSP's new channel mappings (snk\hng64_a.cpp). Fixed vertex ROM range check and moved indexing after check. Fixes assertion failures, etc (snk\hng64_3d.ipp).
-- hummer.cpp: Adding passwords in ASCII format
-- igs_fear.cpp
-  . Added preliminary inputs for Icescape
-  . Dumped all GFX ROM for 'Majiang Zhengba'
-- igs_m027.cpp and igs_m027xa.cpp
-  . Dumped internal ROM for Gone Fishing (V602US), Haunted House (IGS, V109US), Jungle King 2004 (V101US), Krazy Keno (V105US) and Royal 5+ / X'mas 5 (V101US).
-  . Improved I/O for 'Royal 5+ / X'mas 5 (V101US)' and Gone Fishing (V602US). Promoted 'Royal 5+ / X'mas 5 (V101US)' to working.
-  . Improved inputs for Jungle King 2004. Correct inputs, use Triple Fever artwork an hooked up sound banking for Haunted House. Correct button inputs and DIP switches for Krazy Keno. Added internal artwork for Krazy Keno and Jungle King 2004. Promoted Haunted House (IGS, V101US), Haunted House (IGS, V107US) and Haunted House (IGS, V109US) and Jungle King 2004 (V101US) to working.
-  . Fixed ADPCM ROM banking for Haunted House and Krazy Keno. Got rid of some stuff carried over from igs_m027.cpp that no games on this platform seem to use (igs\igs_m027xa.cpp).
-- igs017.cpp, igs_m027.cpp, igs_m027_033vid.cpp, igs_m027_link.cpp and igs_m027xa.cpp: Boost OKI MSM6295 ADPCM sound volume from half to full
-- itech8.cpp
-  . Let's mark 'Golden Par Golf' as MACHINE_NOT_WORKING due to lockups in attract mode
-  . Removed DEFAULT_RANDOM NVRAM from gpgolf and capbowl. Changed capbowl NVRAM init from all_0 to all_1 (though bowlrama expects all_0).
-- jclub2.cpp: Emulated switch matrix properly. Reduced tag lookups and literal tags. Use templates and arrays to reduce duplication. Use util::sext for sign extension. Suppress side effects for debugger reads, use logmacro.h for configurable logging.
-- legionna.cpp: Fixed naming
-- micro3d.cpp: Copy old value of MR1 to MR2 when MR1 is written (machine\scn_pci.cpp)
-- model2.cpp
-  . Only trigger interrupts if the input changes to the asserted state (i960\i960.cpp). Drop interrupts on reset (i960 IRQ)
-  . Correct TGP math lookup table logic, fixes wrong in-game physics in Virtua Cop 2 (ID 09265). Also removed wait state when writing to copro FIFO, no longer needed.
-  . Use separate memory spaces for data A and external. Fixes enemy car collision detection in stcc. Added EBU to address for extended A bus accesses (mb86235\mb86235.cpp).
-  . Bilinear luma filtering for SEGA Model 2 textured render path. Bilinear improvements discussed on pull request thread: Code standard. Anti Alpha higlighted edges ala Supermodel. Cleaner bilinear edge cases ala Supermodel.
-  . Unoptimized preliminary support for mipmaps and trilinear filtering: Bilinear luma filtering for SEGA Model 2 textured render path. Bilinear improvements discussed on pull request thread. Code standard. Anti Alpha higlighted edges ala Supermodel. Cleaner bilinear edge cases ala Supermodel (sega\model2_v.cpp, sega\model2rd.ipp). Added dpdy information to extents to be able to compute mipmap lod index per pixel (video\poly.h). Added all mipmap information to m2_poly_extra_data structure (sega\model2.h, sega\model2_v.cpp). Added preliminary unoptimized support for mipmaps and trilinear filtering. Fix to code overflow error in transparent trilinear. Converted render callbacks to C++ member function templates (sega\model2rd.ipp).
-  . Improved interrupt logic: Interrupt control register only returns interrupts actively signalled to the i960; masked interrupts are not returned. Sound IRQs are triggered when either TxRDY or RxRDY from the USART is active (Model 2B manual, section 6.2). Removed model2c_interrupt callback; no evidence that Model 2C behaves any differently to earlier board revisions. Removed vcop issue from TODO list since it no longer occurs (tested) (sega\model2.cpp).
-  . Correctly combine sound USART interrupts. Make sound_ready_w() protected; read status from USART instead of tracking state using member variables. Reduced number of render delegates (sega\model2.cpp).
-  . Added Virtua Racing layout (layout\vr.lay) also to 'Sega Touring Car Championship', when the cabinet option in the Test Menu is set to Deluxe, the screen's aspect ratio is set to 16:9.
-- moo.cpp: Separated original hardware and bootlegs in separate state classes. Modernized sound CPU ROM banking and made region size match ROM size. Reduced run-time tag lookups and literal tags. Cleaned up code.
-- namcofl.cpp: Implemented interrupt acknowledge and drop interrupts on reset (i960 IRQ)
-- namcos1.cpp and namcos86.cpp: Moved Namco System 1/System 86 sprite functions into its own device. Corrected sprite RAM size. Made ROM region names more descriptive for namcos1.cpp.
-- namcos21.cpp: Correct DSP clock frequency. There's a 40 MHz oscillator beside the DSP on the DSP board, as documented in NamcoSystem21 driver (namco\namcos21_dsp.cpp).
-- namcos22.cpp: Fixed portability issues in round_coordinate. Fixes severe graphical glitches in Namco System 22 games like Ridge Racer on ARM systems (video\poly.h) (ID 09276).
-- namcos23.cpp: Renderer optimizations, 5-10% perf increase on Panic Park.
-- nmk16.cpp: Fixed palette format for 'Acrobat Mission' and 'Koutetsu Yousai Strahl' and use input merger for Stagger I sound IRQ. Fixes color fading for 'Acrobat Mission' and 'Koutetsu Yousai Strahl' and their clones.
-- nmkmedal.cpp: Correct title for pllovegene and added reference video
-- nss.cpp, sfcbox.cpp, snesb.cpp and snesb51.cpp
-  . Fixed status flag display in emulation mode. In emulation mode, "MX" are " B". Both bits are always 1, only the semantic meaning changes: " " doesn't exist, and "B" is only meaningful when pushed during an IRQ/NMI, to distinguish from BRK (g65816\g65816.cpp).
-  . Fixed IRQ to be level triggered. Followup b3f2535: stop clearing LINE_IRQ when jumping to the IRQ vector. Properly written IRQ handlers won't notice any difference, but this fixes the behavior for software which (possibly intentionally) fails to clear an IRQ source; in that case the IRQ should continue to trigger (probably leading to a system hang). LINE_SO is generally not hooked up, but if it is, it doesn't raise IRQ. Also delete unused G65816_INT_* macros (g65816\g65816.cpp).
-- pgm3.cpp: Bootstrap first decrypted block from internal Flash
-- pluto6.cpp: Replaced 'Serial VFD Device' with msc1937_device (video\roc10937.cpp). Re-added commented out systems.
-- polepos.cpp: Split driver classes according to hardware configurations and cleaned up code. Suppress side effects for debugger reads, reduced literal tags and run-time tag lookups. Use address maps rather than installing handlers at initialization time. Made ROM region tags more descriptive. Use logmacro.h helpers.
-- psikyo.cpp: Split driver classes for different hardware configurations. Reduced use of literal tags and improved ROM region tags. Suppress side effects for debugger reads. Cleaned up input port definitions.
-- r2dx_v33.cpp: Minor cleanups: Split driver state class for different hardware configurations. Fixed save state support. Fixed bank switching on reset. More cold (seibu\r2dx_v33.cpp). Moved partial_carry_sum to a separate file to reduce dependencies. #include guards (seibu\seibu_helper.cpp). Allow variable ROM region and size in sprite ROM decryption functions (seibu\r2crypt.cpp). Added #include guards (seibu\r2crypt.h).
-- raiden2.cpp: Minor cleanups: Simplified bank switching and fixed bank switching on reset. Fixed save state support. Use generic graphics decoding layouts. Cleaned up CPU ROM loading. Don't let logging code rot if disabled (seibu\raiden2.cpp). Moved partial_carry_sum to a separate file to reduce dependencies. #include guards (seibu\seibu_helper.cpp). Allow variable ROM region and size in sprite ROM decryption functions (seibu\r2crypt.cpp). Added #include guards (seibu\r2crypt.h).
-- segas32.cpp: Clean up sega\segas32_v.cpp
-- segasp.cpp: Dumped PIC keys for clone Yataimura Kingyosukui (4-player, China, Ver 1.000) and Saikyou Saisoku Battle Racer
-- seibucats.cpp: Fixed crash when reading inputs. Use memory share creators and supply RAM sizes at construction.
-- seibuspi.cpp
-  . Fixed formatting (seibu\seibuspi_m.cpp and seibu\seibuspi_v.cpp)
-  . Split driver state class for different hardware configurations: Suppress side effects for debugger reads. Restrict tilemap drawing to clipping rectangle. Use BIT helper for extracting single bits. Reduced duplication, literal tags and preprocessor defines. Fixed namings. Use memory share creators and supply RAM sizes at construction (seibu\seibuspi.cpp).
-  . Use names less likely to cause conflicts for free functions (seibu\seibu_helper.cpp). Added #include guards (seibu\seibuspi_m.h).
-- seta.cpp: Changed jockeyc and setaroul NVRAM init from random to all_0
-- slapfght.cpp: Split driver classes for different hardware configurations. Suppress side effects for debugger reads and improved save state support. Reduced literal tags, run-time tag lookups, duplication and cleaned up code.
-- splash.cpp: Moved roldfrog to a separate driver state class and cleaned up code: Use machine_start() and machine_reset() overrides for machine start/reset functions. Cleaned up bitmap drawing functions. Suppress side effects for debugger reads. Reduced run-time tag lookups, literal tags and duplication.
-- stella8085.cpp: Clean up driver (adp\stella8085.cpp, machine\i8256.cpp/h and layout\disc2000.lay)
-- stv.cpp: Register variables to save states (sega\stvcd.cpp)
-- y2.cpp: Added motherboard ROM for System Board Y2
-- Amiga (alg.cpp, arsystems.cpp, cubo.cpp, mquake.cpp and upscope.cpp): Revert MAME 0.274 (Refine silence on empty DMA buffers) with rationale (amiga\paula.cpp).
-- Anpanman CommuTouch: Identified set. Also confirmed dump on a second PCB.
-- Championship Bowling: Srcclean
-- Cosmo: Added support for starfield
-- Crazy Bell: Dumped PROMs
-- Cue Ball Wizard: Dumped a GAL for clone Cue Ball Wizard (Spanish)
-- Doko Demo Issho: Dumped BIOS ROMs, confirmed they are the same as gekimaka and pingu.
-- Dream Chance: Fleshed out the driver a bit. Identified the game as Dream Chance. TODO: IRQs are wrong and just stubbed enough to make it do something. Stops after showing first card. IRQ problem or protection? Some suspect reads with checks.DIPs ports are correct but they don't affect the game / never change in the DIP test screen. Fully recover password (checked from 0x1ce6 on. It starts with 19490817 but where are last two digits checked?).
-- Fast Draw (poker conversion kit): Fixed Fatal error: wrong-sized NVRAM region (ID 09280)
-- Future Flash/Laser Base: Correct clocks (music pitch and speed)
-- Geki Makaimura: Dumped CF card 
-- Gradius III: Implemented device_post_load for post-load tasks. Fixed sound routing and cleaned up code. PCB has mono output and only one YM2151 channel is connected (fixes background music balance). Use logmacro.h helpers for optional logging and use BIT helper.
-- Hang-On: Dumped PLS153 on sound and ROM board
-- Kick and Run: Dumped and verified PALs for clone Mexico 86 (bootleg of Kick and Run, set 1)
-- Klax: Documented ROM build date shown in the test menu
-- Knights of Valour 3 HD: Added SOC38 internal ROMs
-- Konami: Cleaned up code in various Konami devices and systems. Use explicitly sized integers for things that need to be registered for save states. Use references rather than pointers for output parameters of callbacks. Use standard or abbreviated integer types consistently. Improved some member names and fixed formatting (88games.cpp, ajax.cpp, aliens.cpp, asterix.cpp, bishi.cpp, blockhl.cpp, bottom9.cpp, chqflag.cpp, crimfght.cpp, dbz.cpp, divebomb.cpp, giclassic.cpp, gijoe.cpp, gradius3.cpp, konamigx.cpp/h, konamigx_m.cpp, konamigx_v.cpp, konmedal.cpp, lethal.cpp, mainevt.cpp, moo.cpp, mystwarr.h, mystwarr_v.cpp, overdriv.cpp, parodius.cpp, piratesh.cpp, qdrmfgp.cpp, quickpick5.cpp, rollerg.cpp, rungun.cpp, simpsons.cpp, spy.cpp, surpratk.cpp, tail2nos.cpp, thunderx.cpp, tmnt.cpp, tmnt2.cpp, ultraman.cpp, vendetta.cpp, wecleman.h, wecleman_v.cpp, xexex.cpp, xmen.cpp, zr107.cpp, k051960.cpp/h, k052109.cpp/h, k053244_k053245.cpp/h, k053246_k053247_k055673.cpp/h, k054156_k054157_k056832.cpp/h and k051316.cpp/h).
-- Many Block: Don't apply Macross tilemap offsets to Many Block
-- Peek-a-Boo!: Dumped the MCU for Peek-a-Boo!. Note: MCU is not hooked up (it's connected differently to other games).
-- Pirate Ship: Removed commented code from machine configuration (K053246 is paired with K053247 or K055673, so m_k053246 is redundant).
-- Savage Quest: Convert to new PCI. Stub HASP dongle in a device (centronics\hasp_savquest.cpp).
-- Shadow Force: Fixed DIP settings based on manual and World and Japan version use only 3 buttons (ID 05557) (ID 09260).
-- Super 70's: Redumped romset
-- Super Poker: Added dip-sw settings for Super Poker (v306US) from manual
-- Turret Tower: Suppress side effects for debugger reads and fixed sound routing. Also reduced literal tags and run-time tag lookups and cleaned up code.
-- unknown Labeled 'WU- MARY-1A' Music by: SunKiss Chen: Set IP_ACTIVE_HIGH to low. Added P1 input. Will prevent the error 30 except the 0x80 at key2 and 0x40 at P1 and shown error 02 due to hopper not implemented and something.
-- Yizhi Xiangqi: Improved inputs
-- Description changes of Anpanman CommuTouch, Bingo Galaxy (MDA-C0039A), Cherry Master (ED-96, Corsica CM v8.01), Crazy Bonus 2002 (Ver. 1, Shanho HW, set 2), Cuty Line (LC-88, ver.1.01), Dream Chance, Hanafuda Hana Ginga (Japan, ver 1.00), Landing High Japan (VER.2.01OK, single monitor), The Love Generation (Power Link), Mega Lines (Wing W-7 System), Pipi & Bibis / Whoopee!! (bootleg, decrypted set 1), Pipi & Bibis / Whoopee!! (bootleg, decrypted set 2), Pipi & Bibis / Whoopee!! (bootleg, encrypted), 'Royal 5+ / X'mas 5 (V101US)', Skill Chance (W-7, set 1, 62-98 main), Skill Chance (W-7, set 2, 53-98 main), Tang Tang (ver. 0526, 26/05/2000, set 1), Turret Tower - The Enemy Has Arrived, UFO Catcher 7 (rev. B) and Wild Cat S (CMV4 hardware)
-- Dipswitch fixes in ddenlovr.cpp, goldstar.cpp, igs_m027.cpp, igs_m027xa.cpp, laserbas.cpp, lastbank.cpp, shadfrce.cpp and spoker.cpp
-- Renamed (bingogalo) to (bingogala), (cm2005a) to (cm2005_102u), (cm2005b) to (cm2005_014h), (doraemon) to (doraemonp), (hginga) to (hgingaa), (ufo7) to (ufo7b), (unkbpmed) to (anpanmct) and (unkpara) to (dreamcha)
-- MAME
-  . VIDEO RENDERING SYSTEM
-    . Polygon rendering: Added dpdy information to extents to be able to compute mipmap lod index per pixel. Fixed portability issues in round_coordinate. Fixes severe graphical glitches in Namco System 22 games on ARM systems (video\poly.h) (ID 09276).
-    . Removed most specialisations of the RGB utilities. Added an ARM NEON bilinear filtering implementation. Increased the intermediate precision of the C++ bilinear filtering implementation. Cleaned up and fully inlined the C++ implementation apart from bilinear filtering. Moved the generic C++ implementation to emu\video\rgbutil.h. Put all bilinear filtering implementations out-of-line in emu\video\rgbutil.cpp.
-  . MEMORY SYSTEM
-    . Fixed debugger's memdump command. Changed memdump to properly report overlapping views (emu\emumem.cpp, emu\emumem_hedr.ipp, emu\emumem_hedw.ipp).
-  . INPUT
-    . Removed the "optional" field flag (emu\ioport.h). There are multiple issues with this flag: It's poorly defined. Is it an input that's software-accessible but not used? Is it an input that shows in test modes but doesn't do anything useful? Is it an input that the system can be configured to not use? Is it an input that is useful but not strictly necessary? In almost a decade, it hasn't been used widely. It was used in less than ten places. There hasn't been substantial interest in actually applying it across the codebase. It would be an absolute nightmare to try and apply to mahjong and hanafuda games. Consider all the cases where a game may use some but not all of the double-up game controls, and some games support multiple control schemes that use different subsets of the standard mahjong matrix. Trying to apply it to gambling systems would also be a minefield. If we were to expect it to be applied, it would cause an eplosion in input port definitions for platforms with multiple games, adding further maintenance burden. It would greatly reduce the value of having things like the standard mahjong panel definitions as you'd rarely actually be able to use them as-is.
-    . Removed PORT_ROTATED from the core. This automatic joystick remapping feature has not been enabled in any driver for years (emu\inputdev.cpp, emu\ioport.cpp and mame/luaengine_input.cpp).
-  . LUA engine: Allow configuring analog input adjustments from scripts. Export minvalue and maxvalue for IPT_ADJUSTER (mame\luaengine_input.cpp).
-  . 3RDPARTY: Sync AsmJit with upstream version 1.20 from https://github.com/asmjit/asmjit/commit/5134d396bd00c1b63259387acdbb12dfdf009f9b (3rdparty\asmjit).
-  . Prevent automatic attempts at loading or creating loose image files with the same names as extant software list items when they fail to load as such. Only allow command line image creation when file is not found and save startup image name for error reporting before trashing it (emu\image.cpp).
-  . Updated Chinese (Simplified) translations. The revision refers to the Windows 11 Chinese Simplified menu buttons and option titles, many places are still not perfect, modify it again and again! (Chinese_Simplified\strings.po).
-  . Doc: Fixed a typo in the documentation for the default values for the 'comm_localport' and 'comm_remoteport' flags: 15122 -> 15112 (docs\source\commandline\commandline-all.rst).
-- Debugger
-  . Fixed parsing of unary ! operator in debug expressions (debug\express.cpp)
-  . Added support for generating PDB symbols with MinGW Clang and LLD. Also don't disable sibling/tail call optimisation when symbols are enabled. This is hurting our release builds since they're built with symbols. Note: Set PDB_SYMBOLS to 1 to generate CodeView format symbols in separate PDB files, allowing source-level debugging using Microsoft Visual Studio or WinDbg. It can also be used with other tools that can load symbols from PDB files, e.g. the Intel VTune and AMD µProf performance analysis tools. This option is only supported for MinGW builds using the clang compiler and the LLVM linker (lld). This option only takes effect if the **SYMBOLS** option is set to a non-zero value (makefile, scripts\genie.lua, src\main.lua and scripts\toolchain.lua).
-  . Fill q.value was not working (debug\debugcmd.cpp)
-
 </font></div></pre></div>
 
 
 <br><br>
 <font color="#FF0000" size="3" face="Arial"><strong>Mameinfo.dat</strong></font><br><br>
+<font size="2" color="#eeeeee" face="Arial"><u>0.286</u>: Updated to MAME 0.286 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (25th Feb). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <font size="2" color="#eeeeee" face="Arial"><u>0.285</u>: Updated to MAME 0.285 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (29th Jan). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <font size="2" color="#eeeeee" face="Arial"><u>0.284</u>: Updated to MAME 0.284 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (30th Dec). Added/Updated DEmul v0.7 (20th Dec), FinalBurn Neo v1.0.0.03 (27th Dec), Flycast v2.5 (27th Dec) and Play! emulator infos. Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <font size="2" color="#eeeeee" face="Arial"><u>0.283</u>: Updated to MAME 0.283 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (28th Nov). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
-<font size="2" color="#eeeeee" face="Arial"><u>0.282</u>: Updated to MAME 0.282 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (31st Oct). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <br><br><br><br>
 
 
 
 <font size="5" face="Arial" color="#FF0000"><strong>Download</strong></font><br><br>
+<a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0286.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.286 &nbsp;(3.76 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0285.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.285 &nbsp;(3.75 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0284.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.284 &nbsp;(3.74 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0283.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.283 &nbsp;(3.73 MB)</b></font></a><br><br>
-<a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0282.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.282 &nbsp;(3.72 MB)</b></font></a><br><br>
 <br><br>
 
 
