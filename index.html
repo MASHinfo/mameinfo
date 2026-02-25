@@ -57,21 +57,26 @@
 - New games: Triv III
 - New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Thunder V, Ultraman Club 3 and Versus.
 - New clones: Ghosts'n Goblins (World? set 1)
-- New drivers: agro.cpp, pachislo_z80.cpp and sammy_pachislo_z80.cpp 
+- New drivers: agro.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sis6326_pci
 - CPU
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
 - DEVICE
-  . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp).
+  . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
+  . SiS 6326 PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space (pci\sis6326.cpp)
+  . SiS 6326 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture (video\pc_vga_sis.cpp).
+  . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp).
 - New devices: aha2940
 - kaneko16.cpp: Added licensees to metadata and tidied code
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups.
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h)
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz
+- Varia Metal: Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
 - Description changes of 'B.C. Kid (World) / Bonk's Adventure - Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin - Special Arcade Version (Japan)', Bonk's Adventure - Arcade version (prototype), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3) and Ghosts'n Goblins (World? set 4). 
 - Renamed (gnga) to (gngb) and (gng) to (gnga)
+- SDLMAME: Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
 
