@@ -57,7 +57,7 @@
 - New games: Triv III
 - New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Thunder V, Ultraman Club 3 and Versus.
 - New clones: Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1) and John Elway's Team Quarterback (rev 1)
-- New drivers: agro.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sis6326_pci
+- New drivers: agro.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
 - CPU
   . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output (sharc\sharc.cpp).
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
@@ -65,10 +65,12 @@
   . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
   . PC LPT: Added address_map variant for ISA PnP targets. LPT port 279 is read only, writes are routed to ISA PnP mode (machine\pc_lpt.cpp).
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
-  . SiS 6326 PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation (pci\sis6326.cpp).
+  . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad (pci\sis6326.cpp).
   . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200 (video\pc_vga_sis.cpp).
+  . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
 - New devices: aha2940
+- chamrx1.cpp: Expand motherboard notes
 - kaneko16.cpp: Added licensees to metadata and tidied code
 - lastduel.cpp: Reduced RAM size for Last Duel. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
 - metro.cpp
@@ -78,6 +80,8 @@
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h).
 - Gals Panic 3: Cleaned up code: Suppress side effects for debugger reads. Reduced unnecessary memory accesses in RLE decompression. Made some variables const, use abbreviated integer types consistently. Don't split initialisation between files (kaneko\kaneko_grap2.cpp). Cleanup driver: Replaced macros with lambdas and reduced literal tags. Updated notes. Use abbreviated integer types consistently.
+- GameCristal: Moved ACPI implementation in own core (machine\sis950_acpi.cpp). Added enough SMI glue logic.
+- Games Family: Updated QA notes.
 - Mario Bros.: Walk sound trigger is from WR pin instead of D0. Put the masao bootleg in a subclass (ID 08997). Added note about MCU internal rom: Dump M58715 internal ROM. The EA pin dumping method does not work, is the MCU read protected? It's probably a small initialization routine, followed by a jump to external ROM. MAME has a fake bootstrap for now.
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Updated notes.
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
