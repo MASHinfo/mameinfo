@@ -59,7 +59,7 @@
 - New clones: Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1) and John Elway's Team Quarterback (rev 1)
 - New AGEMAME games: Telly Addicts (New Series) (Bellfruit) (Cobra 3)
 - New drivers: agro.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
-- New devices: aha2940
+- New devices: aha2940, sis6326_pci and sis950_acpi
 - CPU
   . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output (sharc\sharc.cpp).
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
@@ -74,8 +74,9 @@
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
 - chamrx1.cpp: Expand motherboard notes
+- jalmah.cpp: Added the actual references for some of the MCUs in filenames
 - kaneko16.cpp: Added licensees to metadata and tidied code
-- lastduel.cpp: Reduced RAM size for Last Duel. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
+- lastduel.cpp: Reduced RAM size for Last Duel and correct spriteram range. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
 - metro.cpp
   . Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
   . Improved metadata: Added region-specific titles to descriptions, and explanatory comments. Added assumed regions to descriptions based on game UI language. Fixed toride2gg set title (non-adauchi gaiden set unlike previously described metadata). Added distributor metadata for lastfortk set. Use the standard mahjong matrix (metro\metro.cpp).
@@ -91,7 +92,9 @@
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
 - Description changes of 'B.C. Kid (World) / Bonk's Adventure - Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin - Special Arcade Version (Japan)', Bal Cube (Japan), Bonk's Adventure - Arcade version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Last Fortress - Toride: Mah-jong (Germany), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Poitto! (Japan revision D), Pururun (Japan set 1), Pururun (Japan set 2), Puzzli (Japan revision B), Puzzli (Japan revision A), Toride II (German) and Toride II Adauchi Gaiden (Japan).
 - Renamed (gnga) to (gngb) and (gng) to (gnga)
-- SDLMAME: Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
+- SDLMAME
+  . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
+  . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp)
 - MAME
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
   . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp)
@@ -111,6 +114,7 @@
 - Removed games: Silverball (8.01)
 - New drivers: dharma_z180.cpp, fireshrk.cpp, mdartstr.cpp, namcos6.cpp, pitchtry.cpp, rallybik.cpp, seawolfnm.cpp and sshuffle.cpp
 - New devices: acpi_piix4, acpi_pipc, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, fdc37c665ir, gd5401, igs_incalt, isa16_medalist_rom_disk, it8661f, it8671f, nmk_irq, pc97338, rt1000b, toaplan_bcu, toaplan_dsp, toaplan_fcu, toaplan_video_controller, trio64dx_pci, um8498f, va_lpf4, voodoo_3000_x86, vt82c416, vt82c586b_acpi, vt82c586b_ide, vt82c586b_isa, vt82c586b_usb, vt82c598mvp_bridge, vt82c598mvp_host, z8691 and z86c91.
+- Bob Zed (What's new): https://youtu.be/a_RTfU6ewfg
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
