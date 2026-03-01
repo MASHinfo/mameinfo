@@ -74,7 +74,7 @@
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
 - chamrx1.cpp: Expand motherboard notes
-- galivan.cpp: Removed button 3 in dangar and galivan (only in test mode). ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel).
+- galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - jalmah.cpp: Added the actual references for some of the MCUs in filenames
 - kaneko16.cpp: Added licensees to metadata and tidied code
 - lastduel.cpp: Reduced RAM size for Last Duel and correct spriteram range. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
@@ -99,7 +99,7 @@
 - MAME
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
   . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp)
-  . Consolidate drivers into single file (lastduel.cpp)
+  . Consolidate drivers into single file (lastduel.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
 
