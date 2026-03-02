@@ -56,7 +56,7 @@
 
 - New games: Triv III
 - New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Thunder V, Ultraman Club 3 and Versus.
-- New clones: Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1) and John Elway's Team Quarterback (rev 1)
+- New clones: Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1) and John Elway's Team Quarterback (rev 1)
 - New AGEMAME games: Telly Addicts (New Series) (Bellfruit) (Cobra 3)
 - New drivers: agro.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
 - New devices: aha2940, sis6326_pci and sis950_acpi
@@ -65,20 +65,26 @@
     . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator. Also added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Added some helpers (cpu\drcfe.h).
     . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
     . PowerPC DRC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now.
+  . Intel 8086: Correction to adc/sbb overflow flag calculation. Initialize m_ea_timing table (i86\i86.cpp and i86\i86inline.h).
+  . Intel 80186: The invalid opcode is a trap (m_ip = m_prev_ip). BOUND is signed. Fixed iRMX interrupt mode. Improved BOUND logging (i86\i186.cpp).
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
   . NEC Vxx: Correction to addc/subb overflow flag calculation
   . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
 - DEVICE
+  . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
   . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
   . PC LPT: Added address_map variant for ISA PnP targets. LPT port 279 is read only, writes are routed to ISA PnP mode (machine\pc_lpt.cpp).
+  . SCSI: Allow for connecting devices external to the bus (machine\nscsi_bus.cpp). Turn nscsi_device into an interface for easier composition. m_ify the variable names (bus\nscsi\* and machine\nscsi_*). Split HLE to a different file (machine\nscsi_hle.cpp).
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
   . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad (pci\sis6326.cpp).
-  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200 (video\pc_vga_sis.cpp).
+  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200. Added remaining Sequencer registers and improved logging. Added CRTC counter latches. Fixed bug with dxdiag setting the wrong ramdac mode from 16bpp fullscreen to 8bpp desktop (video\pc_vga_sis.cpp).
   . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
+  . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
 - chamrx1.cpp: Expand motherboard notes
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
+- iteagle.cpp: Use put_int_clamp on samples output (sound\es1373.cpp)
 - jalmah.cpp: Added the actual references for some of the MCUs in filenames
 - kaneko16.cpp: Added licensees to metadata and tidied code
 - lastduel.cpp: Reduced RAM size for Last Duel and correct spriteram range. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
@@ -86,9 +92,11 @@
   . Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
   . Improved metadata: Added region-specific titles to descriptions, and explanatory comments. Added assumed regions to descriptions based on game UI language. Fixed toride2gg set title (non-adauchi gaiden set unlike previously described metadata). Added distributor metadata for lastfortk set. Use the standard mahjong matrix (metro\metro.cpp).
 - namcos21.cpp and namcos21_c67.cpp: Don't hook up unused hold/ack (namco\namcos21_dsp.cpp and namco\namcos21_dsp_c67.cpp)
+- segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - tmnt2.cpp: Removed unneeded variable. Added VIDEO_ALWAYS_UPDATE flag to Golfing Greats.
+- Blood Bros. and Out Zone: Added PCB infos
 - Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h).
 - Gals Panic 3: Cleaned up code: Suppress side effects for debugger reads. Reduced unnecessary memory accesses in RLE decompression. Made some variables const, use abbreviated integer types consistently. Don't split initialisation between files (kaneko\kaneko_grap2.cpp). Cleanup driver: Replaced macros with lambdas and reduced literal tags. Updated notes. Use abbreviated integer types consistently.
 - GameCristal: Moved ACPI implementation in own core (machine\sis950_acpi.cpp). Added enough SMI glue logic.
@@ -107,7 +115,7 @@
   . Consolidate drivers into single file (lastduel.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
-
+  . Improved building in more configurations (makefile, scripts\genie.lua, scripts\src\3rdparty.lua and scripts\src\lib.lua)
 
 
 
