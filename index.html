@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.286</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 4th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 5th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -55,17 +55,19 @@
 0.287GIT
 
 - New games: Triv III
-- New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Thunder V, Ultraman Club 3 and Versus.
+- New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Fruit Dream II, Thunder V, Ultraman Club 3 and Versus.
 - New clones: Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), John Elway's Team Quarterback (rev 1) and Pinball Action (Tecfri, without external display)
 - New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Bistro, Club, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Herz As, Herz As (F8), Herz As (F10), Max, Merkur Astro, Multi, Sesam, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
-- New drivers: agro.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
+- New drivers: agro.cpp, dfruit2.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
 - New devices: aha2940, fga4he, ht208_video7_vga, pdc20268, sis6326_pci, sis950_acpi and trident_4dwavedx
 - CPU
   . Dynamic Re-Compiling
     . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator. Also added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs (cpu\*). Added some helpers (cpu\drcfe.h).
-    . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
-    . PowerPC DRC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp).
-  . Hyperstone E1-xxxx: Re-wrote E1 instruction analyser. Reduced redundant code, track condition flag dependencies independently, fixed a number of bugs (e132xs\e132xsfe.cpp). Don't recalculate immediate values when generating code (e132xs\e132xsdrc_ops.hxx).
+    . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
+    . PowerPC DRC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp). Modernised recompiler front-end code and improved instruction analysis logging (cpu\powerpc).
+    . drcbearm64: Reduced unnecessary rounding mode changes. Don't set the rounding mode on SETFMOD if it hasn't changed (cpu\drcbearm64.cpp).
+  . Hitachi SH-1/2/3/4: Cleaned up instruction analysis logging a little. Cleaned up register dependency analysis logging and fixed an instruction analysis bug (cpu\sh*).
+  . Hyperstone E1-xxxx: Re-wrote E1 instruction analyser. Reduced redundant code, track condition flag dependencies independently, fixed a number of bugs (e132xs\e132xsfe.cpp). Don't recalculate immediate values when generating code (e132xs\e132xsdrc_ops.hxx). Log analysed instructions in UML log when using recompiler. Allow recompiler to skip unused condition flag calculations. Also fixed some instruction analysis bugs. Skip more unnecessary flag calculations, use pre-calculated PC for updating G0 in memory when possible, better analysis of pre-calculated PC values when delay slots are involved (cpu\e132xs).
   . Intel 8086: Correction to adc/sbb overflow flag calculation. Initialize m_ea_timing table (i86\i86.cpp and i86\i86inline.h).
   . Intel 80186: The invalid opcode is a trap (m_ip = m_prev_ip). BOUND is signed. Fixed iRMX interrupt mode. Improved BOUND logging (i86\i186.cpp).
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
@@ -83,8 +85,10 @@
   . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
   . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
+- battlex.cpp: Set_flip_screen already marks tilemaps dirty. Removed unneeded variable
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
 - chamrx1.cpp: Expand motherboard notes
+- fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - gfamily.cpp, pulltrig.cpp and sis630.cpp
   . Moved ACPI implementation in own core. Added enough SMI glue logic (machine\sis950_acpi.cpp). Added pin mapper. Hookup relocable IDE IIRQA/IIRQB pins (machine\sis950_lpc.cpp). Added PCI slots to base SiS 630 driver.
@@ -97,6 +101,7 @@
   . Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
   . Improved metadata: Added region-specific titles to descriptions, and explanatory comments. Added assumed regions to descriptions based on game UI language. Fixed toride2gg set title (non-adauchi gaiden set unlike previously described metadata). Added distributor metadata for lastfortk set. Use the standard mahjong matrix (metro\metro.cpp).
 - namcos21.cpp and namcos21_c67.cpp: Don't hook up unused hold/ack (namco\namcos21_dsp.cpp and namco\namcos21_dsp_c67.cpp)
+- namcos23.cpp: Use custom tilemap drawing and eliminate gfxdecode from base class. Removed now-unneeded textram_w and textchar_w. Fixed Y-flip in manual tilemap drawing. Improved viewport behavior and Z-sort modes. Added X mirroring.
 - segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
@@ -107,8 +112,10 @@
 - Games Family: Updated QA notes.
 - Mario Bros.: Walk sound trigger is from WR pin instead of D0. Put the masao bootleg in a subclass (ID 08997). Enable DYNAMIC_TS for clearer sound (nintendo/nl_mario.cpp). Added note about MCU internal rom: Dump M58715 internal ROM. The EA pin dumping method does not work, is the MCU read protected? It's probably a small initialization routine, followed by a jump to external ROM. MAME has a fake bootstrap for now.
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Fixes occasionally writes wrong tiles to bg tilemap (ID 09395). Updated notes. Changed video emulation to tilemaps. Added flipscreen and fixed savestates. Small cleanup and update notes.
+- Touryuumon: Added default EEPROM and speedups
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
-- Description changes of 'B.C. Kid (World) / Bonk's Adventure - Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin - Special Arcade Version (Japan)', Bal Cube (Japan), Bonk's Adventure - Arcade version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Last Fortress - Toride: Mah-jong (Germany), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Pururun (Japan set 1), Pururun (Japan set 2), Puzzli (Japan revision B), Puzzli (Japan revision A), Toride II (German) and Toride II Adauchi Gaiden (Japan).
+- Description changes of 'B.C. Kid (World) / Bonk's Adventure - Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin - Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure - Arcade version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Last Fortress - Toride: Mah-jong (Germany), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Pururun (Japan set 1), Pururun (Japan set 2), Puzzli (Japan revision B), Puzzli (Japan revision A), Toride II (German) and Toride II Adauchi Gaiden (Japan).
+- Fixed rom names in exprraid.cpp
 - Renamed (gnga) to (gngb) and (gng) to (gnga)
 - SDLMAME
   . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
@@ -116,6 +123,7 @@
 - MAME
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
   . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp)
+  . 3rdparty: Updated some use of deprecation ASIO APIs (util\client_ws.hpp, util\server_ws_impl.hpp, capcom\cps2comm.cpp).
   . Consolidate drivers into single file (lastduel.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
