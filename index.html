@@ -30,11 +30,11 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0286.zip"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo 0.286 (3.76 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo + MAMEUI-inifiles-0287GIT (6th Mar).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0287GIT (6th Mar) (4.44 MB)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0286.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.286 Category-, Version and Alltime inifiles (1012 kB)</b></font></a><br><br>
+<a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0286.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.286 Category-, Version and Alltime inifiles (1012 kB)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.286 (6.41 MB)</b></font></a><br><br>
+<a href="https://mashinfo.github.io/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.286 (6.41 MB)</b></font></a><br><br>
 
 <a href="https://mashinfo.github.io/mameinfo/download/PCB-infos0153.zip"><font size="+1" face="Arial" color="#eeeeee"><b>PCB-infos 0.153 (2.11 MB)</b></font></a><br><br>
 
@@ -59,12 +59,12 @@
 - New clones: Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), John Elway's Team Quarterback (rev 1) and Pinball Action (Tecfri, without external display)
 - New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Bistro, Club, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Herz As, Herz As (F8), Herz As (F10), Max, Merkur Astro, Multi, Sesam, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
 - New drivers: agro.cpp, dfruit2.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
-- New devices: aha2940, fga4he, ht208_video7_vga, pdc20268, sis6326_pci, sis950_acpi and trident_4dwavedx
+- New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, pdc20268, sis6326_pci, sis950_acpi, t4dwave_pcm and trident_4dwavedx
 - CPU
+  . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp). Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx).
   . Dynamic Re-Compiling
     . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator (cpu\*). Added some helpers (cpu\drcfe.h).
-    . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp). Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx).
-    . PowerPC DRC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp). Modernised recompiler front-end code and improved instruction analysis logging (cpu\powerpc).
+    . drcbex64.cpp: Avoid unnecessarily changing SSE mode on SETFMOD and when leaving recompiled code (cpu\drcbex64.cpp)
     . drcbearm64: Reduced unnecessary rounding mode changes. Don't set the rounding mode on SETFMOD if it hasn't changed. Fixed back-end getting confused about the rounding mode on entry (cpu\drcbearm64.cpp).
   . Hitachi SH-1/2/3/4: Cleaned up instruction analysis logging a little. Cleaned up register dependency analysis logging and fixed an instruction analysis bug (cpu\sh*).
   . Hyperstone E1-xxxx: Re-wrote E1 instruction analyser. Reduced redundant code, track condition flag dependencies independently, fixed a number of bugs (e132xs\e132xsfe.cpp). Don't recalculate immediate values when generating code (e132xs\e132xsdrc_ops.hxx). Log analysed instructions in UML log when using recompiler. Allow recompiler to skip unused condition flag calculations. Also fixed some instruction analysis bugs. Skip more unnecessary flag calculations, use pre-calculated PC for updating G0 in memory when possible, better analysis of pre-calculated PC values when delay slots are involved (cpu\e132xs).
@@ -73,6 +73,7 @@
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp).
   . NEC Vxx: Correction to addc/subb overflow flag calculation
   . NEC V60 and NEC V810: Correction to addc/subc overflow flag calculation (v60\v60.cpp)
+  . PowerPC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp). Modernised recompiler front-end code and improved instruction analysis logging (cpu\powerpc).
   . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
 - DEVICE
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
@@ -158,7 +159,7 @@
     . Better ASTAT handling: Flag pin bits are unaffected by push/pop status. Only flags set to input follow inputs on flag pins. Implemented ASTAT write for recompiler. Show ASTAT value in debugger when recompiler is enabled. Also don't allocated DRC cache when recompiler is disabled. Better sync on input changes across scheduling domains (cpu\sharc).
     . Pause DMA when stalled with recompiler to match interpreter. Disabled stalling DMA with recompiler for now. Current implementation gets confused, breaking Thrill Drive on Hornet (cpu\sharc).
   . Dynamic Re-Compiling
-    . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
+    . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu\drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
     . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there. Restore floating point rounding mode if an exception is thrown, use C99 nearbyint/nearbyintf. Work around older clang that doesn't support the floating point environment access pragma (cpu\drcbec.cpp)
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
@@ -331,8 +332,8 @@
 - WGP: Real Race Feeling: Increased 68000 clock
 - Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Daytona USA (with Saturn advertisements), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), Jiao! Jiao! Jiao! (China), Knuckle Bash 2 (bootleg of Knuckle Bash), Mario Bros. (Japan, revision C), Mario Bros. (US, revision F), Major Poker (set 2, v2.0), Major Poker (set 3, Micro Manufacturing intro), Major Poker (set 4, Micro Manufacturing intro), Major Poker (set 5, Micro Manufacturing intro), MX5000 (version R), Nyanpai (Japan), Qianxi Jielong / Hongxin Jielong, Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp, hominn_980924.cpp, mario.cpp, namcos1.cpp and superqix.cpp
-- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (majorpkr) to (majorpkr20), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (niyanpai) to (nyanpai), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
-- Dipswitch fixes in 4enraya.cpp, igs017.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, (pullttrig) to (pulltrig), tecmo.cpp, niyanpai.cpp and vicdual.cpp
+- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (majorpkr) to (majorpkr20), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (niyanpai) to (nyanpai), (pullttrig) to (pulltrig), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
+- Dipswitch fixes in 4enraya.cpp, igs017.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, tecmo.cpp, niyanpai.cpp and vicdual.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
