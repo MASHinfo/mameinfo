@@ -61,11 +61,12 @@
 - New drivers: agro.cpp, dfruit2.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
 - New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, pdc20268, sis6326_pci, sis950_acpi, t4dwave_pcm and trident_4dwavedx
 - CPU
-  . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp). Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx).
+  . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp). Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp.
   . Dynamic Re-Compiling
     . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator (cpu\*). Added some helpers (cpu\drcfe.h).
     . drcbex64.cpp: Avoid unnecessarily changing SSE mode on SETFMOD and when leaving recompiled code (cpu\drcbex64.cpp)
     . drcbearm64: Reduced unnecessary rounding mode changes. Don't set the rounding mode on SETFMOD if it hasn't changed. Fixed back-end getting confused about the rounding mode on entry (cpu\drcbearm64.cpp).
+    . drcuml: Let C functions take any pointer/reference parameter (cpu\uml.h)
   . Hitachi SH-1/2/3/4: Cleaned up instruction analysis logging a little. Cleaned up register dependency analysis logging and fixed an instruction analysis bug (cpu\sh*).
   . Hyperstone E1-xxxx: Re-wrote E1 instruction analyser. Reduced redundant code, track condition flag dependencies independently, fixed a number of bugs (e132xs\e132xsfe.cpp). Don't recalculate immediate values when generating code (e132xs\e132xsdrc_ops.hxx). Log analysed instructions in UML log when using recompiler. Allow recompiler to skip unused condition flag calculations. Also fixed some instruction analysis bugs. Skip more unnecessary flag calculations, use pre-calculated PC for updating G0 in memory when possible, better analysis of pre-calculated PC values when delay slots are involved (cpu\e132xs).
   . Intel 8086: Correction to adc/sbb overflow flag calculation. Initialize m_ea_timing table (i86\i86.cpp and i86\i86inline.h).
@@ -79,6 +80,7 @@
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
   . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
   . PC LPT: Added address_map variant for ISA PnP targets. LPT port 279 is read only, writes are routed to ISA PnP mode (machine\pc_lpt.cpp).
+  . PCI: Standardize minimum grant & maximum latency readbacks
   . SCSI: Allow for connecting devices external to the bus (machine\nscsi_bus.cpp). Turn nscsi_device into an interface for easier composition. m_ify the variable names (bus\nscsi\* and machine\nscsi_*). Split HLE to a different file (machine\nscsi_hle.cpp). Finish deslotting and correct a number of things (bus\*, machine\*...).
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
   . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad. Shuffle roms a bit (pci\sis6326.cpp).
@@ -89,6 +91,7 @@
 - battlex.cpp: Set_flip_screen already marks tilemaps dirty. Removed unneeded variable
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
 - chamrx1.cpp: Expand motherboard notes
+- chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
 - fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - gfamily.cpp, pulltrig.cpp and sis630.cpp
@@ -108,6 +111,7 @@
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - tmnt2.cpp: Removed unneeded variable. Added VIDEO_ALWAYS_UPDATE flag to Golfing Greats.
 - Blood Bros. and Out Zone: Added PCB infos
+- Car Jamboree: Improved priorities, assume 0x8800-0x8807 is a 74259. Fixes the player car jumping on the ramp where one part disappears because of sprite priorities.
 - Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h).
 - Gals Panic 3: Cleaned up code: Suppress side effects for debugger reads. Reduced unnecessary memory accesses in RLE decompression. Made some variables const, use abbreviated integer types consistently. Don't split initialisation between files (kaneko\kaneko_grap2.cpp). Cleanup driver: Replaced macros with lambdas and reduced literal tags. Updated notes. Use abbreviated integer types consistently.
 - Games Family: Updated QA notes.
@@ -124,7 +128,9 @@
 - MAME
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
   . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp)
-  . 3rdparty: Updated some use of deprecation ASIO APIs (util\client_ws.hpp, util\server_ws_impl.hpp, capcom\cps2comm.cpp).
+  . 3rdparty
+    . Updated some use of deprecation ASIO APIs (util\client_ws.hpp, util\server_ws_impl.hpp, capcom\cps2comm.cpp)
+    . Fixed softfloat with GCC 15 optimizer (i386; 3rdparty\softfloat\softfloat.c)
   . Consolidate drivers into single file (lastduel.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
