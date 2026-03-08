@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 7th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 8th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,14 +56,16 @@
 
 - New games: Triv III
 - New Non-Working games: Agro's Fantastic Video Game (version 2), Cranky Condor, Fruit Dream II, Thunder V, Ultraman Club 3 and Versus.
-- New clones: Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), Glass (ver 1.0, Break Edition, checksum 13BE832C), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3) and Pinball Action (Tecfri, without external display)
+- New clones: Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), Glass (ver 1.0, Break Edition, checksum 13BE832C), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3), Pinball Action (Tecfri, without external display) and Power Drift (Japan, Rev A)
 - New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal (DOB), Disc Royal, Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As (F10), Herz As (F8), Herz As, Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Merkur Astro, Money, Multi Prima, Multi Star, Multi, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
 - New drivers: agro.cpp, dfruit2.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
 - New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, pdc20268, sis6326_pci, sis950_acpi, t4dwave_pcm and trident_4dwavedx
 - CPU
   . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
     . Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp. 
-    . More recompiler improvements: Implemented fixed point CLIP and add/subtract with carry for recompiler. Cleaned up and de-duplicated code for setting ASTAT flags on fixed point ALU operationf for recompiler and fixed AC flag for subract operations. Optimised generated code for fixed point dual add subtrat, PASS and COMP for recompiler. Reduced unnecessary ASTAT flag copies for recompiler and added more glue that will be needed for supporting saturating arithmetic. Cleaned up fixed point COMP code for interpreter (sharc\sharc). Fixed Rn = Rx + CI - 1 ALU operation. Neglected to git add the change after copy/pasting complementary operation above (sharc\sharcdrc.cpp). Fixed several interpreter issues: Fixed carry flag calculation for subtract with carry. Implemented Rn = Rx + CI and Rn = Rx + CI - 1. Rn = Rx + 1, Rn = Rx - 1 and Rn = -Rx should saturate the result (sharc\sharc).
+    . More recompiler improvements: Implemented fixed point CLIP and add/subtract with carry for recompiler. Cleaned up and de-duplicated code for setting ASTAT flags on fixed point ALU operationf for recompiler and fixed AC flag for subract operations. Optimised generated code for fixed point dual add subtrat, PASS and COMP for recompiler. Reduced unnecessary ASTAT flag copies for recompiler and added more glue that will be needed for supporting saturating arithmetic. Cleaned up fixed point COMP code for interpreter (sharc\sharc).
+    . Fixed Rn = Rx + CI - 1 ALU operation. Neglected to git add the change after copy/pasting complementary operation above (sharc\sharcdrc.cpp). Fixed several interpreter issues: Fixed carry flag calculation for subtract with carry. Implemented Rn = Rx + CI and Rn = Rx + CI - 1. Rn = Rx + 1, Rn = Rx - 1 and Rn = -Rx should saturate the result (sharc\sharc). Implemented saturation for ALU dual add/subtract in interpreter (sharc\compute.hxx). Better ALU emulation for interpreter: Implemented fixed-point ALU overflow sticky flag (AOS). More accurate implementation of Fn = -Fx, Fn = ABS Fx and Fn = PASS Fx. Implemented Rn = ABS Rx and Fn = ABS(Fx - Fy). Sorted computer function declarations and definitions to match order of instruction listings in documentation (sharc\sharc).
+    . More ALU refinements for the interpreter: Set AOS on fixed point dual add/subtract overflow. Handle corner cases better for floating point MIN, MAX and CLIP. Cleaned up code for floating point COMP (sharc\compute.hxx).
   . Dynamic Re-Compiling
     . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator (cpu\*). Added some helpers (cpu\drcfe.h).
     . drcbex64.cpp: Avoid unnecessarily changing SSE mode on SETFMOD and when leaving recompiled code (cpu\drcbex64.cpp)
@@ -71,13 +73,15 @@
     . drcuml: Let C functions take any pointer/reference parameter (cpu\uml.h)
   . Hitachi SH-1/2/3/4: Cleaned up instruction analysis logging a little. Cleaned up register dependency analysis logging and fixed an instruction analysis bug (cpu\sh*).
   . Hyperstone E1-xxxx: Re-wrote E1 instruction analyser. Reduced redundant code, track condition flag dependencies independently, fixed a number of bugs (e132xs\e132xsfe.cpp). Don't recalculate immediate values when generating code (e132xs\e132xsdrc_ops.hxx). Log analysed instructions in UML log when using recompiler. Allow recompiler to skip unused condition flag calculations. Also fixed some instruction analysis bugs. Skip more unnecessary flag calculations, use pre-calculated PC for updating G0 in memory when possible, better analysis of pre-calculated PC values when delay slots are involved (cpu\e132xs).
+  . IBM PowerPC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp). Modernised recompiler front-end code and improved instruction analysis logging (cpu\powerpc).
   . Intel 8086: Correction to adc/sbb overflow flag calculation. Initialize m_ea_timing table (i86\i86.cpp and i86\i86inline.h).
   . Intel 80186: The invalid opcode is a trap (m_ip = m_prev_ip). BOUND is signed. Fixed iRMX interrupt mode. Improved BOUND logging (i86\i186.cpp).
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp). Fixed softfloat with GCC 15 optimizer. qword ptr also needs the fix (i386; 3rdparty\softfloat\softfloat.c).
   . NEC Vxx: Correction to addc/subb overflow flag calculation
   . NEC V60 and NEC V810: Correction to addc/subc overflow flag calculation (v60\v60.cpp)
-  . PowerPC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp). Modernised recompiler front-end code and improved instruction analysis logging (cpu\powerpc).
   . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
+- SOUND
+  . Fixed pin rising edge detect if state high val is not 1. Added _r/_w to handlers (sound\vlm5030.cpp).
 - DEVICE
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
   . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
@@ -90,7 +94,7 @@
   . SCSI: Allow for connecting devices external to the bus (machine\nscsi_bus.cpp). Turn nscsi_device into an interface for easier composition. m_ify the variable names (bus\nscsi\* and machine\nscsi_*). Split HLE to a different file (machine\nscsi_hle.cpp). Finish deslotting and correct a number of things (bus\*, machine\*...).
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
   . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad. Shuffle roms a bit (pci\sis6326.cpp).
-  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200. Added remaining Sequencer registers and improved logging. Added CRTC counter latches. Fixed bug with dxdiag setting the wrong ramdac mode from 16bpp fullscreen to 8bpp desktop (video\pc_vga_sis.cpp).
+  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200. Added remaining Sequencer registers and improved logging. Added CRTC counter latches. Fixed bug with dxdiag setting the wrong ramdac mode from 16bpp fullscreen to 8bpp desktop. Implemented video overlay playback (video\pc_vga_sis.cpp).
   . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
   . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
@@ -100,7 +104,7 @@
 - chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
 - cv1k.cpp
   . Added cv1k SH7709S cache handling behavior for slowdown emulation. Handles some basic caching for the sh7709s used for cv1k titles so that they run at more appropriate speeds.
-  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing.
+  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory (sh\sh7709s.cpp)
 - fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - gfamily.cpp, pulltrig.cpp and sis630.cpp
@@ -113,6 +117,7 @@
 - metro.cpp
   . Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
   . Improved metadata: Added region-specific titles to descriptions, and explanatory comments. Added assumed regions to descriptions based on game UI language. Fixed toride2gg set title (non-adauchi gaiden set unlike previously described metadata). Added distributor metadata for lastfortk set. Use the standard mahjong matrix (metro\metro.cpp).
+- model3.cpp: Dot product for lighting effects can't be negative by definition (sega\model3_v.cpp)
 - namcos21.cpp and namcos21_c67.cpp: Don't hook up unused hold/ack (namco\namcos21_dsp.cpp and namco\namcos21_dsp_c67.cpp)
 - namcos23.cpp: Use custom tilemap drawing and eliminate gfxdecode from base class. Removed now-unneeded textram_w and textchar_w. Fixed Y-flip in manual tilemap drawing. Improved viewport behavior and Z-sort modes. Added X mirroring.
 - segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
@@ -137,12 +142,12 @@
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Fixes occasionally writes wrong tiles to bg tilemap (ID 09395). Updated notes. Changed video emulation to tilemaps. Added flipscreen and fixed savestates. Small cleanup and update notes.
 - Touryuumon: Added default EEPROM and speedups
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
-- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
+- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
 - Fixed rom names in exprraid.cpp
 - Renamed (gnga) to (gngb), (gng) to (gnga), (lotoplay) to (lotoply), (lotoplaya) to (lotoplya), (lotoplayb) to (lotoplyb) and (lotoplayp) to (lotoplyp)
 - SDLMAME
   . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
-  . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp)
+  . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp). Some fixes for -attach_window functionality under SDL3. Ensuring that when -attach_window that some inappropriate properties (e.g. - 'SDL_PROP_WINDOW_CREATE_TITLE_STRING') are not specified. Ensuring that under X11, we invoke 'XSelectInput()' with our own mask rather than what SDL3 does by default. Windows support. Attempting to fix MacOS specific warning (sdl3\sdlopts.h, sdl3\window.cpp).
 - MAME
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
   . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp)
@@ -789,10 +794,10 @@
 
 <br><br>
 <font color="#FF0000" size="3" face="Arial"><strong>Mameinfo.dat</strong></font><br><br>
-<font size="2" color="#eeeeee" face="Arial"><u>0.286</u>: Updated to MAME 0.286 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (25th Feb). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
-<font size="2" color="#eeeeee" face="Arial"><u>0.285</u>: Updated to MAME 0.285 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (29th Jan). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
-<font size="2" color="#eeeeee" face="Arial"><u>0.284</u>: Updated to MAME 0.284 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (30th Dec). Added/Updated DEmul v0.7 (20th Dec), FinalBurn Neo v1.0.0.03 (27th Dec), Flycast v2.5 (27th Dec) and Play! emulator infos. Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
-<font size="2" color="#eeeeee" face="Arial"><u>0.283</u>: Updated to MAME 0.283 (http://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (28th Nov). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
+<font size="2" color="#eeeeee" face="Arial"><u>0.286</u>: Updated to MAME 0.286 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (25th Feb). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
+<font size="2" color="#eeeeee" face="Arial"><u>0.285</u>: Updated to MAME 0.285 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (29th Jan). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
+<font size="2" color="#eeeeee" face="Arial"><u>0.284</u>: Updated to MAME 0.284 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (30th Dec). Added/Updated DEmul v0.7 (20th Dec), FinalBurn Neo v1.0.0.03 (27th Dec), Flycast v2.5 (27th Dec) and Play! emulator infos. Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
+<font size="2" color="#eeeeee" face="Arial"><u>0.283</u>: Updated to MAME 0.283 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (28th Nov). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <br><br><br><br>
 
 
@@ -807,13 +812,13 @@
 
 
 <br>
-&nbsp;&nbsp;&nbsp;<a href="http://mametesters.org/view_all_set.php?sort=last_updated&dir=DESC&type=2"><font size="3" face="Arial"><b>MAME Testers</b></font></a><br>
-&nbsp;&nbsp;&nbsp;<a href="http://git.redump.net/mame/log/"><font size="3" face="Arial"><b>MAME GIT</b></font></a><br>
-&nbsp;&nbsp;&nbsp;<a href="http://mamedev.org/release.html"><font size="3" face="Arial"><b>MAME Download</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="https://mametesters.org/view_all_set.php?sort=last_updated&dir=DESC&type=2"><font size="3" face="Arial"><b>MAME Testers</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="https://git.redump.net/mame/log/"><font size="3" face="Arial"><b>MAME GIT</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="https://mamedev.org/release.html"><font size="3" face="Arial"><b>MAME Download</b></font></a><br>
 &nbsp;&nbsp;&nbsp;<a href="https://ashura-x.github.io/ashurax.github.io/"><font size="3" face="Arial"><b>Ashura-X's Nightly MAME builds</b></font></a><br>
 &nbsp;&nbsp;&nbsp;<a href="https://forums.bannister.org/ubbthreads.php?ubb=postlist&Board=1&page=1"><font size="3" face="Arial"><b>MAME - Forums - Bannister</b></font></a><br>
 &nbsp;&nbsp;&nbsp;<a href="https://forum.mamedev.org/"><font size="3" face="Arial"><b>MAME Discussion - MAMEDEV Forum</b></font></a><br>
-&nbsp;&nbsp;&nbsp;<a href="http://mamedev.org/devwiki/index.php/Frequently_Asked_Questions"><font size="3" face="Arial"><b>MAME Frequently Asked Questions</b></font></a><br>
+&nbsp;&nbsp;&nbsp;<a href="https://mamedev.org/devwiki/index.php/Frequently_Asked_Questions"><font size="3" face="Arial"><b>MAME Frequently Asked Questions</b></font></a><br>
 <br><br>
 
 
