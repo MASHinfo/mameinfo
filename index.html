@@ -100,7 +100,7 @@
   . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
   . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
-- battlex.cpp: Set_flip_screen already marks tilemaps dirty. Removed unneeded variable
+- battlex.cpp: Set_flip_screen already marks tilemaps dirty. Removed unneeded variable.
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
 - chamrx1.cpp: Expand motherboard notes
 - chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
@@ -151,7 +151,7 @@
 - Touryuumon: Added default EEPROM and speedups
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
 - Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
-- Fixed rom names in exprraid.cpp and namcos22.cpp
+- Fixed rom names in exprraid.cpp, jalmah.cpp and namcos22.cpp
 - Renamed (gnga) to (gngb), (gng) to (gnga), (lotoplay) to (lotoply), (lotoplaya) to (lotoplya), (lotoplayb) to (lotoplyb) and (lotoplayp) to (lotoplyp)
 - SDLMAME
   . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
