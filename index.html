@@ -66,7 +66,7 @@
     . Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp. 
     . More recompiler improvements: Implemented fixed point CLIP and add/subtract with carry for recompiler. Cleaned up and de-duplicated code for setting ASTAT flags on fixed point ALU operationf for recompiler and fixed AC flag for subract operations. Optimised generated code for fixed point dual add subtrat, PASS and COMP for recompiler. Reduced unnecessary ASTAT flag copies for recompiler and added more glue that will be needed for supporting saturating arithmetic. Cleaned up fixed point COMP code for interpreter (sharc\sharc).
     . Fixed Rn = Rx + CI - 1 ALU operation. Neglected to git add the change after copy/pasting complementary operation above (sharc\sharcdrc.cpp). Fixed several interpreter issues: Fixed carry flag calculation for subtract with carry. Implemented Rn = Rx + CI and Rn = Rx + CI - 1. Rn = Rx + 1, Rn = Rx - 1 and Rn = -Rx should saturate the result (sharc\sharc). Implemented saturation for ALU dual add/subtract in interpreter (sharc\compute.hxx). Better ALU emulation for interpreter: Implemented fixed-point ALU overflow sticky flag (AOS). More accurate implementation of Fn = -Fx, Fn = ABS Fx and Fn = PASS Fx. Implemented Rn = ABS Rx and Fn = ABS(Fx - Fy). Sorted computer function declarations and definitions to match order of instruction listings in documentation (sharc\sharc).
-    . More ALU refinements for the interpreter: Set AOS on fixed point dual add/subtract overflow. Handle corner cases better for floating point MIN, MAX and CLIP. Cleaned up code for floating point COMP (sharc\compute.hxx). More detailed emulation of floating point addition, subtraction and COPYSIGN and some minor optimisation for interpreter.
+    . More ALU refinements for the interpreter: Set AOS on fixed point dual add/subtract overflow. Handle corner cases better for floating point MIN, MAX and CLIP. Cleaned up code for floating point COMP. More detailed emulation of floating point addition, subtraction and COPYSIGN and some minor optimisation for interpreter. Share interpreter code for some single ALU ops and dual multiplier/ALU ops and be stricter about Rn vs Fn. Fixed saturation without resorting to comparisons (sharc\compute.hxx).
   . Dynamic Re-Compiling
     . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator (cpu\*). Added some helpers (cpu\drcfe.h).
     . drcbex64.cpp: Avoid unnecessarily changing SSE mode on SETFMOD and when leaving recompiled code (cpu\drcbex64.cpp)
@@ -128,6 +128,7 @@
 - segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
 - snowbros.cpp: Fixed comment order sort to MSB first and same byte. Split driver states per hardware configs. Simplified sound bankswitch method for snowbro3 and clones. Reduced duplicates. Fixed toto dip switch config for describe broken title screen. Added korean titles when exists. Fixed metadata due to title screen.
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
+- stellafr.cpp: Added/Redumped DSP rom
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - tmnt2.cpp: Removed unneeded variable. Added VIDEO_ALWAYS_UPDATE flag to Golfing Greats.
 - trackfld.cpp: Cleanup. Consolidate in single driver file (except for audio device). Use same raw parameters for screen as contemporary Konami games (konami\trackfld.cpp). Inputs don't magically change on reset. Also tidy some stuff up (konami\trackfld_a.cpp). Use scanline timer for NMI generation as in parent set for clone Yie Ar Kung-Fu (bootleg GX361 conversion).
@@ -141,9 +142,11 @@
 - Games Family: Updated QA notes.
 - Heavy Unit: Removed empty override
 - Mario Bros.: Walk sound trigger is from WR pin instead of D0. Put the masao bootleg in a subclass (ID 08997). Enable DYNAMIC_TS for clearer sound (nintendo/nl_mario.cpp). Added note about MCU internal rom: Dump M58715 internal ROM. The EA pin dumping method does not work, is the MCU read protected? It's probably a small initialization routine, followed by a jump to external ROM. MAME has a fake bootstrap for now.
+- Pooyan: Added screen raw params
+- Popper: Lower CPU quantum
 - Run and Gun: IRQ 5 enable bit comes from a different register
 - Sand Scorpion: Fixed CALC1 naming (CALC1 hasn't any MCU core)
-- Space Guerrilla: Removed hardcoded color table. Added DSW locations.
+- Space Guerrilla: Removed hardcoded color table. Added DSW locations. 8-bit palette data can't come from 5-bit colorram, so implement it differently (no visible change). Also added flipscreen.
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Fixes occasionally writes wrong tiles to bg tilemap (ID 09395). Updated notes. Changed video emulation to tilemaps. Added flipscreen and fixed savestates. Small cleanup and update notes.
 - Touryuumon: Added default EEPROM and speedups
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
@@ -164,7 +167,8 @@
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
   . Improved building in more configurations (makefile, scripts\genie.lua, scripts\src\3rdparty.lua and scripts\src\lib.lua)
   . m_ify the variable names (cpu\m6502\*)
-
+- Debugger
+  . Stop the windows debugger from crashing when using a widescreen monitor. Happened with text windows wider that 256 characters (win\debugviewinfo.cpp).
 
 
 
