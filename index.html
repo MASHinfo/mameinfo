@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 9th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 10th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -106,7 +106,7 @@
 - chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
 - cv1k.cpp
   . Added cv1k SH7709S cache handling behavior for slowdown emulation. Handles some basic caching for the sh7709s used for cv1k titles so that they run at more appropriate speeds.
-  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory (sh\sh7709s.cpp)
+  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory. Convert the cpu cycles to bus cycles properly (sh\sh7709s.cpp)
 - fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - gfamily.cpp, pulltrig.cpp and sis630.cpp
@@ -125,6 +125,7 @@
   . Modernized ROM loading entries to MAME standards
   . Redumped clone Dirt Dash (World, DT2 Ver.B) program ROMs. Promoted game to working.
 - namcos23.cpp: Use custom tilemap drawing and eliminate gfxdecode from base class. Removed now-unneeded textram_w and textchar_w. Fixed Y-flip in manual tilemap drawing. Improved viewport behavior and Z-sort modes. Added X mirroring.
+- nemesis.cpp: Change maincpu interrupts from hold to assert/clear (konami/nemesis.cpp). Fixed Hyper Crash steering in konamigt mode.
 - segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
 - snowbros.cpp: Fixed comment order sort to MSB first and same byte. Split driver states per hardware configs. Simplified sound bankswitch method for snowbro3 and clones. Reduced duplicates. Fixed toto dip switch config for describe broken title screen. Added korean titles when exists. Fixed metadata due to title screen.
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
