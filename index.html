@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 10th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 11th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,11 +56,11 @@
 
 - New games: Triv III
 - New Working games: Dirt Dash (World, DT2 Ver.B)
-- New Non-Working games: Agro's Fantastic Video Game (version 2), Cool Gunman (V1.70), Cranky Condor, Fruit Dream II, Thunder V, Ultraman Club 3 and Versus.
+- New Non-Working games: Agro's Fantastic Video Game (version 2), Cool Gunman (V1.70), Cranky Condor, Fruit Dream II, Huanqiu Dafuweng, Thunder V, Ultraman Club 3 and Versus.
 - New clones: Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), Glass (ver 1.0, Break Edition, checksum 13BE832C), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 2), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3), Pinball Action (Tecfri, without external display), Power Drift (Japan, Rev A) and Time Crisis (Japan, TS1 Ver.B)
 - New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal (DOB), Disc Royal, Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As (F10), Herz As (F8), Herz As, Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Merkur Astro, Money, Multi Prima, Multi Star, Multi, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
-- New drivers: agro.cpp, dfruit2.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sis6326_pci and sis950_acpi
-- New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, pdc20268, sis6326_pci, sis950_acpi, t4dwave_pcm and trident_4dwavedx
+- New drivers: agro.cpp, dfruit2.cpp, haiwei.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp, sammymdl.cpp, sis6326_pci and sis950_acpi
+- New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, ky10510, ky3211, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm and trident_4dwavedx
 - CPU
   . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
     . Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp. 
@@ -83,6 +83,7 @@
   . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
 - SOUND
   . Sanyo VLM5030: Fixed pin rising edge detect if state high val is not 1. Added _r/_w to handlers (sound\vlm5030.cpp).
+  . Sound Interface: Don't send sound to osd if mute reason is ui related. Change abuffer resync to more abrupt. After abuffer overflow, reduce buffers to 1 instead of clear. It was still getting a buffer underrun sometimes after overflow when reduced to 1 (emu\sound.cpp and sound\sound_module.cpp).
 - DEVICE
   . Cassette: Use helper functions from multibyte.h (formats\wavfile.cpp). Added support for cassette images in AIFF format (formats\cassimg.h).
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
@@ -95,8 +96,8 @@
   . PCI: Standardize minimum grant & maximum latency readbacks
   . SCSI: Allow for connecting devices external to the bus (machine\nscsi_bus.cpp). Turn nscsi_device into an interface for easier composition. m_ify the variable names (bus\nscsi\* and machine\nscsi_*). Split HLE to a different file (machine\nscsi_hle.cpp). Finish deslotting and correct a number of things (bus\*, machine\*...).
   . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
-  . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad. Shuffle roms a bit (pci\sis6326.cpp).
-  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200. Added remaining Sequencer registers and improved logging. Added CRTC counter latches. Fixed bug with dxdiag setting the wrong ramdac mode from 16bpp fullscreen to 8bpp desktop. Implemented video overlay playback (video\pc_vga_sis.cpp).
+  . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad. Shuffle roms a bit. Added support for DVD variant. Preliminary line drawing (pci\sis6326.cpp).
+  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200. Added remaining Sequencer registers and improved logging. Added CRTC counter latches. Fixed bug with dxdiag setting the wrong ramdac mode from 16bpp fullscreen to 8bpp desktop. Implemented video overlay playback. Improved VCLK PLL handling (video\pc_vga_sis.cpp).
   . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
   . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
   . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
@@ -108,6 +109,7 @@
   . Added cv1k SH7709S cache handling behavior for slowdown emulation. Handles some basic caching for the sh7709s used for cv1k titles so that they run at more appropriate speeds.
   . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory. Convert the cpu cycles to bus cycles properly (sh\sh7709s.cpp)
 - fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
+- galgames.cpp: Dumped BIOS version 1.71. Note: v1.71 program ROMs were preproduction ROMs and there are known issue with memory management. Using v1.71 with StarPak carts will produce freezing and possible stability issues.
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - gfamily.cpp, pulltrig.cpp and sis630.cpp
   . Moved ACPI implementation in own core. Added enough SMI glue logic (machine\sis950_acpi.cpp). Added pin mapper. Hookup relocable IDE IIRQA/IIRQB pins (machine\sis950_lpc.cpp). Added PCI slots to base SiS 630 driver.
@@ -126,7 +128,11 @@
   . Redumped clone Dirt Dash (World, DT2 Ver.B) program ROMs. Promoted game to working.
 - namcos23.cpp: Use custom tilemap drawing and eliminate gfxdecode from base class. Removed now-unneeded textram_w and textchar_w. Fixed Y-flip in manual tilemap drawing. Improved viewport behavior and Z-sort modes. Added X mirroring.
 - nemesis.cpp: Change maincpu interrupts from hold to assert/clear (konami/nemesis.cpp). Fixed Hyper Crash steering in konamigt mode.
+- sammymdl.cpp and sigmab98.cpp
+  . Separated Sammy medal games from Sigma B-98 driver. Made TAXAN KY-3211 and KY-10510 Sprite generator into separate devices (video\ky3211_ky10510.cpp).
+  . Cleaned up code. Use multibyte helpers for 16-bit parameters, use BIT helper to extract bits. Reduced duplication, improved names. Use abbreviated integer type names consistently. Updated notes.
 - segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
+- sigmab98.cpp: Cleaned up code. Marked 'Minna Atsumare! Dodge Hero' as MACHINE_IMPERFECT_TIMING. Its title screen runs faster than should, which causes desyncing title call.
 - snowbros.cpp: Fixed comment order sort to MSB first and same byte. Split driver states per hardware configs. Simplified sound bankswitch method for snowbro3 and clones. Reduced duplicates. Fixed toto dip switch config for describe broken title screen. Added korean titles when exists. Fixed metadata due to title screen.
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
 - stellafr.cpp: Added/Redumped DSP rom
@@ -151,7 +157,7 @@
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Fixes occasionally writes wrong tiles to bg tilemap (ID 09395). Updated notes. Changed video emulation to tilemaps. Added flipscreen and fixed savestates. Small cleanup and update notes.
 - Touryuumon: Added default EEPROM and speedups
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
-- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
+- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Galaxy Games + prototype StarPak 4 cartridge, Galaxy Games + StarPak 2 cartridge, Galaxy Games + StarPak 3 cartridge, Galaxy Games + StarPak 4 cartridge, Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
 - Fixed rom names in exprraid.cpp, jalmah.cpp and namcos22.cpp
 - Renamed (gnga) to (gngb), (gng) to (gnga), (lotoplay) to (lotoply), (lotoplaya) to (lotoplya), (lotoplayb) to (lotoplyb) and (lotoplayp) to (lotoplyp)
 - SDLMAME
@@ -159,7 +165,7 @@
   . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp). Some fixes for -attach_window functionality under SDL3. Ensuring that when -attach_window that some inappropriate properties (e.g. - 'SDL_PROP_WINDOW_CREATE_TITLE_STRING') are not specified. Ensuring that under X11, we invoke 'XSelectInput()' with our own mask rather than what SDL3 does by default. Windows support. Attempting to fix MacOS specific warning (sdl3\sdlopts.h, sdl3\window.cpp).
 - MAME
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
-  . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp)
+  . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp). Include fastforward in unthrottle_mute (ui\moptions.cpp and ui\ui.cpp).
   . 3rdparty
     . Updated some use of deprecation ASIO APIs (util\client_ws.hpp, util\server_ws_impl.hpp, capcom\cps2comm.cpp)
     . Fixed softfloat with GCC 15 optimizer. qword ptr also needs the fix (i386; 3rdparty\softfloat\softfloat.c)
