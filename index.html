@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 11th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 12th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -83,7 +83,7 @@
   . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
 - SOUND
   . Sanyo VLM5030: Fixed pin rising edge detect if state high val is not 1. Added _r/_w to handlers (sound\vlm5030.cpp).
-  . Sound Interface: Don't send sound to osd if mute reason is ui related. Change abuffer resync to more abrupt. After abuffer overflow, reduce buffers to 1 instead of clear. It was still getting a buffer underrun sometimes after overflow when reduced to 1 (emu\sound.cpp and sound\sound_module.cpp).
+  . Sound Interface: Don't send sound to osd if mute reason is ui related. Change abuffer resync to more abrupt. After abuffer overflow, reduce buffers to 1 instead of clear. It was still getting a buffer underrun sometimes after overflow when reduced to 1. Forward audio latency setting to abuffer. Derive min_buffers from max_buffers and added over/underrun stats. Updated sound_module notes. Audio latency is a float (emu\sound.cpp and sound\sound_module.cpp). Forward latency to abuffer (sound\coreaudio_sound.cpp).
 - DEVICE
   . Cassette: Use helper functions from multibyte.h (formats\wavfile.cpp). Added support for cassette images in AIFF format (formats\cassimg.h).
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
@@ -107,7 +107,7 @@
 - chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
 - cv1k.cpp
   . Added cv1k SH7709S cache handling behavior for slowdown emulation. Handles some basic caching for the sh7709s used for cv1k titles so that they run at more appropriate speeds.
-  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory. Convert the cpu cycles to bus cycles properly (sh\sh7709s.cpp)
+  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory. Convert the cpu cycles to bus cycles properly. Update bank conflict precharge penalty timing. Handle the precharge of the last active bank in the background and only pay the penalty on a bank conflict and only pay the remainder of the wait cycles that haven't elapsed since the last access. Update the read->write wait penalty time for dirty writeback eviction since wcr1 should contain that value (sh\sh7709s.cpp).
 - fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
 - galgames.cpp: Dumped BIOS version 1.71. Note: v1.71 program ROMs were preproduction ROMs and there are known issue with memory management. Using v1.71 with StarPak carts will produce freezing and possible stability issues.
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
@@ -128,6 +128,7 @@
   . Redumped clone Dirt Dash (World, DT2 Ver.B) program ROMs. Promoted game to working.
 - namcos23.cpp: Use custom tilemap drawing and eliminate gfxdecode from base class. Removed now-unneeded textram_w and textchar_w. Fixed Y-flip in manual tilemap drawing. Improved viewport behavior and Z-sort modes. Added X mirroring.
 - nemesis.cpp: Change maincpu interrupts from hold to assert/clear (konami/nemesis.cpp). Fixed Hyper Crash steering in konamigt mode.
+- nss.cpp, sfcbox.cpp, snesb.cpp and snesb51.cpp: XBA always takes 3 cycles (g65816\g65816op.ipp)
 - sammymdl.cpp and sigmab98.cpp
   . Separated Sammy medal games from Sigma B-98 driver. Made TAXAN KY-3211 and KY-10510 Sprite generator into separate devices (video\ky3211_ky10510.cpp).
   . Cleaned up code. Use multibyte helpers for 16-bit parameters, use BIT helper to extract bits. Reduced duplication, improved names. Use abbreviated integer type names consistently. Updated notes.
