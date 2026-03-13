@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 13th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 14th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,11 +56,11 @@
 
 - New games: Lucky Spin 1999 (Ver. A.1) and Triv III
 - New Working games: Dirt Dash (World, DT2 Ver.B)
-- New Non-Working games: Agro's Fantastic Video Game (version 2), Cool Gunman (V1.70), Cranky Condor, Fruit Dream II, Huanqiu Dafuweng, Thunder V, Ultraman Club 3 and Versus.
+- New Non-Working games: Agro's Fantastic Video Game (version 2), Circus 2, Cool Gunman (V1.70), Cranky Condor, Fruit Dream II, Huanqiu Dafuweng, Thunder V, Ultraman Club 3 and Versus.
 - New clones: Bonus Spin Bonanza (V1.0G), Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), Glass (ver 1.0, Break Edition, checksum 13BE832C), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 2), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3), Ms. Pac-Man (Playmark bootleg), Pinball Action (Tecfri, without external display), Power Drift (Japan, Rev A), Tarzan (V201FA, alt encryption) and Time Crisis (Japan, TS1 Ver.B)
 - New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As, Herz As (F10), Herz As (F8), Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Merkur Astro, Money, Multi, Multi Prima, Multi Star, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
-- New drivers: agro.cpp, dfruit2.cpp, haiwei.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sammymdl.cpp
-- New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, ky10510, ky3211, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm and trident_4dwavedx
+- New drivers: agro.cpp, dfruit2.cpp, funcube.cpp, haiwei.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sammymdl.cpp
+- New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, ky10510, ky3211, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm, trident_4dwavedx and x1_020_dx_101
 - CPU
   . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
     . Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp. 
@@ -110,6 +110,11 @@
   . Added cv1k SH7709S cache handling behavior for slowdown emulation. Handles some basic caching for the sh7709s used for cv1k titles so that they run at more appropriate speeds.
   . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory. Convert the cpu cycles to bus cycles properly. Update bank conflict precharge penalty timing. Handle the precharge of the last active bank in the background and only pay the penalty on a bank conflict and only pay the remainder of the wait cycles that haven't elapsed since the last access. Update the read->write wait penalty time for dirty writeback eviction since wcr1 should contain that value (sh\sh7709s.cpp).
 - fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
+- funcube.cpp, namcoeva.cpp and seta2.cpp
+  . Refactored 'Allumer X1-020/NEC DX-101 Video' as a device (video\x1_020_dx_101.cpp)
+  . funcube.cpp: Moved Funcube hardware emulation out of seta\seta2.c
+  . namcoeva.cpp: Moved driver from seta to namco project. Removed dependency on seta\seta2.cpp.
+  . seta2.cpp: Reduced literal tags and cleaned up code. Updated notes. Use standard mahjong matrix (seta\seta2.cpp). Minor optimisation, reduced duplication and expanded notes (video\x1_020_dx_101.cpp).
 - galgames.cpp: Dumped BIOS version 1.71. Note: v1.71 program ROMs were preproduction ROMs and there are known issue with memory management. Using v1.71 with StarPak carts will produce freezing and possible stability issues.
 - galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
 - gfamily.cpp, pulltrig.cpp and sis630.cpp
@@ -137,6 +142,7 @@
   . Cleaned up code. Use multibyte helpers for 16-bit parameters, use BIT helper to extract bits. Reduced duplication, improved names. Use abbreviated integer type names consistently. Updated notes.
 - segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
 - sigmab98.cpp: Cleaned up code. Marked 'Minna Atsumare! Dodge Hero' as MACHINE_IMPERFECT_TIMING. Its title screen runs faster than should, which causes desyncing title call.
+- snk6502.cpp: Added screen raw params. Removed unneeded high freq timer.
 - snowbros.cpp: Fixed comment order sort to MSB first and same byte. Split driver states per hardware configs. Simplified sound bankswitch method for snowbro3 and clones. Reduced duplicates. Fixed toto dip switch config for describe broken title screen. Added korean titles when exists. Fixed metadata due to title screen.
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
 - stellafr.cpp: Added/Redumped DSP rom
@@ -163,17 +169,19 @@
 - Touryuumon: Added default EEPROM and speedups
 - WGP 2: Real Race Feeling: Redumped bad sub 68000 rom
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
+- X-Men: Removed local irq3 handler. Correction to xmen6p frame toggle.
 - Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Galaxy Games + prototype StarPak 4 cartridge, Galaxy Games + StarPak 2 cartridge, Galaxy Games + StarPak 3 cartridge, Galaxy Games + StarPak 4 cartridge, Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
 - Fixed rom names in exprraid.cpp, jalmah.cpp and namcos22.cpp
 - Renamed (gnga) to (gngb) and (gng) to (gnga)
 - Dipswitch fixes in bbusters.cpp, bfm_cobra3.cpp, nemesis.cpp, spaceg.cpp, sprcros2.cpp, statriv2.cpp and snowbros.cpp
 - MAME
+  . VIDEO RENDERING SYSTEM: Fixed configure issue if main-mcfg doesn't use set_raw and sub-mcfg does (emu\screen.h)
   . DEVICES: Notify on changing preset images (emu\diimage.cpp)
   . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp). Include fastforward in unthrottle_mute (ui\moptions.cpp and ui\ui.cpp).
   . 3rdparty
     . Updated some use of deprecation ASIO APIs (util\client_ws.hpp, util\server_ws_impl.hpp, capcom\cps2comm.cpp)
     . Fixed softfloat with GCC 15 optimizer. qword ptr also needs the fix (i386; 3rdparty\softfloat\softfloat.c)
-  . Consolidate drivers into single file (lastduel.cpp, trackfld.cpp and tumbleb.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
+  . Consolidate drivers into single file (lastduel.cpp, seta2.cpp, trackfld.cpp and tumbleb.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
 - SDLMAME
   . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
   . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp). Some fixes for -attach_window functionality under SDL3. Ensuring that when -attach_window that some inappropriate properties (e.g. - 'SDL_PROP_WINDOW_CREATE_TITLE_STRING') are not specified. Ensuring that under X11, we invoke 'XSelectInput()' with our own mask rather than what SDL3 does by default. Windows support. Attempting to fix MacOS specific warning (sdl3\sdlopts.h, sdl3\window.cpp).
