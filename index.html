@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 18th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -60,7 +60,7 @@
 - New clones: Bonus Spin Bonanza (V1.0G), Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Futbol (set 2), Futbol (test ROMs), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 1), Glass (ver 1.0, Break Edition, checksum 13BE832C), Golden Star (Blue version, newer), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 2), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3), Ms. Pac-Man (Playmark bootleg), Pinball Action (Tecfri, without external display), Power Drift (Japan, Rev A), Tarzan (V201FA, alt encryption) and Time Crisis (Japan, TS1 Ver.B)
 - New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As, Herz As (F10), Herz As (F8), Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Merkur Astro, Money, Multi, Multi Prima, Multi Star, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
 - New drivers: agro.cpp, dfruit2.cpp, funcube.cpp, haiwei.cpp, hy-268a.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sammymdl.cpp
-- New devices: ac97_stac9704, aha2940, fga4he, ht208_video7_vga, ky10510, ky3211, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm, trident_4dwavedx and x1_020_dx_101
+- New devices: ac97_stac9704, aha2940, clgd5434_pci, fga4he, ht208_video7_vga, ky10510, ky3211, mc_mk4_hopper, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm, trident_4dwavedx and x1_020_dx_101
 - CPU
   . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
     . Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp. 
@@ -80,7 +80,9 @@
   . Intel 8086: Correction to adc/sbb overflow flag calculation. Initialize m_ea_timing table. Don't accept NMI at reset time. No need for that m_reset_time local variable (i86\i86.cpp and i86\i86inline.h).
   . Intel 80186: The invalid opcode is a trap (m_ip = m_prev_ip). BOUND is signed. Fixed iRMX interrupt mode. Improved BOUND logging (i86\i186.cpp).
   . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp). Fixed softfloat with GCC 15 optimizer. qword ptr also needs the fix (i386; 3rdparty\softfloat\softfloat.c).
-  . MOS Technology 6502: Don't accept NMI at reset time. No need for that m_reset_time local variable (m6502\m6502.cpp)
+  . MOS Technology 6502
+    . Don't accept NMI at reset time. No need for that m_reset_time local variable. Small refactor to do_sbc_d to make it easier to see the difference between NMOS/CMOS (m6502\m6502.cpp and m6502\w65c02.cpp).
+    . Modify SBC decimal adjust algorithm for 65C02, which differs from NMOS 6502 in edge cases. Allows 6502test.ssd (from mungre/beeb6502test repository) to pass test BCD-FC on bbcm (m6502\w65c02.cpp).
   . NEC Vxx: Correction to addc/subb overflow flag calculation
   . NEC V60 and NEC V810: Correction to addc/subc overflow flag calculation (v60\v60.cpp)
   . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
@@ -91,6 +93,7 @@
 - DEVICE
   . Cassette: Use helper functions from multibyte.h (formats\wavfile.cpp). Added support for cassette images in AIFF format (formats\cassimg.h).
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
+  . ICS2115 WaveFront Synthesizer: Suppress side effects for debugger reads and cleaned up code. Use logmacro.h for configurable logging, reduced duplication and made some local variables const (sound\ics2115.cpp).
   . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
   . Intel 8253 PIT: Improved timing accuracy. The counter is loaded and decremented on the falling edge of CLK. GATE and GATE transitions (for edge-sensitive modes) are sampled on the rising edge of CLK. Mode 3 treats GATE as edge-sensitive. In modes 2 and 3, GATE has an immediate effect on OUT. Deferred the execution of 'set_clock_signal'. Removed 8253 timing workarounds from (MESS) sixtrak. Ensure the recent fix for mode 3 does not yet apply to 'set_clk' configurations (machine\pit8253.cpp).
   . Kaneko PANDORA GFX: Cleanups and updates. Use shortened typename value for consistency. Use BIT macro for single bit flags. Fixed loggings, spacings and namings. Make some variables constant. Reduced literal tag usages. Fill empty sprite gfx region to transparent. Removed unnecessary checks. Fixed comments (Original chip has 14 bit tile code, used at djboy.cpp and hvyunit.cpp). Added notes for sprite bitmap RAM. Fixed sprite trail and notes. Chip has double buffering, so this commit fixes sprite trail match to PCB (ex: airbustr).
@@ -165,6 +168,7 @@
 - Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h).
 - Dingo: Don't accept NMI at reset time. No need for that m_reset_time local variable (z80\z80.cpp). Fixes Dingo soft reset doesn't work (ID 09411).
 - DJ Boy: Fixed initializer. Reduced duplicated comment block. Added notes for bankswitch entry.
+- Fruit Land: Demoted game to GAME_NOT_WORKING. Even before the current boot regression it wasn't really working well (video with half height).
 - Gals Panic: Restrict foreground bitmap draw routine to screen cliprect
 - Gals Panic 3: Cleaned up code: Suppress side effects for debugger reads. Reduced unnecessary memory accesses in RLE decompression. Made some variables const, use abbreviated integer types consistently. Don't split initialisation between files (kaneko\kaneko_grap2.cpp). Cleanup driver: Replaced macros with lambdas and reduced literal tags. Updated notes. Use abbreviated integer types consistently.
 - Games Family: Updated QA notes.
@@ -181,11 +185,12 @@
 - Star Wars Arcade: Pilot stick y was wrong way around
 - Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Fixes occasionally writes wrong tiles to bg tilemap (ID 09395). Updated notes. Changed video emulation to tilemaps. Added flipscreen and fixed savestates. Small cleanup and update notes.
 - Touryuumon: Added default EEPROM and speedups
+- Trick Trap: Fixed titlescreen offset
 - WGP 2: Real Race Feeling: Redumped bad sub 68000 rom
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
 - X-Men: Removed local irq3 handler. Correction to xmen6p frame toggle. Fixes some sequences are sped up in xmen6p and xmen6pu (ID 09409). Added sound mute. Correct bootleg OKI banking. Cleanup driver. Removed EEPROMOUT port.
 - Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Galaxy Games + prototype StarPak 4 cartridge, Galaxy Games + StarPak 2 cartridge, Galaxy Games + StarPak 3 cartridge, Galaxy Games + StarPak 4 cartridge, Ghosts'n Goblins (World? set 2), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
-- Fixed rom names in exprraid.cpp, jalmah.cpp and namcos22.cpp
+- Fixed rom names in exprraid.cpp, jalmah.cpp, namcos22.cpp and shangha3.cpp
 - Renamed (gnga) to (gngb) and (gng) to (gnga)
 - Dipswitch fixes in bbusters.cpp, bfm_cobra3.cpp, nemesis.cpp, spaceg.cpp, sprcros2.cpp, statriv2.cpp, snowbros.cpp and midxunit.cpp
 - MAME
