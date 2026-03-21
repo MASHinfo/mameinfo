@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 20th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 21st March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -91,8 +91,10 @@
 - SOUND
   . ICS2115 WaveFront Synthesizer: Suppress side effects for debugger reads and cleaned up code. Use logmacro.h for configurable logging, reduced duplication and made some local variables const (sound\ics2115.cpp).
   . Sanyo VLM5030: Fixed pin rising edge detect if state high val is not 1. Added _r/_w to handlers (sound\vlm5030.cpp).
-  . Sound Interface: Don't send sound to osd if mute reason is ui related. Change abuffer resync to more abrupt (ID 09203). After abuffer overflow, reduce buffers to 1 instead of clear. It was still getting a buffer underrun sometimes after overflow when reduced to 1. Forward audio latency setting to abuffer. Derive min_buffers from max_buffers and added over/underrun stats. Updated sound_module notes. Audio latency is a float (emu\sound.cpp and sound\sound_module.cpp). Forward latency to abuffer (sound\coreaudio_sound.cpp). Fixed wrong assumption that samplerate is fixed at 48000 (sound abuffer).
-  . Yamaha YMZ770/YMZ774: Removed hardcoded clock (sound\ymz770.cpp)
+  . Sound Interface
+    . Don't send sound to osd if mute reason is ui related. Change abuffer resync to more abrupt (ID 09203). After abuffer overflow, reduce buffers to 1 instead of clear. It was still getting a buffer underrun sometimes after overflow when reduced to 1. Forward audio latency setting to abuffer. Derive min_buffers from max_buffers and added over/underrun stats. Updated sound_module notes. Audio latency is a float (emu\sound.cpp and sound\sound_module.cpp).
+    . Forward latency to abuffer (sound\coreaudio_sound.cpp). Fixed wrong assumption that samplerate is fixed at 48000 (sound abuffer). Rate-limit the output stream so it doesn't queue up to infinity when you unthrottle (sound\sdl3_sound.cpp) (MT9401).
+  . Yamaha YMZ770/YMZ774: Removed hardcoded clock. Updated notes (sound\ymz770.cpp)
 - DEVICE
   . Cassette: Use helper functions from multibyte.h (formats\wavfile.cpp). Added support for cassette images in AIFF format (formats\cassimg.h).
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
@@ -113,6 +115,9 @@
   . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
 - battlex.cpp: Set_flip_screen already marks tilemaps dirty. Removed unneeded variable.
 - bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
+- cdi.cpp
+  . Added Audio Mixing: CD-i audio mixing now largely working. To verify, try Zelda Wand of Gamelon and notice the audio now fades correctly. Added Audio Attenuation Storage. Breaks existing savestates. Reduced crashes from Audio. Previously, attenuation commands were not processed resulting in executing data bytes as code. This placeholder properly skips 5 bytes, increasing stability of the system. Reduced Audio Peaking. Changing to 0.25 removes some noticeable audio peaking. For example, the intro Philips logo (philips\cdi.cpp).
+  . CD-i CDIC: Removes unnecessary memory allocation in CDDA decoder. The class already has m_samples prepared for this purpose. Simplify XA Audio. This removes an allocation of 56 bytes by instead using an orphaned array which was intended for this purpose. Added Attenuation Math (philips\cdicdic.cpp).
 - chamrx1.cpp: Expand motherboard notes
 - chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
 - cv1k.cpp
@@ -197,7 +202,7 @@
 - WGP 2: Real Race Feeling: Redumped bad sub 68000 rom
 - Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
 - X-Men: Removed local irq3 handler. Correction to xmen6p frame toggle. Fixes some sequences are sped up in xmen6p and xmen6pu (ID 09409). Added sound mute. Correct bootleg OKI banking. Cleanup driver. Removed EEPROMOUT port.
-- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Dharma Dojang - Mangchi Man (Korea), Galaxy Games + prototype StarPak 4 cartridge, Galaxy Games + StarPak 2 cartridge, Galaxy Games + StarPak 3 cartridge, Galaxy Games + StarPak 4 cartridge, Ghosts'n Goblins (World? set 1), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
+- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Battlezone (rev 2), Battlezone (cocktail), Battlezone (rev 1), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Desert Wars (bootleg of Battlezone), Dharma Dojang - Mangchi Man (Korea), Galaxy Games + prototype StarPak 4 cartridge, Galaxy Games + StarPak 2 cartridge, Galaxy Games + StarPak 3 cartridge, Galaxy Games + StarPak 4 cartridge, Ghosts'n Goblins (World? set 1), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
 - Fixed rom names in exprraid.cpp, jalmah.cpp, namcos22.cpp and shangha3.cpp
 - Renamed (gng) to (gngb), (gngc) to (gng), (gnga) to (gngc) and (radikaldrt) to (radikald)
 - Dipswitch fixes in bbusters.cpp, bfm_cobra3.cpp, nemesis.cpp, spaceg.cpp, sprcros2.cpp, statriv2.cpp, snowbros.cpp and midxunit.cpp
@@ -217,7 +222,7 @@
   . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
   . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp). Some fixes for -attach_window functionality under SDL3. Ensuring that when -attach_window that some inappropriate properties (e.g. - 'SDL_PROP_WINDOW_CREATE_TITLE_STRING') are not specified. Ensuring that under X11, we invoke 'XSelectInput()' with our own mask rather than what SDL3 does by default. Windows support. Attempting to fix MacOS specific warning (sdl3\sdlopts.h, sdl3\window.cpp).
   . Fixed black screen when launching with -video soft on MacOS (render\drawsdl3soft.cpp). Render OSD at native resolution on scaled high DPI displays (render\drawsdl3accel.cppand render\drawsdl3soft.cpp).
-  . Autodetect Homebrew SDL3 on MacOS (scripts\src\osd\sdl3.lua)
+  . Autodetect Homebrew SDL3 on MacOS (scripts\src\osd\sdl3.lua).
 - Compiling
   . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
   . Improved building in more configurations (makefile, scripts\genie.lua, scripts\src\3rdparty.lua and scripts\src\lib.lua)
