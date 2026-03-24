@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 23rd March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 24th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,7 +56,9 @@
 
 - New games: Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
 - New clones: Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3) and Red Hawk (China & Hong Kong)
-- New devices: vt82c691_bridge and vt82c691_host
+- New devices: smbus_pipc, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host and w83877tf
+- CPU
+  . Intel I386: Added CPUID brand ID for Pentium 3 and 4 (i386\i386.cpp and i386\i486ops.hxx). Avoid arithmetic between different enum types (i386\i386dasm.h).
 - DEVICE
   . Bus: Addressed unintuitive behavious in a dozen slot devices. With these slots, you'd get no options if you specified a clock frequency, or the default options if you didn't, or in a few cases, you'd get the options if you specified a default (even nullptr) or no options otherwise. It's completely unintuitive. This pattern shouldn't be allowed to creep back in.
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp).
@@ -65,10 +67,20 @@
 - SOUND
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
 - dassault.cpp and rohga.cpp: Removed unnecessary decocomn.cpp (DECO Common Video Functions) dependency. Moved alt sprite format config into machine_config. Fixed Hangzo ROM region size (main CPU ROM is ~1MB (only first 1MB is mapped at hotb_base_map) and no second "oki1" bank). Reduced unused arguments in dassault.cpp.
+- taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
+- Neo Mania: Hookup inputs (centronics\neomania_adapter.cpp)
 - Rampart: Correction to P3 buttons
+- Sengoku no Jieitai: Increased Z80 clock
 - Description changes of Makaimura (Japan revision A?)
 - Fixed rom names in royalmah.cpp
+- MAME
+  . UI/OSD
+    . Removed misguided qualifiers (osd\osdsync.cpp)
+    . UTF-8 strings will use a distinct character type (ui\devopt.cpp)
+  . Avoid use of volatile assignement result as value (emu\validity.cpp)
+  . Avoid arithmetic between different enum types (mame\infoxml.cpp)
+  . Default-construct XML parser options (mame\cheat.cpp)
 - SDLMAME/SDL3
   . Pump CF run loop before enumerating game controllers on MacOS. On MacOS, SDL3's GCController backend discovers USB game controllers asynchronously through the Core Foundation run loop. Without giving the run loop time to process, USB controllers (e.g. Xbox Series X/S) are not detected during initial enumeration (input\input_sdl3.cpp).
   . Process events after raising window on macOS to ensure input focus. On macOS, the window may not have acquired input focus by the time SDL_RaiseWindow returns. Pumping events after raising ensures the FOCUS_GAINED event is dequeued and m_focus_window is set before the input modules start polling, preventing the intermittent loss of keyboard and mouse input on startup. Fixes GitHub #10612 (sdl/video.cpp and sdl3/video.cpp).
@@ -215,7 +227,7 @@
 - Mahjong games: Added a simple slot system for standard mahjong and hanafuda matrix panels (up to 6*6) (shared\mahjong.cpp) (Drivers: ddenlovr.cpp, dynax.cpp, fromanc2.cpp, fromance.cpp, homedata.cpp, igs011.cpp, igsmahjong.cpp, mahjong.cpp, metro.cpp, ms32.cpp, royalmah.cpp, seibuspi.cpp, seta2.cpp, ssv.cpp
 - Mario Bros.: Walk sound trigger is from WR pin instead of D0. Put the masao bootleg in a subclass (ID 08997). Enable DYNAMIC_TS for clearer sound (nintendo/nl_mario.cpp). Added note about MCU internal rom: Dump M58715 internal ROM. The EA pin dumping method does not work, is the MCU read protected? It's probably a small initialization routine, followed by a jump to external ROM. MAME has a fake bootstrap for now.
 - Monte Carlo: Small correction to car colors
-- Neo Mania (Portugal): Added MACHINE_UNEMULATED_PROTECTION flag. Note: Once in non-Safe Mode Windows (after drivers installation etc.) the OS has a Startup item for the frontend (neofend.exe). If protection fails it will proceed to *wipe out* the entire HDD, it is advised to backup the .dif before fiddling with that.
+- Neo Mania (Portugal): Initial Neo Mania Adapter JAMMA board (centronics\neomania_adapter.cpp). Added MACHINE_UNEMULATED_PROTECTION flag. Note: Once in non-Safe Mode Windows (after drivers installation etc.) the OS has a Startup item for the frontend (neofend.exe). If protection fails it will proceed to *wipe out* the entire HDD, it is advised to backup the .dif before fiddling with that.
 - PC hardware: Sort out notes of several PC based Arcade drivers
 - Pooyan: Added screen raw params
 - Popper: Lower CPU quantum
