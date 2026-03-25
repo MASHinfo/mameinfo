@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 24th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 25th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,7 +56,7 @@
 
 - New games: Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
 - New clones: Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3) and Red Hawk (China & Hong Kong)
-- New devices: smbus_pipc, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host and w83877tf
+- New devices: smbus_pipc, vt82c596b_acpi, vt82c596_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host and w83877tf
 - CPU
   . Intel I386: Added CPUID brand ID for Pentium 3 and 4 (i386\i386.cpp and i386\i486ops.hxx). Avoid arithmetic between different enum types (i386\i386dasm.h).
 - DEVICE
@@ -64,6 +64,10 @@
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp).
   . SiS 630 Host-to-PCI Bridge: Removed debug_break on smiact trigger (machine\sis630_host.cpp)
   . Slot device: Cleaned up boilerplate for slot devices
+  . SiS 6326 AGP/PCI card: Added shifter behaviour on High/True Color depths (pci\sis6326.cpp)
+  . Slot device: Added special validity check for driver-level slots to prevent image and slot names from colliding (emu\dislot.cpp)
+  . VT82C586B: Rename to '596 and implement actual '596B (machine\vt82c586b_acpi.cpp)
+  . Zilog Z80 DMA Controller: Updated RDY immediately but defer the side effects. Fixes (MESS) abc1600 floppy write, does not seem to break x1turbo40 (machine\z80dma.cpp).
 - SOUND
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
 - dassault.cpp and rohga.cpp: Removed unnecessary decocomn.cpp (DECO Common Video Functions) dependency. Moved alt sprite format config into machine_config. Fixed Hangzo ROM region size (main CPU ROM is ~1MB (only first 1MB is mapped at hotb_base_map) and no second "oki1" bank). Reduced unused arguments in dassault.cpp.
@@ -76,8 +80,7 @@
 - Fixed rom names in royalmah.cpp
 - MAME
   . UI/OSD
-    . Removed misguided qualifiers (osd\osdsync.cpp)
-    . UTF-8 strings will use a distinct character type (ui\devopt.cpp)
+    . Removed misguided qualifiers (osd\osdsync.cpp). UTF-8 strings will use a distinct character type (ui\devopt.cpp). Added pattern explainations for -listbios (mame\clifront.cpp).
   . Avoid use of volatile assignement result as value (emu\validity.cpp)
   . Avoid arithmetic between different enum types (mame\infoxml.cpp)
   . Default-construct XML parser options (mame\cheat.cpp)
@@ -209,7 +212,7 @@
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - tmnt2.cpp: Removed unneeded variable. Added VIDEO_ALWAYS_UPDATE flag to Golfing Greats.
 - trackfld.cpp: Cleanup. Consolidate in single driver file (except for audio device). Use same raw parameters for screen as contemporary Konami games (konami\trackfld.cpp). Inputs don't magically change on reset. Also tidy some stuff up (konami\trackfld_a.cpp). Use scanline timer for NMI generation as in parent set for clone Yie Ar Kung-Fu (bootleg GX361 conversion).
-- Battlezone: Removed space from title (ID 09401)
+- Battlezone: Removed space from title (ID 09414)
 - Beast Busters: Correct dipswitches in clones Beast Busters (US, Version 2) and Beast Busters (US, Version 3) (ID 09407). Removed Player 3 in clone Beast Busters (Japan, Version 2, 2 Player).
 - Blocken: Added PCB info and ROM locations
 - Blood Bros. and Out Zone: Added PCB infos
