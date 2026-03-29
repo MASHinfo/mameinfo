@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 27th March 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 29th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -62,6 +62,7 @@
   . Intel I386: Added CPUID brand ID for Pentium 3 and 4 (i386\i386.cpp and i386\i486ops.hxx). Avoid arithmetic between different enum types (i386\i386dasm.h).
 - DEVICE
   . Bus: Addressed unintuitive behavious in a dozen slot devices. With these slots, you'd get no options if you specified a clock frequency, or the default options if you didn't, or in a few cases, you'd get the options if you specified a default (even nullptr) or no options otherwise. It's completely unintuitive. This pattern shouldn't be allowed to creep back in.
+  . Floppy: Allow specifying explicit start and end sectors when getting PC MFM track data. Ensoniq VFX and EPS family floppies use 10 sectors per track, starting at sector 0 rather than the more common sector 1. The code in 'esq16_dsk.cpp' handles this when loading floppy images, but not when saving them. This attempts to fix this in a way that is not only specific to Ensoniq's floppy images, but to possibly other future ones as well. In 'flopimg.cpp', allow specifying explicit start and end sectors when getting PC MFM track data. In 'esq16_dsk.cpp', use this to explicitly specifying sectors 0 to 9 when getting the track data to save (formats\flopimg.cpp and formats\esq16_dsk.cpp).
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp).
   . SiS 630 Host-to-PCI Bridge: Removed debug_break on smiact trigger (machine\sis630_host.cpp)
   . Slot device: Cleaned up boilerplate for slot devices
@@ -71,9 +72,11 @@
   . Zilog Z80 DMA Controller: Updated RDY immediately but defer the side effects. Fixes (MESS) abc1600 floppy write, does not seem to break x1turbo40 (machine\z80dma.cpp).
 - SOUND
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
-  . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Struct savestate issue (sound\ymz770.cpp).
+  . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Fixes a burst of white static noise occurs in Pink Sweets, when certain voice clips play (ID 09408). Struct savestate issue (sound\ymz770.cpp).
 - dassault.cpp and rohga.cpp: Removed unnecessary decocomn.cpp (DECO Common Video Functions) dependency. Moved alt sprite format config into machine_config. Fixed Hangzo ROM region size (main CPU ROM is ~1MB (only first 1MB is mapped at hotb_base_map) and no second "oki1" bank). Reduced unused arguments in dassault.cpp.
+- namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit (namco\namcos22_v.cpp).
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
+- Ace Driver: Racing Evolution: Fixed name entry screen palette issues
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
 - Neo Mania: Hookup inputs (centronics\neomania_adapter.cpp)
 - Octopussy: Octopussy is not a Master Crane clone
@@ -82,6 +85,7 @@
 - Description changes of Makaimura (Japan revision A?) and Tiger Road (US bootleg, set 1)
 - Fixed rom names in royalmah.cpp
 - MAME
+  . DEVICES: Allow source and manufacturer strings to be deduplicated. This increases coupling between the "traits" classes generated for driver/device definitions and the device type implementation class, but it noticeably reduces static data size for MAME as a whole (emu\device.h and emu\gamedrv.h).
   . UI/OSD
     . Removed misguided qualifiers (osd\osdsync.cpp). UTF-8 strings will use a distinct character type (ui\devopt.cpp). Added pattern explainations for -listbios (mame\clifront.cpp).
   . Avoid use of volatile assignement result as value (emu\validity.cpp)
@@ -90,6 +94,11 @@
 - SDLMAME/SDL3
   . Pump CF run loop before enumerating game controllers on MacOS. On MacOS, SDL3's GCController backend discovers USB game controllers asynchronously through the Core Foundation run loop. Without giving the run loop time to process, USB controllers (e.g. Xbox Series X/S) are not detected during initial enumeration (input\input_sdl3.cpp).
   . Process events after raising window on macOS to ensure input focus. On macOS, the window may not have acquired input focus by the time SDL_RaiseWindow returns. Pumping events after raising ensures the FOCUS_GAINED event is dequeued and m_focus_window is set before the input modules start polling, preventing the intermittent loss of keyboard and mouse input on startup. Fixes GitHub #10612 (sdl/video.cpp and sdl3/video.cpp).
+- Compiling
+  . Fixed things C++20 doesn't allow
+    . Deal with UTF-8 strings as a distint type (ui\info.cpp, imagedev\cassette.cpp)
+    . Avoid arithmetic between different enum types (ui\inputmap.cpp, debugger\qt\dasmwindow.cpp, debugger\qt\mainwindow.cpp, sound\coreaudio_sound.cpp, cpu\drcbec.cpp, mit\tx0_v.cpp, konami\3dom2.cpp, machine\mc68328.cpp, cpu\mips\mips1.cpp, cpu\mips\r4000.cpp). Avoid arithmetic between enum and floating point (dec\pdp1.cpp, konami\firebeat.cpp, mit\tx0.cpp, sound\lc7535.cpp and sound\spkrdev.cpp)
+    . Avoid comparing enum to floatint point (sound\discrete.h). Fixed deprecated uses of volatile variables (gaelco\gaelco3d_m.cpp). Don't use UTF-8 qualifier on pure ASCII strings, just assume char is ASCII-like (ui\toolbar.ipp). Provide an explicit constructor (osd\interface\audio.h). Fixed uninitialised class member warning (util\server_http_impl.hpp).
 - Debugger
   . Added Edit menu with clipboard shortcuts. The macOS Cocoa debugger only adds Debug and Run menus to the menu bar, so standard Cmd+X/C/V shortcuts are never routed through the responder chain to the command input NSTextField. Add an Edit menu with Cut, Copy, and Paste items to enable clipboard operations (debugger\debugosx.mm).
 
@@ -99,11 +108,11 @@
 
 0.287
 
-- New games: Lucky Spin 1999 (Ver. A.1) and Triv III
+- New games: Triv III
 - New Working games: Dirt Dash (World, DT2 Ver.B)
-- New Non-Working games: Agro's Fantastic Video Game (version 2), Circus 2, Cool Gunman (V1.70), Cranky Condor, Draw Poker HI-LO (Americade), Fruit Dream II, Futbol (set 1), Huanqiu Dafuweng, Mahjong Sweet Academy Special (Japan, P010B-Y05), Thunder V, Ultraman Club 3, Versus, Wu Lu Fuxing and Xingyun Caishen.
+- New Non-Working games: Agro's Fantastic Video Game (version 2), Circus 2, Cool Gunman (V1.70), Cranky Condor, Draw Poker HI-LO (Americade), Fruit Dream II, Futbol (set 1), Huanqiu Dafuweng, Lucky Spin 1999 (Ver. A.1), Mahjong Sweet Academy Special (Japan, P010B-Y05), Thunder V, Ultraman Club 3, Versus, Wu Lu Fuxing and Xingyun Caishen.
 - New clones: Bonus Spin Bonanza (V1.0G), Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Futbol (set 2), Futbol (test ROMs), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 2), Glass (ver 1.0, Break Edition, checksum 13BE832C), Golden Star (Blue version, newer), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 2), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3), Ms. Pac-Man (Playmark bootleg), Pinball Action (Tecfri, without external display), Power Drift (Japan, Rev A), Tarzan (V201FA, alt encryption) and Time Crisis (Japan, TS1 Ver.B)
-- New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As, Herz As (F10), Herz As (F8), Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Merkur Astro, Money, Multi, Multi Prima, Multi Star, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz AS, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
+- New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Astro (Merkur), Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As, Herz As (F10), Herz As (F8), Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Money, Multi, Multi Prima, Multi Star, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz As, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
 - New drivers: agro.cpp, dfruit2.cpp, funcube.cpp, haiwei.cpp, hy-268a.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sammymdl.cpp
 - New devices: ac97_stac9704, aha2940, clgd5434_pci, fga4he, hanafuda_medal_panel, hanafuda_panel, hanaroku_panel, hgokou_joystick, ht208_video7_vga, ky10510, ky3211, mahjong_medal_panel, mahjong_panel, mahjong_panel_connector, mc_mk4_hopper, neomania_adapter, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm, trident_4dwavedx, wss and x1_020_dx_101
 - CPU
