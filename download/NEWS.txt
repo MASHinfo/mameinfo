@@ -3,6 +3,193 @@ Features, Supports and Changes in MAME
 
 
 
+0.287
+
+- New games: Triv III
+- New Working games: Dirt Dash (World, DT2 Ver.B)
+- New Non-Working games: Agro's Fantastic Video Game (version 2), Circus 2, Cool Gunman (V1.70), Cranky Condor, Draw Poker HI-LO (Americade), Fruit Dream II, Futbol (set 1), Huanqiu Dafuweng, Lucky Spin 1999 (Ver. A.1), Mahjong Sweet Academy Special (Japan, P010B-Y05), Thunder V, Ultraman Club 3, Versus, Wu Lu Fuxing and Xingyun Caishen.
+- New clones: Bonus Spin Bonanza (V1.0G), Darkstalkers: The Night Warriors (Brazil 940818), Express Raider (bootleg), Futbol (set 2), Futbol (test ROMs), Gals Panic 4 (Asia), Ghosts'n Goblins (World? set 2), Glass (ver 1.0, Break Edition, checksum 13BE832C), Golden Star (Blue version, newer), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 2), John Elway's Team Quarterback (rev 1), Loto-Play (Z80, set 1), Loto-Play (Z80, set 2), Loto-Play (Z80, set 3), Ms. Pac-Man (Playmark bootleg), Pinball Action (Tecfri, without external display), Power Drift (Japan, Rev A), Tarzan (V201FA, alt encryption) and Time Crisis (Japan, TS1 Ver.B)
+- New AGEMAME games: 21 Point, 4 Asse (F1), 4 Asse (F2), As, Astro (Merkur), Big Winner, Bistro, Club, Disc 4000, Disc Fun, Disc II Plus, Disc Olympia, Disc Royal, Disc Royal (DOB), Doppel-Sonne, Double, Full House, Fun Station Spielekoffer 7 Spiele, Fun Station Spielekoffer 8 Spiele, Golden Jubilar, Granada, Herz As, Herz As (F10), Herz As (F8), Jackpot 4000, Jumbo 400, Jumbo Action, Komet, Max, Money, Multi, Multi Prima, Multi Star, Mystery Jackpot, Nun Ran, Sesam, Skat Bierskat Solitaire (F2), Super Disc, Super Herz As, Super Jackpot, Super Multi, Super Pro, 'Telly Addicts (New Series) (Bellfruit) (Cobra 3)', Trio and Trumpf As
+- New drivers: agro.cpp, dfruit2.cpp, funcube.cpp, haiwei.cpp, hy-268a.cpp, pachislo_z80.cpp, sammy_pachislo_z80.cpp and sammymdl.cpp
+- New devices: ac97_stac9704, aha2940, clgd5434_pci, fga4he, hanafuda_medal_panel, hanafuda_panel, hanaroku_panel, hgokou_joystick, ht208_video7_vga, ky10510, ky3211, mahjong_medal_panel, mahjong_panel, mahjong_panel_connector, mc_mk4_hopper, neomania_adapter, pdc20268, sis6326_dvd, sis6326_pci, sis950_acpi, t4dwave_pcm, trident_4dwavedx, wss and x1_020_dx_101
+- CPU
+  . Analog Devices ADSP21062 'Sharc': Hooked up flag pin outputs for the interpreter. Hooked up flag outputs for the recompiler, push out flag latch state when switching from input to output. Added a compile-time option to disable ASTAT flag update elision in the SHARC recompiler and fixed some recompiler front-end bugs. Disassemble unimplemented instructions executed in recompiled code, include tag in more fatal errors, use throw syntax to make it cleared it's an early out (sharc\sharc.cpp). Don't use memset to clear loop entries (sharc\sharcfe.cpp).
+    . Implemented fixed point clip and saturating arithmetic in interpreter. Correct logic for generating carry/overflow flags in add-with-carry and subtract-with-borrow operations. Correct floating point clip calculation for Fx < 0. Implemented the LT, LE, GE and GT conditions properly (sharc\compute.hxx, sharc\sharc.h, sharc\sharcops.hxx). Implemented short word sign extension. Fixed DAG2 (PM) register display in debugger. Track AF dependencies when analysing instructions. Log analysed instructions when logging UML code. Removed misplaced break in sharc\sharcfe.cpp. 
+    . More recompiler improvements: Implemented fixed point CLIP and add/subtract with carry for recompiler. Cleaned up and de-duplicated code for setting ASTAT flags on fixed point ALU operationf for recompiler and fixed AC flag for subract operations. Optimised generated code for fixed point dual add subtrat, PASS and COMP for recompiler. Reduced unnecessary ASTAT flag copies for recompiler and added more glue that will be needed for supporting saturating arithmetic. Cleaned up fixed point COMP code for interpreter (sharc\sharc).
+    . Fixed Rn = Rx + CI - 1 ALU operation. Neglected to git add the change after copy/pasting complementary operation above (sharc\sharcdrc.cpp). Fixed several interpreter issues: Fixed carry flag calculation for subtract with carry. Implemented Rn = Rx + CI and Rn = Rx + CI - 1. Rn = Rx + 1, Rn = Rx - 1 and Rn = -Rx should saturate the result (sharc\sharc). Implemented saturation for ALU dual add/subtract in interpreter (sharc\compute.hxx). Better ALU emulation for interpreter: Implemented fixed-point ALU overflow sticky flag (AOS). More accurate implementation of Fn = -Fx, Fn = ABS Fx and Fn = PASS Fx. Implemented Rn = ABS Rx and Fn = ABS(Fx - Fy). Sorted computer function declarations and definitions to match order of instruction listings in documentation (sharc\sharc).
+    . More ALU refinements for the interpreter: Set AOS on fixed point dual add/subtract overflow. Handle corner cases better for floating point MIN, MAX and CLIP. Cleaned up code for floating point COMP. More detailed emulation of floating point addition, subtraction and COPYSIGN and some minor optimisation for interpreter. Share interpreter code for some single ALU ops and dual multiplier/ALU ops and be stricter about Rn vs Fn. Fixed saturation without resorting to comparisons (sharc\compute.hxx).
+    . More detailed floating point mulitply and add/sub emulation for interpreter. Set MV, MU and MI flags and corresponding sticky flags for multiplication.  Flush denormals to zero and set AV flag (and corresponding sticky flag) for dual add/subtract. More detailed NaN handling for both (sharc\compute.hxx).
+  . Dynamic Re-Compiling
+    . Allow recompiling CPU cores to define their own opcode descriptions. The base opcode description now only has the parts that are used by the base recompiler front-end. CPU cores are free to define their own extensions as they see fit without being limited to pre-defined fields. The base recompiler front-end is now a template, eliminating the virtual member functions. It no longer has any dependencies on libemu, which paves the way to decoupling the recompiler front-ends and allowing the instruction analysis to be tested without the rest of the emulator (cpu\*). Added some helpers (cpu\drcfe.h).
+    . drcbex64.cpp: Avoid unnecessarily changing SSE mode on SETFMOD and when leaving recompiled code (cpu\drcbex64.cpp)
+    . drcbearm64: Reduced unnecessary rounding mode changes. Don't set the rounding mode on SETFMOD if it hasn't changed. Fixed back-end getting confused about the rounding mode on entry (cpu\drcbearm64.cpp).
+    . drcuml: Let C functions take any pointer/reference parameter (cpu\uml.h)
+  . Hitachi SH-1/2/3/4: Cleaned up instruction analysis logging a little. Cleaned up register dependency analysis logging and fixed an instruction analysis bug (cpu\sh*).
+  . Hitachi SH-2 (SH7604): Fixed three register access bugs: vcrd_w: Read m_vcrd instead of m_vcrc for FOV interrupt vector. dmaor_w: Use (old & data & 6) so AE/NMIF flags can actually be cleared. vcrb_r: Mask reserved bits 15 and 7 with 0x7f7f, matching vcra/vcrc/vcrwdt (sh\sh7604.cpp).
+  . Hyperstone E1-xxxx: Re-wrote E1 instruction analyser. Reduced redundant code, track condition flag dependencies independently, fixed a number of bugs (e132xs\e132xsfe.cpp). Don't recalculate immediate values when generating code (e132xs\e132xsdrc_ops.hxx). Log analysed instructions in UML log when using recompiler. Allow recompiler to skip unused condition flag calculations. Also fixed some instruction analysis bugs. Skip more unnecessary flag calculations, use pre-calculated PC for updating G0 in memory when possible, better analysis of pre-calculated PC values when delay slots are involved (cpu\e132xs).
+  . IBM PowerPC: Fixed floating point comparison flags. Fixes various things that were always broken with the C and ARM backends or worked by chance with the x86-64 and i686 back-end. Also commented out some constexpr for now (cpu\powerpc\*). End instruction sequences on encountering SC (powerpc\ppcfe.cpp). Modernised recompiler front-end code and improved instruction analysis logging (cpu\powerpc).
+  . Intel 8086: Correction to adc/sbb overflow flag calculation. Initialize m_ea_timing table. Don't accept NMI at reset time. No need for that m_reset_time local variable (i86\i86.cpp and i86\i86inline.h).
+  . Intel 80186: The invalid opcode is a trap (m_ip = m_prev_ip). BOUND is signed. Fixed iRMX interrupt mode. Improved BOUND logging (i86\i186.cpp).
+  . Intel I386: Fixed SMM. Use the correct bits for DPL. Adjust CS for ppro+. Include the 486 (i386\i386.cpp). Fixed softfloat with GCC 15 optimizer. qword ptr also needs the fix (i386; 3rdparty\softfloat\softfloat.c).
+  . MOS Technology 6502
+    . Don't accept NMI at reset time. No need for that m_reset_time local variable. Small refactor to do_sbc_d to make it easier to see the difference between NMOS/CMOS (m6502\m6502.cpp and m6502\w65c02.cpp).
+    . Modify SBC decimal adjust algorithm for 65C02, which differs from NMOS 6502 in edge cases. Allows 6502test.ssd (from mungre/beeb6502test repository) to pass test BCD-FC on (MESS) bbcm (m6502\w65c02.cpp) (ID 06769).
+    . De-virtualize SBC implementation in w65c02, w65c02s, etc. (m6502\w65c02.cpp). Route core fetch/data/write paths through interruptible accesses. Added interruptible access regression test. Narrow interruptible access follow-up (m6502\m6502.cpp).
+  . NEC Vxx: Correction to addc/subb overflow flag calculation
+  . NEC V60 and NEC V810: Correction to addc/subc overflow flag calculation (v60\v60.cpp)
+  . Texas Instruments TMS32020/C25/C26: Small optimisation and cleanup: Templated relevant member functions on ignore ARP hack avoiding a data member check. Made IRQ cycles a local - it's never needed outside the scope where it's used. Skip hold logic if hold read callback is unset. Templated some member functions with simple variations (tms320c2x\tms320c2x.cpp).
+  . Zilog Z80: Don't accept NMI at reset time. No need for that m_reset_time local variable (z80\z80.cpp)
+- SOUND
+  . ICS2115 WaveFront Synthesizer: Suppress side effects for debugger reads and cleaned up code. Use logmacro.h for configurable logging, reduced duplication and made some local variables const (sound\ics2115.cpp).
+  . Sanyo VLM5030: Fixed pin rising edge detect if state high val is not 1. Added _r/_w to handlers (sound\vlm5030.cpp).
+  . Sound Interface
+    . Don't send sound to osd if mute reason is ui related. Change abuffer resync to more abrupt (ID 09203). After abuffer overflow, reduce buffers to 1 instead of clear. It was still getting a buffer underrun sometimes after overflow when reduced to 1. Forward audio latency setting to abuffer. Derive min_buffers from max_buffers and added over/underrun stats. Updated sound_module notes. Audio latency is a float (emu\sound.cpp and sound\sound_module.cpp).
+    . Forward latency to abuffer (sound\coreaudio_sound.cpp). Fixed wrong assumption that samplerate is fixed at 48000 (sound abuffer). Rate-limit the output stream so it doesn't queue up to infinity when you unthrottle (sound\sdl3_sound.cpp) (ID 09401).
+  . Yamaha YMZ770/YMZ774: Removed hardcoded clock. Updated notes. Added sample rate auto selection (sound\ymz770.cpp).
+- DEVICE
+  . Cassette: Use helper functions from multibyte.h (formats\wavfile.cpp). Added support for cassette images in AIFF format (formats\cassimg.h).
+  . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
+  . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
+  . Intel 8253 PIT: Improved timing accuracy. The counter is loaded and decremented on the falling edge of CLK. GATE and GATE transitions (for edge-sensitive modes) are sampled on the rising edge of CLK. Mode 3 treats GATE as edge-sensitive. In modes 2 and 3, GATE has an immediate effect on OUT. Deferred the execution of 'set_clock_signal'. Removed 8253 timing workarounds from (MESS) sixtrak. Ensure the recent fix for mode 3 does not yet apply to 'set_clk' configurations (machine\pit8253.cpp).
+  . Kaneko PANDORA GFX: Cleanups and updates. Use shortened typename value for consistency. Use BIT macro for single bit flags. Fixed loggings, spacings and namings. Make some variables constant. Reduced literal tag usages. Fill empty sprite gfx region to transparent. Removed unnecessary checks. Fixed comments (Original chip has 14 bit tile code, used at djboy.cpp and hvyunit.cpp). Added notes for sprite bitmap RAM. Fixed sprite trail and notes. Chip has double buffering, so this commit fixes sprite trail match to PCB (ex: airbustr).
+  . Konami 051733 math chip: Reduced code size a bit (konami\k051733.cpp)
+  . MagicEyes VRender0 SoC: Added DMA address direction. Use struct for timer for reduce duplicates. Added struct name for DMA registers for reduce duplicates. Added notes for DMA control register. Use BIT helper for single bit values. Replaced printf to logerror. Use static function for DMA address increment calculation (machine\vrender0.cpp).
+  . Microtouch Touchscreen: Added the host interface microcontroller to make it easier to look at the program (disabled for now, will be emulated in the future).
+  . PC LPT: Added address_map variant for ISA PnP targets. LPT port 279 is read only, writes are routed to ISA PnP mode (machine\pc_lpt.cpp).
+  . PCI: Standardize minimum grant & maximum latency readbacks (machine\pci.cpp)
+  . SCSI: Allow for connecting devices external to the bus (machine\nscsi_bus.cpp). Turn nscsi_device into an interface for easier composition. m_ify the variable names (bus\nscsi\* and machine\nscsi_*). Split HLE to a different file (machine\nscsi_hle.cpp). Finish deslotting and correct a number of things (bus\*, machine\*...).
+  . SCSI CD-ROM: Support the revised BlueSCSI host transfer protocol which allows up to 64K per chunk instead of 4K (nscsi\cd.cpp)
+  . SiS 6326 AGP/PCI card: Hookup PCI variant "SiS 6326 PCI card" and VGA in VMI space. Initial BitBlt implementation. Fixed pattern regs mode and mouse caret in notepad. Shuffle roms a bit. Added support for DVD variant. Preliminary line drawing (pci\sis6326.cpp).
+  . SiS 630 VGA i/f: Start hooking up MD config pins, base hookup of TV Out space. Fixed lambda capture. Preliminary HW cursor. Added line compare "disable" and fixed display at 1600x1200. Added remaining Sequencer registers and improved logging. Added CRTC counter latches. Fixed bug with dxdiag setting the wrong ramdac mode from 16bpp fullscreen to 8bpp desktop. Implemented video overlay playback. Improved VCLK PLL handling (video\pc_vga_sis.cpp).
+  . Slot device: Cleaned up interface. Added a helper for the common operation of replacing all options, setting default, and setting whether the slot is fixed (reduced boilerplate in slot devices a bit). Fixed a bug where slot options copied the supplied name but also required the string to remain valid for their lifetime. Use std::string_view for strings that should never be null. Reduced some duplication (emu\dislot.cpp).
+  . VGA: Streamline VGA based PCI/AGP cards legacy structures (bus\pci\*)
+  . VIA Apollo MVP3: Map ACPI_PIPC on 8-bit units, use a device_memory_interface workaround to avoid emumem mapping bug (machine\vt82c586b_acpi.cpp). Added IDE and ACPI irq routing (machine\vt82c586b_isa.cpp).
+  . Xebec S1410 5.25 Inch Winchester Disk Controller: Return seek error on out-of-bounds seek (nscsi\s1410.cpp)
+- battlex.cpp: Set_flip_screen already marks tilemaps dirty. Removed unneeded variable.
+- bfm_cobra3.cpp: Attempt to improve non-MPEG hardware parts. Added CD-ROMs to c3_ppays, c3_tellyns and c3_totp. Redumped c3_telly CD-ROM.
+- cdi.cpp
+  . Added Audio Mixing: CD-i audio mixing now largely working. To verify, try Zelda Wand of Gamelon and notice the audio now fades correctly. Added Audio Attenuation Storage. Breaks existing savestates. Reduced crashes from Audio. Previously, attenuation commands were not processed resulting in executing data bytes as code. This placeholder properly skips 5 bytes, increasing stability of the system. Reduced Audio Peaking. Changing to 0.25 removes some noticeable audio peaking. For example, the intro Philips logo (philips\cdi.cpp).
+  . CD-i CDIC: Removes unnecessary memory allocation in CDDA decoder. The class already has m_samples prepared for this purpose. Simplify XA Audio. This removes an allocation of 56 bytes by instead using an orphaned array which was intended for this purpose. Added Attenuation Math (philips\cdicdic.cpp).
+- chamrx1.cpp: Expand motherboard notes
+- chihiro.cpp: Added another DSP56362 as the encode procesor DSP to the audio APU. And when the DSPs exit reset copy 24 bit words from Pentium processor RAM into DSP program RAM (shared\xbox_pci.cpp).
+- cv1k.cpp
+  . Added cv1k SH7709S cache handling behavior for slowdown emulation. Handles some basic caching for the sh7709s used for cv1k titles so that they run at more appropriate speeds.
+  . Hitachi SH7709S: Fixed up a couple of timing handling bugs. Use the writeback flag instead of write flag as the access to external memory is what matters for those. Fixed up the writeback buffer timing, we don't need to precharge twice for writes. Also rolled up the command costs the SDRAM region handling so the writes only need to add trwl to the penalty. Check for burst mode availability when determining the base cycle cost, only burst ROM and sdram can use burst access to each other area requires 4 separate accesses. Added some comments explaining missing/unimplemented features. Added the non-burst timing table for WCR2. Updates and adds a couple of extra comments related to the penalties/timing. Fixed bug in DRC memory accessor using clobbered IO reg (#15074). Fixed a shift error in the wcr1 register values. Added bcr2 plumbing for determining cache line fetch reads based off BCR2. Area 0 is set via external pins so hardcoding the cv1k value, this is typically code space though so it only affects timing during copy of code to main memory. Convert the cpu cycles to bus cycles properly. Update bank conflict precharge penalty timing. Handle the precharge of the last active bank in the background and only pay the penalty on a bank conflict and only pay the remainder of the wait cycles that haven't elapsed since the last access. Update the read->write wait penalty time for dirty writeback eviction since wcr1 should contain that value. Fixed LRU cache replacement updates. Only update LRU values greater than the current LRU value on cache hit (sh\sh7709s.cpp).
+- ddenlovr.cpp: Use slotted control panels. This is most useful for the games that can support several panel types, especially when the Hanaroku panel is supported. Added preliminary support for Hanafuda Hana Gokou joystick controls and improved some DIP switch settings a little. Allow a mahjong panel to be connected for all hanafuda games with slotted control panels. This is how the games were operated most of the time, and all mahjong controls are displayed in input tests. Also cleaned up some DIP switch settings.
+- fdek_h8s.cpp and namcos6.cpp: Added info about other games in the same medal serie
+- firetrk.cpp: Added DIP locations
+- funcube.cpp, namcoeva.cpp and seta2.cpp
+  . Refactored 'Allumer X1-020/NEC DX-101 Video' as a device (video\x1_020_dx_101.cpp)
+  . funcube.cpp: Moved Funcube hardware emulation out of seta\seta2.c
+  . namcoeva.cpp: Moved driver from seta to namco project. Removed dependency on seta\seta2.cpp.
+  . seta2.cpp: Reduced literal tags and cleaned up code. Updated notes. Use standard mahjong matrix (seta\seta2.cpp). Minor optimisation, reduced duplication and expanded notes (video\x1_020_dx_101.cpp).
+- galgames.cpp: Dumped BIOS version 1.71. Note: v1.71 program ROMs were preproduction ROMs and there are known issue with memory management. Using v1.71 with StarPak carts will produce freezing and possible stability issues.
+- galivan.cpp: Removed button 3 in dangar. Hold galivan's button 3 to move while hanging. ninjemak button 3 is on 0x40 according to testmode (although no button 3 on cpanel). Tweak galivan's screen raw params (it *is* measured, see PCB notes).
+- gamtor.cpp: Added some system base ROMs. Created a new device with a hopper inside.
+- gfamily.cpp, pulltrig.cpp and sis630.cpp
+  . Moved ACPI implementation in own core. Added enough SMI glue logic (machine\sis950_acpi.cpp). Added pin mapper. Hookup relocable IDE IIRQA/IIRQB pins (machine\sis950_lpc.cpp). Added PCI slots to base SiS 630 driver.
+  . Fixed subsystem write once in GUI and device ID for bridge (machine\sis630_gui.cpp)
+- gng.cpp: Updated notes after msg from dink about palette glitch. Note: Writing to palette during active display causes bus conflicts, this happens at busy moments and the vblank routine overflows to the next frame. The glitchy 'lightning' effect is currently not emulated.
+- iteagle.cpp: Use put_int_clamp on samples output (sound\es1373.cpp)
+- jalmah.cpp: Added the actual references for some of the MCUs in filenames
+- kaneko16.cpp: Added licensees to metadata and tidied code
+- kontest.cpp and mogura.cpp: Small cleanup/improvements. Only loop over 8*8 blocks that need to be drawn (kontest.cpp).
+- lastduel.cpp: Reduced RAM size for Last Duel and correct spriteram range. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
+- metro.cpp
+  . Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
+  . Improved metadata: Added region-specific titles to descriptions, and explanatory comments. Added assumed regions to descriptions based on game UI language. Fixed toride2gg set title (non-adauchi gaiden set unlike previously described metadata). Added distributor metadata for lastfortk set. Use the standard mahjong matrix (metro\metro.cpp).
+- model3.cpp: Dot product for lighting effects can't be negative by definition (sega\model3_v.cpp)
+- ms32.cpp: Simplified mahjong panel column permutation
+- namcos2.cpp: Fixed sprite masking (namco\namcos2_sprite.cpp). Fixes Marvel Land ingame foreground doesn't work (ID 09410).
+- namcos21.cpp and namcos21_c67.cpp: Don't hook up unused hold/ack (namco\namcos21_dsp.cpp and namco\namcos21_dsp_c67.cpp)
+- namcos22.cpp
+  . Modernized ROM loading entries to MAME standards
+  . Redumped clone Dirt Dash (World, DT2 Ver.B) program ROMs. Promoted game to working.
+- namcos23.cpp
+  . Use custom tilemap drawing and eliminate gfxdecode from base class. Removed now-unneeded textram_w and textchar_w. Fixed Y-flip in manual tilemap drawing. Improved viewport behavior and Z-sort modes. Added X mirroring.
+  . Fixed incorrect shift in color mode. Fixes several incorrectly-textured things. Fixes also Shinzo Pilot in Motocross Go! looks wrong on newer MAME versions (ID 09403).
+- nemesis.cpp: Change maincpu interrupts from hold to assert/clear. Fixes Salamander title screen doesn't appear after restart the game (ID 09405) (konami/nemesis.cpp). Fixed Hyper Crash steering in konamigt mode.
+- nss.cpp, sfcbox.cpp, snesb.cpp and snesb51.cpp: XBA always takes 3 cycles (g65816\g65816op.ipp)
+- pgm.cpp: Added notes for Debug feature (same purpose as pgm2 Debug DIP) and DIP switch positions.
+- sammymdl.cpp and sigmab98.cpp
+  . Separated Sammy medal games from Sigma B-98 driver. Made TAXAN KY-3211 and KY-10510 Sprite generator into separate devices (video\ky3211_ky10510.cpp).
+  . Cleaned up code. Use multibyte helpers for 16-bit parameters, use BIT helper to extract bits. Reduced duplication, improved names. Use abbreviated integer type names consistently. Updated notes.
+- segas32.cpp: De-slotize MB87030/MB89352 (machine\mb87030.cpp)
+- sigmab98.cpp: Cleaned up code. Marked 'Minna Atsumare! Dodge Hero' as MACHINE_IMPERFECT_TIMING. Its title screen runs faster than should, which causes desyncing title call.
+- snk6502.cpp: Added/Fixed screen raw params. Removed unneeded high freq timer.
+- snowbros.cpp: Fixed comment order sort to MSB first and same byte. Split driver states per hardware configs. Simplified sound bankswitch method for snowbro3 and clones. Reduced duplicates. Fixed toto dip switch config for describe broken title screen. Added korean titles when exists. Fixed metadata due to title screen.
+- statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
+- stellafr.cpp: Added/Redumped DSP rom
+- taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
+- tmnt2.cpp: Removed unneeded variable. Added VIDEO_ALWAYS_UPDATE flag to Golfing Greats.
+- trackfld.cpp: Cleanup. Consolidate in single driver file (except for audio device). Use same raw parameters for screen as contemporary Konami games (konami\trackfld.cpp). Inputs don't magically change on reset. Also tidy some stuff up (konami\trackfld_a.cpp). Use scanline timer for NMI generation as in parent set for clone Yie Ar Kung-Fu (bootleg GX361 conversion).
+- Battlezone: Removed space from title (ID 09414)
+- Beast Busters: Correct dipswitches in clones Beast Busters (US, Version 2) and Beast Busters (US, Version 3) (ID 09407). Removed Player 3 in clone Beast Busters (Japan, Version 2, 2 Player).
+- Blocken: Added PCB info and ROM locations
+- Blood Bros. and Out Zone: Added PCB infos
+- Caliber 50: Handle Caliber 50 sub CPU reset write
+- Car Jamboree: Improved priorities, assume 0x8800-0x8807 is a 74259. Fixes the player car jumping on the ramp where one part disappears because of sprite priorities.
+- Come On Baby: Improved device selection a bit (machine\it8671f.cpp/h).
+- Dingo: Don't accept NMI at reset time. No need for that m_reset_time local variable (z80\z80.cpp). Fixes Dingo soft reset doesn't work (ID 09411).
+- DJ Boy: Fixed initializer. Reduced duplicated comment block. Added notes for bankswitch entry.
+- Fruit Land: Demoted game to GAME_NOT_WORKING. Even before the current boot regression it wasn't really working well (video with half height).
+- Gals Panic: Restrict foreground bitmap draw routine to screen cliprect
+- Gals Panic 3: Cleaned up code: Suppress side effects for debugger reads. Reduced unnecessary memory accesses in RLE decompression. Made some variables const, use abbreviated integer types consistently. Don't split initialisation between files (kaneko\kaneko_grap2.cpp). Cleanup driver: Replaced macros with lambdas and reduced literal tags. Updated notes. Use abbreviated integer types consistently.
+- Games Family: Updated QA notes.
+- Heavy Unit: Removed empty override
+- Kangaroo: Fixed lockup regression in clone Kangaroo (bootleg)
+- Mahjong games: Added a simple slot system for standard mahjong and hanafuda matrix panels (up to 6*6) (shared\mahjong.cpp) (Drivers: ddenlovr.cpp, dynax.cpp, fromanc2.cpp, fromance.cpp, homedata.cpp, igs011.cpp, igsmahjong.cpp, mahjong.cpp, metro.cpp, ms32.cpp, royalmah.cpp, seibuspi.cpp, seta2.cpp, ssv.cpp
+- Mario Bros.: Walk sound trigger is from WR pin instead of D0. Put the masao bootleg in a subclass (ID 08997). Enable DYNAMIC_TS for clearer sound (nintendo/nl_mario.cpp). Added note about MCU internal rom: Dump M58715 internal ROM. The EA pin dumping method does not work, is the MCU read protected? It's probably a small initialization routine, followed by a jump to external ROM. MAME has a fake bootstrap for now.
+- Monte Carlo: Small correction to car colors
+- Neo Mania (Portugal): Initial Neo Mania Adapter JAMMA board (centronics\neomania_adapter.cpp). Added MACHINE_UNEMULATED_PROTECTION flag. Note: Once in non-Safe Mode Windows (after drivers installation etc.) the OS has a Startup item for the frontend (neofend.exe). If protection fails it will proceed to *wipe out* the entire HDD, it is advised to backup the .dif before fiddling with that.
+- PC hardware: Sort out notes of several PC based Arcade drivers
+- Pooyan: Added screen raw params
+- Popper: Lower CPU quantum
+- Revolution X: Added DIP locations
+- Run and Gun: IRQ 5 enable bit comes from a different register. Fixes 'Fatal error: execute_command called with invalid command' when you try to change game difficulty in the dipswitches (F2) in Run and Gun (ver EAA 1993 10.8) (ID 08775). Added sound mute. Removed EEPROMOUT port.
+- Sand Scorpion: Fixed CALC1 naming (CALC1 hasn't any MCU core)
+- Space Guerrilla: Removed hardcoded color table. Added DSW locations. 8-bit palette data can't come from 5-bit colorram, so implement it differently (no visible change). Also added flipscreen.
+- Star Wars Arcade: Pilot stick y was wrong way around
+- Super Cross II: Assume Z80B is 5MHz and screen refresh rate is closer to 60Hz. Fixes occasionally writes wrong tiles to bg tilemap (ID 09395). Updated notes. Changed video emulation to tilemaps. Added flipscreen and fixed savestates. Small cleanup and update notes.
+- Touryuumon: Added default EEPROM and speedups
+- Trick Trap: Fixed titlescreen offset. Fixed possible issue with yscroll.
+- WGP 2: Real Race Feeling: Redumped bad sub 68000 rom
+- Wu Lin Zhengba: Fixed GFX ROM loading and ACRTC hookup. This will now actually throw a fatalerror with unsupported HD63484 COMMAND_DWT after few frames, as stated in header.
+- X-Men: Removed local irq3 handler. Correction to xmen6p frame toggle. Fixes some sequences are sped up in xmen6p and xmen6pu (ID 09409). Added sound mute. Correct bootleg OKI banking. Cleanup driver. Removed EEPROMOUT port.
+- Description changes of 'B.C. Kid (Europe) / Bonk's Adventure: Arcade Version (US, China, Korea) / Kyukyoku!! PC Genjin: Special Arcade Version (Japan)', Backfire! (Data East, Japan, set 1), Backfire! (Data East, Japan, set 2), Bal Cube (Japan), Battlezone (rev 2), Battlezone (cocktail), Battlezone (rev 1), Bonk's Adventure: Arcade Version (prototype), Daitoride (Japan), Daitoride (Japan, YMF278B version), Desert Wars (bootleg of Battlezone), Dharma Dojang - Mangchi Man (Korea), Galaxy Games + prototype StarPak 4 cartridge, Galaxy Games + StarPak 2 cartridge, Galaxy Games + StarPak 3 cartridge, Galaxy Games + StarPak 4 cartridge, Ghosts'n Goblins (World? set 1), Ghosts'n Goblins (World? set 3), Ghosts'n Goblins (World? set 4), Gouketsuji Ichizoku 2 (Japan, Ver. 94.04.08, set 1), Last Fortress - Toride: Mah-jong (Germany), Loto-Play (MC68705, set 1), Loto-Play (MC68705, set 2), Loto-Play (MC68705, set 3), Macheonlu (Korea), Mahjong Doukyuusei (Japan), Mahjong Doukyuusei Special (Japan), Pinball Action (Tecfri, with external display), Poitto! (Japan revision D), Power Drift (World, earlier), Pururun (Japan set 1), Pururun (Japan set 2), Puzzle Express More More (Korea), Puzzle Express More More Plus, Puzzli (Japan revision B), Puzzli (Japan revision A), Suhoseong (Korea), Toride II (German) and Toride II Adauchi Gaiden (Japan).
+- Fixed rom names in exprraid.cpp, jalmah.cpp, namcos22.cpp and shangha3.cpp
+- Renamed (gng) to (gngb), (gngc) to (gng), (gnga) to (gngc) and (radikaldrt) to (radikald)
+- Dipswitch fixes in bbusters.cpp, bfm_cobra3.cpp, ddenlovr.cpp, nemesis.cpp, spaceg.cpp, sprcros2.cpp, statriv2.cpp, snowbros.cpp and midxunit.cpp
+- MAME
+  . VIDEO RENDERING SYSTEM
+    . Fixed configure issue if main-mcfg doesn't use set_raw and sub-mcfg does (emu\screen.h)
+    . Normalize blue palette (ambush.cpp, appoooh.cpp, bankp.cpp, btime.cpp, chaknpop.cpp, drmicro.cpp, gberet.cpp, jack.cpp, liberate.cpp, mrjong.cpp, shootout.cpp, snk6502.cpp, sprcros2.cpp and yiear.cpp).
+    . Set all scroll rows/cols on single param scrollx/y (emu\tilemap.h)
+  . DEVICES: Notify on changing preset images (emu\diimage.cpp)
+  . UI: Fixed some cosmetic issues (ui\filemngr.cpp and ui\prscntrl.cpp). Include fastforward in unthrottle_mute (ui\moptions.cpp and ui\ui.cpp). Use osd_printf_info output for interactive verbs (mame\clifront.cpp).
+  . 3rdparty
+    . Updated some use of deprecation ASIO APIs (util\client_ws.hpp, util\server_ws_impl.hpp, capcom\cps2comm.cpp)
+    . Fixed softfloat with GCC 15 optimizer. qword ptr also needs the fix (i386; 3rdparty\softfloat\softfloat.c)
+  . INPUT: Added 3P and 4P hanafuda controls and moved some gambling controls to the "other" group (emu\inpttype.ipp). Got rid of IPT_GAMBLE_SERVICE (emu\inpttype.h).
+  . Reduced temporary objects and duplicated code (emu\xtal.cpp)
+  . Consolidate drivers into single file (lastduel.cpp, seta2.cpp, trackfld.cpp and tumbleb.cpp). Small cleanup (appoooh.cpp, chinsan.cpp, jantotsu.cpp, jongkyo.cpp, ron.cpp and sprcros2.cpp).
+- SDLMAME/SDL3
+  . Implemented SDL_MouseWheelEvent integer member fallback for version less than 3.2.12. Added fallback for SDL_MouseWheelEvent when build with SDL3 < 3.2.12 (input\input_sdl3.cpp and sdl3\osdsdl.cpp).
+  . Set hint to disable the accents popup on MacOS when holding down keys (sdl3\sdlmain.cpp). Some fixes for -attach_window functionality under SDL3. Ensuring that when -attach_window that some inappropriate properties (e.g. - 'SDL_PROP_WINDOW_CREATE_TITLE_STRING') are not specified. Ensuring that under X11, we invoke 'XSelectInput()' with our own mask rather than what SDL3 does by default. Windows support. Attempting to fix MacOS specific warning (sdl3\sdlopts.h, sdl3\window.cpp).
+  . Fixed black screen when launching with -video soft on MacOS (render\drawsdl3soft.cpp). Render OSD at native resolution on scaled high DPI displays (render\drawsdl3accel.cppand render\drawsdl3soft.cpp).
+  . Autodetect Homebrew SDL3 on MacOS (scripts\src\osd\sdl3.lua).
+- Compiling
+  . Allow USE_SYSTEM_whatever=0 to use local copies of third party libraries (scripts\src\3rdparty.lua)
+  . Improved building in more configurations (makefile, scripts\genie.lua, scripts\src\3rdparty.lua and scripts\src\lib.lua)
+  . m_ify the variable names (cpu\m6502\*)
+  . Some prep work for extending offs_t to 64 bits. This covers some of stuff highlighted in GitHub #14689 where the approach to apply is reasonably obvious and the changes are harmless when offs_t doesn't change size. Most of this is being more strict with offs_t vs uint32_t and switching to type-safe formatting functions.
+  . Bulk change osd_printf_warning -> osd_printf_info for LOG_OUTPUT_FUNC.
+- Debugger
+  . Stop the windows debugger from crashing when using a widescreen monitor. Happened with text windows wider that 256 characters (win\debugviewinfo.cpp).
+  . Use C++ file stream for dumping address maps (debug\debugcmd.cpp)
+
+
+
 0.286
 
 - New games: Monkichicchi no Fuwafuwa Puzzle (Japan, prototype?)
@@ -12,6 +199,7 @@ Features, Supports and Changes in MAME
 - Removed games: Silverball (8.01)
 - New drivers: dharma_z180.cpp, fireshrk.cpp, mdartstr.cpp, namcos6.cpp, pitchtry.cpp, rallybik.cpp, seawolfnm.cpp and sshuffle.cpp
 - New devices: acpi_piix4, acpi_pipc, adsp21060, clgd5401, dspp_bulldog, f65535_isa16, f65535_vga, f82c836a, fdc37c665ir, gd5401, igs_incalt, isa16_medalist_rom_disk, it8661f, it8671f, nmk_irq, pc97338, rt1000b, toaplan_bcu, toaplan_dsp, toaplan_fcu, toaplan_video_controller, trio64dx_pci, um8498f, va_lpf4, voodoo_3000_x86, vt82c416, vt82c586b_acpi, vt82c586b_ide, vt82c586b_isa, vt82c586b_usb, vt82c598mvp_bridge, vt82c598mvp_host, z8691 and z86c91.
+- Bob Zed (What's new): https://youtu.be/a_RTfU6ewfg
 - CPU
   . Analog Devices ADSP21062 'Sharc'
     . Include emu.h. Implemented 16-bit IOP write handling. Added missing DMA members to save states. Implemented bit-accurate RECIPS and RSQRTS in recompiler (fast approximation can be enabled by setting a macro) (sharc\sharc.cpp).
@@ -29,7 +217,7 @@ Features, Supports and Changes in MAME
     . Better ASTAT handling: Flag pin bits are unaffected by push/pop status. Only flags set to input follow inputs on flag pins. Implemented ASTAT write for recompiler. Show ASTAT value in debugger when recompiler is enabled. Also don't allocated DRC cache when recompiler is disabled. Better sync on input changes across scheduling domains (cpu\sharc).
     . Pause DMA when stalled with recompiler to match interpreter. Disabled stalling DMA with recompiler for now. Current implementation gets confused, breaking Thrill Drive on Hornet (cpu\sharc).
   . Dynamic Re-Compiling
-    . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu/drc*).
+    . Fixes and refinements: Fixed crash when the CPU generates code during device_start and the debugger is enabled (devices\cpu\drc*).
     . drccache: Initialised all data members (cpu\drccache.cpp)
     . drcbec: Added support for invariant code and code blocks. Removed a bunch of crud that shouldn't be there. Restore floating point rounding mode if an exception is thrown, use C99 nearbyint/nearbyintf. Work around older clang that doesn't support the floating point environment access pragma (cpu\drcbec.cpp)
     . drcbeut: Added support for invariant code and simplified DRC label list class (only used by C back-end) (cpu\drcbeut.cpp)
@@ -51,7 +239,7 @@ Features, Supports and Changes in MAME
   . Ensoniq ES5503: Revert ill-advised changes from MAME 0.285 and fixed an older regression that caused a crash in (MESS) Bard's Tale IIgs (Github #14941) (sound\es5503.cpp).
   . GI SP0250 LPC: Fixed typo in sp0250 coefficient table (sound\sp0250.cpp)
   . OKI MSM5205 ADPCM: S1/S2 pins were the wrong way around. Small cleanup. Make playmode_w param an u8 instead of int (sound\msm5205.cpp)
-  . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp)
+  . Sound Interface: Alternate method for checking if machine is not yet running (emu\sound.cpp and sound\sound_module.cpp)
 - DEVICE
   . Floppy: Added save state support (machine\upd765.cpp). Subscribe to remap FN. Issue a remap for later variants and fixed regression (isa\fdc.cpp).
   . GP9001 VDP: Cleaned up and simplified code: Removed unnecessary custom_priority_bitmap and priority remap table and use screen priority bitmap. Improved logging and reduced literal tag usage. Also suppress side effects for debugger reads for Toaplan drivers using the device.
@@ -161,7 +349,7 @@ Features, Supports and Changes in MAME
 - Five a Side Soccer: Increased default trackball sensitivity. It was way too low to use with analog controls before.
 - Go Go Strike: Identified motherboard type and retire pcat_base_state use
 - HeliFire: Lower MCU clock, fixes sound pitch is too high and tempo is too fast (ID 09386).
-- Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now).
+- Invasion: The Abductors: Fixed gun position not detected on right side of screen, gun triggers were on wrong port (machine gun works now) (ID 06743).
 - Knuckle Bash 2 (bootleg): Moved kbash2-specific MSM6295 bankswitching into kbash2_state and improved kbash2 system description.
 - Mahjong Vegas: Correct 'Time Service Frequency' dipswitch typo
 - Mario Bros.
@@ -202,8 +390,8 @@ Features, Supports and Changes in MAME
 - WGP: Real Race Feeling: Increased 68000 clock
 - Description changes of Beastie Feastie (Pac-Man conversion, set 1), Big Twin (no girls conversion, set 1), BnB Arcade (V1.0005 World), Daytona USA (with Saturn advertisements), Flak Attack (Japan, version P), Flak Attack (Japan, version P, PWB 450593 sub-board), Happy Tour (V1.12), Hot Mind (Hard Times hardware, set 1), Invasion: The Abductors (version 3.0), Invasion: The Abductors (version 4.0), Invasion: The Abductors (version 5.0), Jiao! Jiao! Jiao! (China), Knuckle Bash 2 (bootleg of Knuckle Bash), Mario Bros. (Japan, revision C), Mario Bros. (US, revision F), Major Poker (set 2, v2.0), Major Poker (set 3, Micro Manufacturing intro), Major Poker (set 4, Micro Manufacturing intro), Major Poker (set 5, Micro Manufacturing intro), MX5000 (version R), Nyanpai (Japan), Qianxi Jielong / Hongxin Jielong, Slap Fight (Japan, A76 set, GX-006-A PCB) and Slap Fight (Japan, A77 set, 8606M PCB).
 - Fixed rom names in ghosteo.cpp, hominn_980924.cpp, mario.cpp, namcos1.cpp and superqix.cpp
-- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (majorpkr) to (majorpkr20), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (niyanpai) to (nyanpai), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
-- Dipswitch fixes in 4enraya.cpp, igs017.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, (pullttrig) to (pulltrig), tecmo.cpp, niyanpai.cpp and vicdual.cpp
+- Renamed (backfirt) to (backfirtb), (gijoea) to (gijoeaa), (majorpkr) to (majorpkr20), (mario) to (mariog), (marioe) to (mario), (mx5000) to (mx5000r), (niyanpai) to (nyanpai), (pullttrig) to (pulltrig), (wgp2) to (wgp2j) and (touryuu) to (touryuua)
+- Dipswitch fixes in 4enraya.cpp, igs017.cpp, midwunit.cpp, namcos23.cpp, mario.cpp, tecmo.cpp, niyanpai.cpp and vicdual.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Don't use reserved _Names (util\palette.h)
@@ -225,7 +413,7 @@ Features, Supports and Changes in MAME
   . PLUGINS: hiscore.dat update (plugins\hiscore\hiscore.dat). Refactored LUA hooks for vector devices (plugins\vector\init.lua + plugins\vector\plugin.json).
   . Consolidate drivers into single file (fantland.cpp, kickgoal.cpp, lethalj.cpp, mario.cpp, rltennis.cpp, segahang.cpp, segaorun.cpp, segas16a.cpp, segas24.cpp, segaxbd.cpp, segaybd.cpp, starcrus.cpp, taito_l.cpp, tecmo.cpp and wgp.cpp)
 - SDLMAME
-  . Initial support for SDL3. SDL3 is the default for macOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned.
+  . Initial support for SDL3. SDL3 is the default for MacOS targets. Linux/Windows can build with OSD=sdl3 while we wait for better distro support for SDL3. Both X11 and Wayland sessions are fully supported on Linux. SDL3 -sound=sdl supports both input and output. All other video, sound and input functionality should otherwise be the same for now. SDL 3.4+ multiple keyboard/mouse support is planned.
   . Fixed font lookup (font\font_sdl3.cpp, lib\osdobj_common.cpp). Fixed key up not being sent on some systems. Fixed assert on new instance of joystick connected (input\input_sdl3.cpp). Enable TEXT_INPUT events, fixes text input fields in the UI (sdl3\window.cpp).
 - Compiling
   . Small comments cleanup to copy-pasted sprite drawing routines. Lots of ATTR_COLD and some code cleanup.
@@ -371,7 +559,7 @@ Features, Supports and Changes in MAME
   . Merged wayward speakers (midw8080\mw8080bw_a.cpp, sega\model1.cpp, nscsi\cd.cpp)
   . Set global C++ locale when the standard library isn't broken. GNU libstdc++ only provides a useless stub locale implementation when using anything other than the glibc standard C library. However, llvm libc++ provides a locale implementation that works fine with UCRT. Suppress digit grouping. Too many things don't take it into consideration (osd\windows\winmain.cpp).
   . Use "classic" locale for debug console (emu\debug\*) and ROM loading (emu\romentry.cpp).
-- MAC OS X: Apply a default channel mapping for devices where macOS gives no layout information, like MacBook internal speakers. Fixes things being in mono when they shouldn't (sound\coreaudio_sound.cpp).
+- MAC OS X: Apply a default channel mapping for devices where MacOS gives no layout information, like MacBook internal speakers. Fixes things being in mono when they shouldn't (sound\coreaudio_sound.cpp).
 - Compiling
   . You're supposed to specify MEM_RESERVE when requesting additional address space. This has been buggy since the very first VCS revision of the MAME 0.121 source, but Windows tolerates it (lib\osdlib_win32.cpp).
   . Cleaned up devices build scripts a bit: Lua considers anything other than null or false to be "truthy". The tests against "null" were comparing to a non-existent global called "null" that evaluated to nil. Got bus.lua back in alphabetical order and got at least most of the trigger variables aligned with paths. At least don't put random stuff in the middle of the Acorn devices in machine.lua.
@@ -1624,7 +1812,7 @@ Features, Supports and Changes in MAME
     . The new menus were unusable with a touchscreen, and not conducive to localisation. It's still not possible to add sound routes with a touchscreen, but at least it's possible to configure routes that exist (mame\ui\*). Fixed localisation issues and less temporary objects (emu\sound.cpp and emu\audio_effects).
     . Avoid anything that could possibly depend on static initialisation order across transaltion units. Allow speaker position names to be localised (modules\sound). Don't pretend it can create output streams (sound\none.cpp). Blind attempt at updating for base class changes (sound\js_sound.cpp).
     . Sound modules
-      . CoreAudio: Changed audio_latency duration option to milliseconds (lib\osdobj_common.cpp, sound\coreaudio_sound.cpp). Changed audio_latency to seconds (float), so people with existing mame.ini won't get broken sound (lib\osdobj_common.cpp, sound\coreaudio_sound.cpp). Preliminary revised macOS CoreAudio backend. Supports multiple input and output streams to multple devices simultaneously. audio_latency now is a floating-point number of 50 Hz audio frames. 0 is valid now. Channel layouts are determined when available (many devices don't support them). External effects support removed; it may return later. Rebuild the device list when the default devices change, fixes a crash when a new default device is connected. Added a callback for each active device to see if it becomes unavailable. Moved default device change check to get_generation so it happens regularly. Use property listeners to determine configuration changes instead of polling. Device additions are now tracked in addition to removals. Changing channel configuration in Audio/MIDI Setup is now tracked. Channel layout tag is a bitfield, not an enum (sound\coreaudio_sound.cpp).
+      . CoreAudio: Changed audio_latency duration option to milliseconds (lib\osdobj_common.cpp, sound\coreaudio_sound.cpp). Changed audio_latency to seconds (float), so people with existing mame.ini won't get broken sound (lib\osdobj_common.cpp, sound\coreaudio_sound.cpp). Preliminary revised MacOS CoreAudio backend. Supports multiple input and output streams to multple devices simultaneously. audio_latency now is a floating-point number of 50 Hz audio frames. 0 is valid now. Channel layouts are determined when available (many devices don't support them). External effects support removed; it may return later. Rebuild the device list when the default devices change, fixes a crash when a new default device is connected. Added a callback for each active device to see if it becomes unavailable. Moved default device change check to get_generation so it happens regularly. Use property listeners to determine configuration changes instead of polling. Device additions are now tracked in addition to removals. Changing channel configuration in Audio/MIDI Setup is now tracked. Channel layout tag is a bitfield, not an enum (sound\coreaudio_sound.cpp).
       . PortAudio: Enhance portaudio support. Sadly, portaudio is limited to the worst case of all OSes audio supports (and ALSA est rather bad) and does not yet handle hotplug. So the result is quite limited. Also, the devices when running portaudio over emulated alsa over pulseaudio are quite ugly. Still works though. Added support for audio latency and samplerate options. Lower latency interval steps. Added api info to device names (sound\pa_sound.cpp). Added error messages (+device name). Fixed a non-const global that should be const. Popmessage instead of printf if there's a device conflict while fiddling in the audio mixer menu. Do not mess up on shift-f3 (sound\pa_sound.cpp).
       . SDL: Make system default work (sound\sdl_sound.cpp). Rework a case where the sound defaults are not put in place in correct order (when starting a system with mandatory cart without one) (emu\sound.cpp and sound\sdl_sound.cpp). Don't try to call SDL_GetDefaultAudioInfo for SDL older than 2.24.0 (sound\sdl_sound.cpp). Allow MAME to be built with SDL 2.0.14 or 2.0.15 with limited functionality. Correct SDL verson detection macro (sound\sdl_sound.cpp).
       . WASAPI: Added preliminary WASAPI sound module (not enabled yet). Improved error handling and buffer management (sound\wasapi_sound.cpp). Made WASAPI sound the default on Windows and made DirectSound lower priority than XAudio2 (lib\osdobj_common.cpp). Deal with resetting per-app device to default in Windows mixer controls. Don't print an error message on a "not found" error getting default devices - this happens when there are no active devices. Repeat the channel mask from the mix format back when initialising the audio client. Avoid another potential deadlock. It's possible for a device format property update to block an activate call. There's still a race condition in that if streams get device invalidated errors before the property update arrives, the core may try and fail to create replacement streams. This at least stops it from causing a deadlock, at worst you lose sound. Handle someone messing with the mixdown format right as MAME exits (sound\wasapi_sound.cpp).
@@ -1641,7 +1829,7 @@ Features, Supports and Changes in MAME
   . Added Belarusian translation
 - SDLMAME
   . Use dirent::d_type on any GNU libc platform (osd\modules\file\posixdir.cpp and posixptty.cpp). This BSD extension is provided by GNU libc, so enable its usage with that C library. Use <pty.h> on any GNU libc platform ((osd\modules\file\posixdir.cpp and posixptty.cpp). openpty() is implemented by GNU libc for all the OSes, so include <pty.h> when using that C library. Cast dirent::d_name to const char* before using it ((osd\modules\file\posixdir.cpp and posixptty.cpp). According to POSIX [1], the type of dirent::d_name is loosely defined as "char d_name[]", as array with an undefined size. In particular, few ways are seen in the wild: (a) "char d_name[size]", i.e. as proper array with a full size and (b) "char d_name[1]"/"char d_name[0]", i.e. as C flexible arrays. Regardless of its type, dirent::d_name is used as if it was a classic const char *, i.e. as pointer to a null-terminated string. util::string_format() uses C++ templates to collect all the arguments, and thus it will use the actual type of dirent::d_name. In case of (a) there is no issue, however for (b) the result is that only the first character is used. To ensure that dirent::d_name is fully used, explicitly cast it to const char * before passing it to util::string_format(), so the whole string is used.
-  . Removed redundant checks when setting BASE_TARGETOS/SDLOS_TARGETOS. The vast majority of the OSes use BASE_TARGETOS=unix and SDLOS_TARGETOS=unix, which are set as default values; the few exceptions (Windows and macOS) already have their own selections. Hence drop all the empty if statements for other OSes than Windows and macOS, as actually redundant (osd\sdl.lua).
+  . Removed redundant checks when setting BASE_TARGETOS/SDLOS_TARGETOS. The vast majority of the OSes use BASE_TARGETOS=unix and SDLOS_TARGETOS=unix, which are set as default values; the few exceptions (Windows and MacOS) already have their own selections. Hence drop all the empty if statements for other OSes than Windows and MacOS, as actually redundant (osd\sdl.lua).
   . Define buffer size for openpty(). There is no defined size for the slave name returned by openpty(); OSes that have a PATH_MAX constant usually use that as limit. Create a custom OPENPTY_PATH_MAX constant specifically for openpty(), even in case PATH_MAX is not available: in that situation, use 8192 as buffer size, which hopefully should be "good enough" (osd\modules\file\posixptty.cpp).
   . Better handling of getting PTY path, etc. Support Issue 8 TTY_NAME_MAX/ptsname_r and pre-standard ptsname_r. Set termios flags directly rather than relying on BSD's cfmakeraw. Actually enable the XPG-8 path (file\posixptty.cpp).
 - Compiling
@@ -1762,7 +1950,7 @@ Features, Supports and Changes in MAME
   . Biquad Filter: Added HIGHPASS1P1Z implementation and used in the (MESS) LinnDrum (sound\flt_biquad.cpp).
   . Exidy SFX: Use real 8253 PIT device rather than a local implementation, fixed class memory access error, cleaned up code to use virtual member functions idiomatically (shared\exidysound.cpp).
   . FM core: Removed YM2608/2610 SSG gain workaround (sound\ymfm_mame.h)
-  . MIDI: Updated to PortMidi 2.0.4. Try to get PortMidi into a state where it will build with sane compiler settings. Fixes for Linux and Clang builds. Another place that needs const hit by Linux. Another batch of K&R function declarations that upset Clang. More cases of ignoring const in the macOS code. Disable another warning to help Clang on Windows. Fixed more macOS errors. Fixed the right uninitialised local variable. Fixed more discarded const and undefined macro errors (3rdparty\portmidi\*).
+  . MIDI: Updated to PortMidi 2.0.4. Try to get PortMidi into a state where it will build with sane compiler settings. Fixes for Linux and Clang builds. Another place that needs const hit by Linux. Another batch of K&R function declarations that upset Clang. More cases of ignoring const in the MacOS code. Disable another warning to help Clang on Windows. Fixed more MacOS errors. Fixed the right uninitialised local variable. Fixed more discarded const and undefined macro errors (3rdparty\portmidi\*).
   . Nintendo/Sony S-DSP: Updates/Cleanups: Fixed pitch modulation emulation, save state support reference (https://snes.nesdev.org/wiki/SNESdev_Wiki), indent, typenames and input clock. Reduced unnecessary lines. More std::clamp uses. Use BIT for single bit flags, lowercase hexadecimal values and reference for voice state reference (https://snes.nesdev.org/wiki/S-SMP). Use logmacro.h for logging and BIT for single bit flags (nss.cpp, sfcbox.cpp, snesb.cpp and snesb51.cpp; sound\s_dsp.cpp).
   . PMI DAC-76 COMDAC: Emulating multiplying capability. Added support for reference current (multiplying capability), voltage output and streaming reference current. Used those capabilities in (MESS) oberheim\dmx.cpp and linn\linndrum.cpp (sound\dac76.cpp).
   . Yamaha YMF292-F SCSP: Improved handling of MIDI interrupts (sound\scsp.cpp)
@@ -2032,7 +2220,7 @@ Features, Supports and Changes in MAME
   . UI/OSD: Added newline at end of -version output (mame\clifront.cpp)
   . CHD/CHDMAN: Hacked around GitHub #13029 (issues creating delta CHDs). The code depends on getting away with trying to read at least one hunk past the end of the parent CHD. Previously it just ignored any errors from reading the parent CHD, but adding error checking broke it. This hack just ignores that specific error. Also cleaned up some gross flow control and made more things const. The code should obviously be fixed properly, but that's non-trivial. This gets it to a state no worse than it was in 0.270. Use a C++17ism to reduce if nesting a bit (util\chd.cpp).
   . 3rdparty
-    . Updated to LUA 5.4.7 and expat 2.6.4. Added dummy expat_config.h to hopefully fix macOS buid (3rdparty\expat\lib\expat_config.h).
+    . Updated to LUA 5.4.7 and expat 2.6.4. Added dummy expat_config.h to hopefully fix MacOS buid (3rdparty\expat\lib\expat_config.h).
     . Removed unused global LITTLEENDIAN/BIGENDIAN macros, as well as TRUE/FALSE macros (3rdparty\softfloat\mamesf.h and softfloat\milieu.h).
   . Consolidate driver into single file (esd16.cpp and simpl156.cpp)
   . MiniMAWS: Set option strict for JavaScript code (scripts\minimaws)
@@ -2385,6 +2573,7 @@ Features, Supports and Changes in MAME
 - Express Raider: Fixed SW display in menu
 - Flying Shark: Correct ROM locations and audio CPU ROM for clone Hishou Zame (Japan)
 - Goldart: Changed main CPU clock frequency and cleaned up code: Changed DS5002 clock frequency to 16MHz (32MHz / 2) rather than 12MHz. Defer allocating RAM until machine start. Restrict drawing to clipping rectangle. Renamed members to reflect the fact that the DS5002 is the main CPU. Reduced run-time tag lookups and suppress side effects for debugger reads and made some variables const.
+- GTI Club: Fixed tires constantly screeching (ID 07627)
 - IPM Invader: Added missing maincpu rom to clone IPM Invader (set 2). Promoted game to working.
 - Jet Wave: Update analog controls (ID 08962)
 - Joyful Road: Small cleanup
@@ -2426,7 +2615,7 @@ Features, Supports and Changes in MAME
 - Renamed (baboshka) to (baboshkar), (drmmake) to (drmmaker), (gradius3j) to (gradius3ja), (gradius3js) to (gradius3jas), (magictch) to (magictcha), (makaimurba) to (makaimurbbl), (mjcamera) to (mjcamerao), (mjcamerb) to (mjcamera), (mmcamera) to (mjcameram), (rungunua) to (rungunuba), (rungunuad) to (rungunubad), (rungunud) to (rungunuabd) and (shpinxii) to (sphinxiir)
 - MAME
   . VIDEO RENDERING SYSTEM
-    . Cherry-pick Wayland improvements from upstream BGFX. Properly support Wayland under EGL and Vulkan. Dynamically load libwayland-egl.so.1 when dealing with Wayland to remove dependencies at program startup. Support both X11 and Wayland in the same build: Works for both Vulkan and OpenGL. Removed --with-wayland from genie options. Vulkan loads all three extensions for surface creation instead of only one. Added width and height parameter to GlContext::createSwapChain(), which is needed for EGL to create a SwapChain with the given window size. Dirty-fix the example-22-windows to recreate the FrameBuffer by first destroying and then recreating to make sure the window is released of its swapchain. Fixed dbgText glitch in example-22-windows. Removed old X11-related dependencies for GLFW3. Adapt to latest bgfx wayland code. Fixed Vulkan swapchain invalidation issue. Always clamp render pass to frame buffer size. Fixed formatting. Hopefully fix macOS build (3rdparty\bgfx\*, osd\sdl.lua, osd\sdl_cfg.lua and render\drawbgfx.cpp).
+    . Cherry-pick Wayland improvements from upstream BGFX. Properly support Wayland under EGL and Vulkan. Dynamically load libwayland-egl.so.1 when dealing with Wayland to remove dependencies at program startup. Support both X11 and Wayland in the same build: Works for both Vulkan and OpenGL. Removed --with-wayland from genie options. Vulkan loads all three extensions for surface creation instead of only one. Added width and height parameter to GlContext::createSwapChain(), which is needed for EGL to create a SwapChain with the given window size. Dirty-fix the example-22-windows to recreate the FrameBuffer by first destroying and then recreating to make sure the window is released of its swapchain. Fixed dbgText glitch in example-22-windows. Removed old X11-related dependencies for GLFW3. Adapt to latest bgfx wayland code. Fixed Vulkan swapchain invalidation issue. Always clamp render pass to frame buffer size. Fixed formatting. Hopefully fix MacOS build (3rdparty\bgfx\*, osd\sdl.lua, osd\sdl_cfg.lua and render\drawbgfx.cpp).
     . Mark gfx ram dirty after load state (emu\digfx.cpp)
     . Account for flipped tilemap in get_info_debug (emu\tilemap.cpp). Fixes tilemap viewer doesn't account for screen flipx x/y when hovering mouse cursor over tiles (ID 09067).
   . DEVICES: Round scaled clock to nearest integer (emu\device.cpp)
@@ -3413,7 +3602,7 @@ Features, Supports and Changes in MAME
   . MiniMAWS: Fixed deprecation warning in Python 3.11 (CGI module deprecated) (scripts\minimaws\lib\wsgiserve.py)
 - Compiling
   . Fixed various warnings (debugger\osx\debugview.mm, netdev\taptun.cpp, sound\coreaudio_sound.cpp and tools\aueffectutil.mm)
-  . Got rid of some sprintf and strcat (generates warnings on macOS) (sharc\sharc.cpp, emu\image.cpp, emu\network.cpp, konami\zs01.cpp, sega\segaufo.cpp and taito\wgp_v.cpp)
+  . Got rid of some sprintf and strcat (generates warnings on MacOS) (sharc\sharc.cpp, emu\image.cpp, emu\network.cpp, konami\zs01.cpp, sega\segaufo.cpp and taito\wgp_v.cpp)
   . Fixed build error on VC++ (emu\emucore.h)
   . Added missing #include <cmath> for std::lround() (input\input_sdl.cpp) (Build MAME on NetBSD).
 - Debugger: Fixed tracesym command outputs NULL strings in case of single symbol (debug\debugcmd.cpp) (ID 08870)
@@ -3721,7 +3910,7 @@ Features, Supports and Changes in MAME
   . VGA: Standardized DEFINE_DEVICE_TYPE descriptions (video\pc_vga_*). Bulk rename s3_vga_device -> s3trio64_vga_device. Retire vblank_timer_cb override and added a latch_start_addr fn in place (video\pc_vga.cpp).
   . Voodoo 2 PCI: Fixed Voodoo 2 PCI config values (video\voodoo_pci.cpp)
 - astropc.cpp and matrix.cpp: Hookup MediaGX CS5530 Bridge/IDE Controller devices. Prepare for MediaGX virtual VGA hookup. Documented GP/DC maps (machine\mediagx_host.cpp). Moved VGA to own core (video\pc_vga_mediagx.cpp).
-- bfm_sc1.cpp and bfm_sc2.cpp: Changed const -> constexpr, fixes undefined references when building with -O0 on macOS (bfm\bfm_bd1.h and bfm\bfm_bda.h).
+- bfm_sc1.cpp and bfm_sc2.cpp: Changed const -> constexpr, fixes undefined references when building with -O0 on MacOS (bfm\bfm_bd1.h and bfm\bfm_bda.h).
 - bwing.cpp: Moved from bankdev to view
 - cave.cpp: Moved Cave drivers and devices to atlus project and a new cave project
 - mpu4vid.cpp: Fixed row table addressing mode as per documentation (video\scn2674.cpp)
@@ -3766,7 +3955,7 @@ Features, Supports and Changes in MAME
   . INPUT
     . Various cleanup and minor enhancements (osd\modules\input\*)
       . Got rid of the DirectInput key code macros. DirectInput headers are always available on Windows - it's just an opportunity for bygs (input\input_common.h). Added default names for keys mapped to MAME's "other switch" type (input\input_common.cpp).
-      . Simulate Pause key being held for 30ms, similarly to what's done for Caps Lock on macOS with SDL. Also added a gross hack to give "correct" names for Pause and Num Lock. Properly align buffers for RAWINPUT header (input\input_rawinput.cpp).
+      . Simulate Pause key being held for 30ms, similarly to what's done for Caps Lock on MacOS with SDL. Also added a gross hack to give "correct" names for Pause and Num Lock. Properly align buffers for RAWINPUT header (input\input_rawinput.cpp).
       . Get default key names from SDL. Not really that useful as it isn't aware of the current keyboard layout. Key map files are still needed for anything other than a US ANSI layout (input\input_sdl.cpp).
   . Save state: Made illegal save state registrations always fatal (emu\save.cpp)
   . PLUGINS: Fixed renamed sets (plugins\hiscore\hiscore.dat)
@@ -4884,7 +5073,7 @@ Features, Supports and Changes in MAME
     . Eliminated the need to call resolve() on callbacks. Read callbacks now need a default return value supplied at construction. Replaced isnull() with isunset() which tells you if the callback wasn't configured rather than whether it isn't safe to call. Enabled validation of device callbacks (it seems it was disabled at some point, probably accidentally). Device callbacks and object finders now implement the same interface for resolution (emu\devcb.h).
   . PLUGINS: Updated changed sets (plugins\hiscore\hiscore.dat)
   . Consolidate drivers in single files (seta.cpp and zac2650.cpp)
-- MAC OS X: Cleaned up most macOS deprecation warnings up to and including 10.13 (osd\modules\debugger and modules\sound). This raises the hard minimum macOS and SDK versions to 10.13. In practice, the minimum since 0.252 has been macOS 11 Big Sur. 10.13/10.14/10.15 can be built and run with this unsupported patch: https://gist.github.com/rb6502/8a1736ee3775f998e8e71faa47ae4b59. The patch works for me, but no guarantees are offered and it may break at any time.
+- MAC OS X: Cleaned up most MacOS deprecation warnings up to and including 10.13 (osd\modules\debugger and modules\sound). This raises the hard minimum MacOS and SDK versions to 10.13. In practice, the minimum since 0.252 has been MacOS 11 Big Sur. 10.13/10.14/10.15 can be built and run with this unsupported patch: https://gist.github.com/rb6502/8a1736ee3775f998e8e71faa47ae4b59. The patch works for me, but no guarantees are offered and it may break at any time.
 - Compiling
   . Clean up several sprintf() deprecation warningss in non-3rdparty code
   . Changed "Bios" to "BIOS" in several drivers
@@ -5105,7 +5294,7 @@ Features, Supports and Changes in MAME
 - SOUND
   . K053260 KDSC: Added sample reverse flag. Allow to change rev flag on the fly (sound\k053260.cpp)
   . PlayStation SPU: Calculate tables based on clock speed (sound\spu.cpp)
-  . PortAudio: Sync to upstream. Tested and works on Windows, macOS and Linux. Fixes compatibility with macOS Ventura and bugfixes WASAPI and WDM-KS on Windows (3rdparty\portaudio\*).
+  . PortAudio: Sync to upstream. Tested and works on Windows, MacOS and Linux. Fixes compatibility with MacOS Ventura and bugfixes WASAPI and WDM-KS on Windows (3rdparty\portaudio\*).
   . TI SN76477 CSG: Make it less verbose
   . Yamaha YMW-258-F: Some MultiPCM fixes (sound\gew.cpp; envelope behavior, sample lengths, stream updates and save state members)
 - DEVICE
@@ -5193,7 +5382,7 @@ Features, Supports and Changes in MAME
   . Fixed an object leak on unload. Also changed some other media image devices to use smart pointers (imagedev\avivideo.cpp)
   . Improved AVI framerate accuracy (emu\recording.cpp) (Numerator values above 0x3fff'ffff have support issues currently, specifically, YouTube will refuse to process an MP4 with it, and it's a pretty common container).
   . Support keypad Enter on Windows (3rdparty\linenoise\linenoise-win32.c)
-- MAC OS X: Fixed compile with Clang 14.0.3 on macOS (3rdparty\portmidi\pm_mac)
+- MAC OS X: Fixed compile with Clang 14.0.3 on MacOS (3rdparty\portmidi\pm_mac)
 - Compiling
   . Edited a pile of copy/pasted comments and made some minor code cleanups (reducing variable scope, etc.)
   . Reduced I/O port lookups in a number of drivers. Reduced scope of some variables and edited some copy/pasted comments.
@@ -6095,7 +6284,7 @@ Features, Supports and Changes in MAME
   . UI
     . OSD/network interface cleanup: Moved osd_midi_device from osdcore.h to osdepend.h. Moved osd_list_network_adapters from osdcore.h to osdnet.h (was already defineduniquely in osdnet.cpp). Moved #include <cstdarg> from osdcore.h to emu.h. Removed dinetwork.h from emu.h.
     . Added an option to copy input device IDs to the relevant menus. Added an item for setting the software lists files path (-hashpath) to the folder setup menu. Allow pasting text from clipboard in most places that allow typing (searching, entering filenames and entering barcodes). Changed the software selection menu heading to be a bit less misleading. Made barcode menu less eager to rebuild itself unnecessarily and removed some confusing and apparently pointless code.
-    . Added some functionality to OSD and cleaned up a little: Added a function for copying text to the clipboard. Moved function for converting Windows error codes to standard error conditions to winutil.cpp so it can be used from more places. Removed duplicate declaration of osd_get_clipboard_text and made the function noexcept (including fixing implementations). Made macOS implementation of osd_get_clipboard_text skip the encoding conversion if it finds UTF-8 text first. Changed the default -uimodekey setting so it doesn't lose the "not shift" that stops the default from interfering with UI paste.
+    . Added some functionality to OSD and cleaned up a little: Added a function for copying text to the clipboard. Moved function for converting Windows error codes to standard error conditions to winutil.cpp so it can be used from more places. Removed duplicate declaration of osd_get_clipboard_text and made the function noexcept (including fixing implementations). Made MacOS implementation of osd_get_clipboard_text skip the encoding conversion if it finds UTF-8 text first. Changed the default -uimodekey setting so it doesn't lose the "not shift" that stops the default from interfering with UI paste.
   . INPUT
     . Log 1-based device numbers, matching what's shown in the internal UI and used in tokens in CFG files (emu\input.cpp and emu\inputdev.cpp).
     . Reworked and expanded documentation on configuring stable controller IDs (docs\source\advanced\ctrlr_config.rst and devicemap.rst)
@@ -6110,7 +6299,7 @@ Features, Supports and Changes in MAME
   . Changed core_stricmp to take std::string_view parameters (util\corestr.cpp). Note that the implementation is still not UTF-8 aware.
   . Made error messages more detailed when opening a configuration file fails and bumped error messages to warning level (emu\config.cpp). Preserve elements with no registered handlers in default and system configuation files (emu\config.cpp).
   . Consolidate drivers in single files. Minor cleanups (aeroboto.cpp, airbustr.cpp, bankp.cpp, battlex.cpp, blmbycar.cpp, djboy.cpp, drmicro.cpp, espial.cpp, exerion.cpp, fcombat.cpp, funkybee.cpp, galastrm.cpp, gatron.cpp, ginganin.cpp, glass.cpp, gomoku.cpp, groundfx.cpp, gunbustr.cpp, homerun.cpp, marineb.cpp, mcatadv.cpp, mjkjidai.cpp, momoko.cpp, mrflea.cpp, msisaac.cpp, oneshot.cpp, pirates.cpp, pitnrun.cpp, retofinv.cpp, rollrace.cpp, sbugger.cpp, skyfox.cpp, ssrj.cpp, targeth.cpp, thief.cpp, thoop2.cpp, vastar.cpp, volfied.cpp, warriorb.cpp, wiping.cpp, wrally.cpp, xorworld.cpp and zodiack.cpp)
-- MAC OS X: Full dark mode support for macOS 10.14 and later. Raise requirement for Dark Mode to 10.15.
+- MAC OS X: Full dark mode support for MacOS 10.14 and later. Raise requirement for Dark Mode to 10.15.
 - Compiling
   . Ignore all but type 0x20 symbols (osd\modules\diagnostics\diagnostics_win32.cpp)
   . Fixes for Clang 15.0 on Windows
@@ -6985,7 +7174,7 @@ Features, Supports and Changes in MAME
 - Cruis'n Exotica: Added PIC dump. Note: The PIC still need to be properly hooked up. Also reformatted single-line comments on the ROM definitions.
 - Dangerous Bar: Redumped display rom (drb1_dot0.ic13)
 - Donkey Kong 3: Correct RAM size for audio CPUs
-- FamicomBox: Added verified cartridges and removed nonexistent cartridges. dded some input control bits. Joypads now swap depending on which one hit start on game select menu. Controller inputs ignored during attract mode before inserting coin. Minor cleanups of cart switching. Use memory banks for nametable RAM.
+- FamicomBox: Added verified cartridges and removed nonexistent cartridges. Added some input control bits. Joypads now swap depending on which one hit start on game select menu. Controller inputs ignored during attract mode before inserting coin. Minor cleanups of cart switching. Use memory banks for nametable RAM.
 - Fruit Star Bonus
   . Promoted Fruit Star Bonus (Ver 8.27PVIE) and clone Fruit Star Bonus (Ver 8.20PIR) to working
   . MPU-12 driver major improvements: Fixed screen matrix according to the CRTC values. Improved memory map. Hooked the AY-3-8910. Adjusted the clock. Decoded bitplanes and unscrambled the color PROM addressing. Calculated the color resnet. Got the correct palette and game colors. Working inputs from the scratch. Completely reversed all the DIP switches. Supported Button-lamps. Added control panel layout. Added two new hungarian clones. Promoted all supported games to working. Added hopper support. Added default NVRAM to all sets. Added more findings, diagrams and technical notes.
@@ -7251,7 +7440,7 @@ Features, Supports and Changes in MAME
   . Namco 06xx: Synchronize data writes. Improved NMI delay (machine\namco06.cpp).
   . Namco 50xx/51xx/52xx/54xx: Use chip select lines and synchronize writes (machine\namco50.cpp, machine\namco51.cpp, audio\namco52.cpp and namco54.cpp).
   . SCSI: Expand SCSI device selection (bus\nscsi\devices.cpp)
-  . Slots: Added option_replace, option_replace_internal and option_remove to make it easier to derive option configurations (emu\dislot.cpp).
+  . Slot device: Added option_replace, option_replace_internal and option_remove to make it easier to derive option configurations (emu\dislot.cpp).
 - aleck64.cpp: Fixed several RDP regressions. YUV texture fetch and color space conversion. Textured rectangle command parsing. Set primitive depth command parsing (video\n64.cpp and rdptpipe.cpp).
 - cdi.cpp
   . Fixed audio crackling and various hangs (machine\cdicdic.cpp)
@@ -7740,7 +7929,7 @@ Features, Supports and Changes in MAME
     . Added a new plugin that lets you create input macros. Besides the obvious application of cheating in Track & Field, this may be useful for making emulated games more accessible to people with disabilities or injuries that make certain input sequences difficult. To try out the attached demos (https://www.mameworld.info/ubbthreads/download.php?Number=392226), extract the archive into your plugin data directory. Included are: raiden: player 1 autofire on keyboard space bar, sf2ce: player 1 right-facing shoryuken using light punch on keyboard M, trackfld: player 1 sprint cheat on keyboard left shift and hotgmck: player 1 "punish" on keyboard Q ("pianos" the discard keys - it's actually too fast for the key matrix scan to see every input). Updated input macro plugin to select sane items when changing menus. Other plugins not updated yet, but may be at some point in the future. Documented the input macro plugin. The only undocumented plugins now are the cheat plugin, the cheat finder plugin, and the port name plugin.
     . Sort input selection menus for autofire plugin. Made left/right repeat when held (makes setting long delays/durations easier). Added headings for devices in input selection menus (helps when controller buttons have identical names, e.g. AES). Made intial selection when moving between menus intuitive, log some errors on saving/loading configuration.
     . Fixed ticking when menu is left on the screen (plugins\timer\init.lua)
-    . Changed the hiscore plugin to save inside the "hiscore" folder in the plugin data directory. The old hiscore path setting has already been removed from MAME for some time. This means the plugin was always saving in the "hi" folder in the working directory with no way to change it, which is problematic on Linux and macOS, particularly for distro packagers. There are lots of plugin and UI changes in this release, so we may as well get this out of the way now. Also made it possible to change the "timed save" option from the Plugin Options menu, and save that in the data folder, too.
+    . Changed the hiscore plugin to save inside the "hiscore" folder in the plugin data directory. The old hiscore path setting has already been removed from MAME for some time. This means the plugin was always saving in the "hi" folder in the working directory with no way to change it, which is problematic on Linux and MacOS, particularly for distro packagers. There are lots of plugin and UI changes in this release, so we may as well get this out of the way now. Also made it possible to change the "timed save" option from the Plugin Options menu, and save that in the data folder, too.
     . Started documenting plugins. Added a couple of missing command-line options and added a local table of contents to the (rather long) command line options page.
     . Use SPDX short identifiers for licenses in exports (more precise and easier to localise), use CC0 for hiscore plugin rather than CC0.
     . Handle multiple blocks in dat (plugins\data\data_command.lua and load_dat.lua)
@@ -7761,7 +7950,7 @@ Features, Supports and Changes in MAME
   . More cleanup on the FAQ page (usingmame\commonissues.rst)
 - VGM player: Added 44 new entries and 3 updated entries (hash\vgmplay.xml)
 - Compiling
-  . Cleaned up CI targets: Restricted Linux CI build to only run on changes to code, translations, software lists, and build scripts. Restricted Windows/macOS CO to only run on changes to code and build scripts. They provide nothing over Linux for the other stuff. Added plugin properties and controller file validation to the "hash" workflow. Added a workflow for building documentation, so pull requests that affect documentation will at least get a basic check in advance (.github/workflows/ci-linux.yml, ci-macos.yml and ci-windows.yml). Added a separate CI target for localisation updates that produces an artefact, and removed the message catalogs from the trigger paths for the Linux CI build.
+  . Cleaned up CI targets: Restricted Linux CI build to only run on changes to code, translations, software lists, and build scripts. Restricted Windows/MacOS CO to only run on changes to code and build scripts. They provide nothing over Linux for the other stuff. Added plugin properties and controller file validation to the "hash" workflow. Added a workflow for building documentation, so pull requests that affect documentation will at least get a basic check in advance (.github/workflows/ci-linux.yml, ci-macos.yml and ci-windows.yml). Added a separate CI target for localisation updates that produces an artefact, and removed the message catalogs from the trigger paths for the Linux CI build.
   . Removed compiled message catalogs on clean, show clean commands for VERBOSE=1 (makefile).
   . Avoid MSVC debug assertion (osd\strconv.cpp)
 - Debugger
@@ -8978,7 +9167,7 @@ Features, Supports and Changes in MAME
   . Removed 64 suffix on the main executable. If you want to build 64-bit and 32-bit in the same tree without them stomping on each other, use SEPARATE_BIN=1 (you already need to do this for TOOLS=1 anyway). Updated GitHub CI for executable names, added ORM check to Linux builds.
   . Unbreak aarch64 and arm builds (makefile). Fixes compiler error on Raspberry Pi (ID 07860).
   . Declare intent when requesting virtual memory for NetBSD (lib\osdlib_unix.cpp).
-  . Suggested changes to MacOS to build: Changes in macOS section regarding current build requirements. Added basic info for Apple Silicon to macOS build instructions (docs\source\initialsetup\compilingmame.rst).
+  . Suggested changes to MacOS to build: Changes in MacOS section regarding current build requirements. Added basic info for Apple Silicon to MacOS build instructions (docs\source\initialsetup\compilingmame.rst).
   . Initialized some variables which were causing incorrect behaviors in DRVNOCLEAR builds
   . LLD (LLVM linker) seems to add a minimal symbol that the system libraries catch. Be smarter about ignoring that (osd\modules\diagnostics\diagnostics_win32.cpp).
   . Fixed issues detected by Coverity Static Analysis (software) (machine\i8271.cpp, video\snes_ppu.cpp, audio\rax.cpp, ui\custui.cpp, ui\confswitch.h, drivers\halleys.cpp, bfm_sc2.cpp, highvdeo.cpp, lordgun.cpp, midzeus.cpp (thegrid), sfcbox.cpp and tnzs.cpp (tnzs.cpp))
@@ -9448,7 +9637,7 @@ Features, Supports and Changes in MAME
   . Disable BGFX threading, which causes crashes and wrong drawing on Catalina and Big Sur (scripts\src\3rdparty.lua) (ID 07746). Tidied up compiler warning options for 3rdparty (scripts\src\3rdparty.lua).
   . Fixed compilation errors in 'posixfile.cpp', for older MacOS/Xcode releases.
   . Added macosx_arm64_clang target support (makefile, scripts\genie.lua and toolchain.lua)
-  . Temp macOS compile fix for bundled SDL2 pending the 2.0.14 release (3rdparty\SDL2\src\atomic\SDL_spinlock.c). Added AudioToolbox framework when building SDL2 on macOS, fixes TOOLS=1 link errors (scripts\src\osd\sdl.lua). Use -Wno-strict-prototypes when building SDL2 on macOS (scripts\src\3rdparty.lua).
+  . Temp MacOS compile fix for bundled SDL2 pending the 2.0.14 release (3rdparty\SDL2\src\atomic\SDL_spinlock.c). Added AudioToolbox framework when building SDL2 on MacOS, fixes TOOLS=1 link errors (scripts\src\osd\sdl.lua). Use -Wno-strict-prototypes when building SDL2 on MacOS (scripts\src\3rdparty.lua).
   . Temporary hack so most DRC games work on the M1/Apple Silicon (lib\osdlib_macosx.cpp)
 - VGM player: Added 47 new entries from most recent package release + some shortname consistency fixes (hash\vgmplay.xml)
 - Compiling
@@ -9658,7 +9847,7 @@ Features, Supports and Changes in MAME
 - Compiling
   . FreeBSD fixes. Use gl includes from pkg-config. GenieOS is named simple BSD.
   . Fixed link errors with new versions of Emscripten (scripts\genie.lua)
-  . Created GitHub Actions for CI. This is intended as a replacement for AppVeyor and parts of TravisCI. It will create full builds of MAME (including tools) for the following platforms: Linux (GCC and Clang), macOS (Clang) and Windows (GCC and MSVC 2019). It will also upload the resulting executable as artifact so that it can be used for regression testing. This commit also removes the unused TeaCI drone files.
+  . Created GitHub Actions for CI. This is intended as a replacement for AppVeyor and parts of TravisCI. It will create full builds of MAME (including tools) for the following platforms: Linux (GCC and Clang), MacOS (Clang) and Windows (GCC and MSVC 2019). It will also upload the resulting executable as artifact so that it can be used for regression testing. This commit also removes the unused TeaCI drone files.
   . Allow memory size to grow at runtime for Emscripten when targeting WebAssembly as there is no longer a performance hit (scripts\src\main.lua)
   . Added build fix for older OS X versions (scripts\src\3rdparty.lua)
 - Debugger: Removed more macros, added more const and make a couple more things use smart pointers (emu\debug\*).
@@ -18029,7 +18218,7 @@ Features, Supports and Changes in MAME
   . Fixed some Cocoa debugger desync issues. Scroll to selection on gaining focus by keyboard (e.g. tab) only. Fixes jump on clicking a memory or disasm view that you've scrolled.
   . Make XML file a class of its own managed with smart poitners. Added a method for copying part of an XML tree into another tree and use it to fix Cocoa debugger fatal error (util\xmlfile.cpp).
   . Save/restore console split positions
-  . Fixed include path with USE_LIBSDL on macOS. The cflags will contain an include path ending in "SDL2", not just "SDL", and removing just the latter leaves a stray "2" on the end (osd\sdl_cfg.lua).
+  . Fixed include path with USE_LIBSDL on MacOS. The cflags will contain an include path ending in "SDL2", not just "SDL", and removing just the latter leaves a stray "2" on the end (osd\sdl_cfg.lua).
 - Compiling
   . Fixed tiny build (missing Z80PIO; scripts\target\mame\tiny.lua)
   . Renamed AS_DECRYPTED_OPCODES to AS_OPCODES
