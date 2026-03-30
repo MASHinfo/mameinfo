@@ -18,7 +18,7 @@
 <bgsound src="" loop="-1">
 
 <center>
-<font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287GIT</u></font>
+<font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287</u></font>
 <br><font size="2" face="Arial" color="#FFFFFF">Updated - 30th March 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
@@ -30,11 +30,11 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo + MAMEUI-inifiles-0287GIT (20th Mar).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0287GIT (20th Mar) (4.45 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo 0.287 (3.77 MB)</b></font></a><br><br>
 
-<a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0286.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.286 Category-, Version and Alltime inifiles (1012 kB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.287 Category-, Version and Alltime inifiles (1014 kB)</b></font></a><br><br>
 
-<a href="https://mashinfo.github.io/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.286 (6.41 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.287 (6.41 MB)</b></font></a><br><br>
 
 <a href="https://mashinfo.github.io/mameinfo/download/PCB-infos0153.zip"><font size="+1" face="Arial" color="#eeeeee"><b>PCB-infos 0.153 (2.11 MB)</b></font></a><br><br>
 
@@ -68,6 +68,7 @@
   . Slot device: Cleaned up boilerplate for slot devices
   . SiS 6326 AGP/PCI card: Added shifter behaviour on High/True Color depths (pci\sis6326.cpp)
   . Slot device: Added special validity check for driver-level slots to prevent image and slot names from colliding (emu\dislot.cpp)
+  . Via VT82C598MVP "Apollo MVP3" Host: Work around SMI mapping for '691 (machine\vt82c598mvp.cpp)
   . VT82C586B: Rename to '596 and implement actual '596B (machine\vt82c586b_acpi.cpp)
   . Zilog Z80 DMA Controller: Updated RDY immediately but defer the side effects. Fixes (MESS) abc1600 floppy write, does not seem to break x1turbo40 (machine\z80dma.cpp).
 - SOUND
@@ -78,13 +79,16 @@
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
+- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area.
 - Neo Mania: Hookup inputs (centronics\neomania_adapter.cpp)
 - Octopussy: Octopussy is not a Master Crane clone
+- Rally X / New Rally X: Added hyphen to title (ID 09422)
 - Rampart: Correction to P3 buttons
 - Sengoku no Jieitai: Increased Z80 clock. Fixes start music too low-pitched and slow (ID 09416).
 - Splatterhouse: Removed space in title (ID 09421)
 - Description changes of Danger Track (bootleg of Rally-X), Makaimura (Japan revision A?), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)) and Tiger Road (US bootleg, set 1)
 - Fixed rom names in royalmah.cpp
+- Dipswitch fixes in gng.cpp and sg_vga.cpp
 - MAME
   . DEVICES: Allow source and manufacturer strings to be deduplicated. This increases coupling between the "traits" classes generated for driver/device definitions and the device type implementation class, but it noticeably reduces static data size for MAME as a whole (emu\device.h and emu\gamedrv.h).
   . UI/OSD
@@ -924,19 +928,19 @@
 
 <br><br>
 <font color="#FF0000" size="3" face="Arial"><strong>Mameinfo.dat</strong></font><br><br>
+<font size="2" color="#eeeeee" face="Arial"><u>0.287</u>: Updated to MAME 0.287 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (30th Mar). Added/Reorganized 'Recommended Games'. Fixed 'Recommended Games' descriptions. Fixed Mameinfo.dat infos.</font><br>
 <font size="2" color="#eeeeee" face="Arial"><u>0.286</u>: Updated to MAME 0.286 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (25th Feb). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <font size="2" color="#eeeeee" face="Arial"><u>0.285</u>: Updated to MAME 0.285 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (29th Jan). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <font size="2" color="#eeeeee" face="Arial"><u>0.284</u>: Updated to MAME 0.284 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (30th Dec). Added/Updated DEmul v0.7 (20th Dec), FinalBurn Neo v1.0.0.03 (27th Dec), Flycast v2.5 (27th Dec) and Play! emulator infos. Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
-<font size="2" color="#eeeeee" face="Arial"><u>0.283</u>: Updated to MAME 0.283 (https://git.redump.net/mame/log/). Added Source/Listinfo changes. Newest Bugs (28th Nov). Added/Reorganized 'Recommended Games'. Fixed Mameinfo.dat infos.</font><br>
 <br><br><br><br>
 
 
 
 <font size="5" face="Arial" color="#FF0000"><strong>Download</strong></font><br><br>
+<a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0287.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.287 &nbsp;(3.77 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0286.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.286 &nbsp;(3.76 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0285.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.285 &nbsp;(3.75 MB)</b></font></a><br><br>
 <a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0284.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.284 &nbsp;(3.74 MB)</b></font></a><br><br>
-<a href="https://mashinfo.github.io/mameinfo/download/Mameinfo0283.zip"><font size="+2" face="Arial" color="#eeeeee"><b> MAMEINFO.DAT 0.283 &nbsp;(3.73 MB)</b></font></a><br><br>
 <br><br>
 <hr size="2">
 
@@ -955,7 +959,6 @@
 
 
 <hr size="2">
-<br><br><br>
 
 
 
