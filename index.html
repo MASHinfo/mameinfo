@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 1st April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 2nd April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mashinfo.github.io/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,6 +56,7 @@
 
 - New games: Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
 - New clones: Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Red Hawk (China & Hong Kong) and Tiger Road (US bootleg, set 2)
+- New drivers: dyna_dc4000.cpp	
 - New devices: pc6022, smbus_pipc, vt82c596b_acpi, vt82c596_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host and w83877tf
 - CPU
   . Intel 8051: Changed address space names to resemble those used by Intel's tools (mcs51\i8051.cpp and mcs51\mcs51ops.cpp)
@@ -64,7 +65,11 @@
 - DEVICE
   . AT28C16 2Kx8 EEPROM: Small cleanup to indentation (machine\at28c16.cpp)
   . Bus: Addressed unintuitive behavious in a dozen slot devices. With these slots, you'd get no options if you specified a clock frequency, or the default options if you didn't, or in a few cases, you'd get the options if you specified a default (even nullptr) or no options otherwise. It's completely unintuitive. This pattern shouldn't be allowed to creep back in.
+  . DECO 104/146 Protection: Cleaned up code. Made fixed configuration constructor parameters. Suppress side effects for debugger reads properly. Made member variables private, reduced unnecessary includes. Use m_ prefix for member variables, use explicitly sized integers for values that are saved. Use logmacro.h for configurable logging. Use BIT helper to extract individual bits. Fixed descramble input.
   . Floppy: Allow specifying explicit start and end sectors when getting PC MFM track data. Ensoniq VFX and EPS family floppies use 10 sectors per track, starting at sector 0 rather than the more common sector 1. The code in 'esq16_dsk.cpp' handles this when loading floppy images, but not when saving them. This attempts to fix this in a way that is not only specific to Ensoniq's floppy images, but to possibly other future ones as well. In 'flopimg.cpp', allow specifying explicit start and end sectors when getting PC MFM track data. In 'esq16_dsk.cpp', use this to explicitly specifying sectors 0 to 9 when getting the track data to save (formats\flopimg.cpp and formats\esq16_dsk.cpp).
+  . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks
+  . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
+  . Namco sound: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
   . PC LPT: Added PS/2 bidirectional mode support (machine\pc_lpt.cpp)
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp)
   . SCSI Hard Disk: Allow only lun=0 for test unit ready (nscsi\hd.cpp)
@@ -74,12 +79,17 @@
   . Slot device: Added special validity check for driver-level slots to prevent image and slot names from colliding (emu\dislot.cpp)
   . Via VT82C598MVP "Apollo MVP3" Host: Work around SMI mapping for '691 (machine\vt82c598mvp.cpp)
   . VT82C586B: Rename to '596 and implement actual '596B (machine\vt82c586b_acpi.cpp)
+  . Z80 SCC Channel: Fixed external clock source selection and start bit timing (machine\z80scc.cpp)
   . Zilog Z80 DMA Controller: Updated RDY immediately but defer the side effects. Fixes (MESS) abc1600 floppy write, does not seem to break x1turbo40. Fixed counter state returning natural value in (MESS) ZX Spectrum Next mode (machine\z80dma.cpp).
 - SOUND
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
   . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Fixes a burst of white static noise occurs in Pink Sweets, when certain voice clips play (ID 09408). Struct savestate issue (sound\ymz770.cpp).
+- atarig42.cpp and atarigx2.cpp: Optimized tilemap drawing. Note: tileinfo.category value for playfield tilemap is controlled by overall bank 0 it can be optimized to single tilemap draw with variable priority value controlled at bank.
 - bogeyman.cpp, matmania.cpp, mystston.cpp, ssozumo.cpp and tagteam.cpp: Added TODO note about vcount timing
+- cave.cpp: Made 013 sprite generator a separated device (previously in atlus\cave_v.cpp) (atlus\sprite013.cpp). Suppress side effects for debugger reads. Use single-pass sprite drawing. Cleaned up code.
+- cps1/2.cpp, cps1bl_5205.cpp, cps1bl_pic.cpp, fcrash.cpp and kenseim.cpp: Cleanup. Reduced duplication, literal tag usage and run-time tag lookups. Make some variables const and reduced preprocessor macrso. Added notes and updated file names in comments. Use device_post_load for post load function. Fixed debugger and save state issues and improved logging. Use BIT helper to extract individual bits. Mark ROMs not dumped from the same PCB as bad. Use snake_case function and variable member names
 - dassault.cpp and rohga.cpp: Removed unnecessary decocomn.cpp (DECO Common Video Functions) dependency. Moved alt sprite format config into machine_config. Fixed Hangzo ROM region size (main CPU ROM is ~1MB (only first 1MB is mapped at hotb_base_map) and no second "oki1" bank). Reduced unused arguments in dassault.cpp.
+- dyna_dc4000.cpp: Moved DC4000 based games from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
@@ -88,14 +98,18 @@
 - Bogey Manor: Added scanline timer
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
 - Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area.
+- I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
+- Mobile Suit Gundam EX Revue: Demoted game as MACHINE_IMPERFECT_TIMING. It has overall timing issues and also displays a black screen when the flip screen DIP switch is on.
 - Mysterious Stones: Added TODO note, vblank flag was wrong way around here too (eg. it started writing gfx at the start of active display area instead of at start of vblank). Assume it has 16 interrupts per frame.
 - Neo Mania: Hookup inputs (centronics\neomania_adapter.cpp)
 - Octopussy: Octopussy is not a Master Crane clone
 - Rally X / New Rally X: Added hyphen to title (ID 09422)
 - Rampart: Correction to P3 buttons
 - Sengoku no Jieitai: Increased Z80 clock. Fixes start music too low-pitched and slow (ID 09416).
+- Slotters Club: Redumped sound ROM
 - Splatterhouse: Removed space in title (ID 09421)
 - Syusse Oozumou: Added scanline timer from tagteam/matmania, also invert vblank flag in this driver too (similar inactive crowd bug as matmania).
+- Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
 - Description changes of Danger Track (bootleg of Rally-X), Happy Planet (Japan), Makaimura (Japan revision A?), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)) and Tiger Road (US bootleg, set 1)
 - Fixed rom names in royalmah.cpp
 - Dipswitch fixes in gng.cpp and sg_vga.cpp
@@ -109,13 +123,17 @@
 - SDLMAME/SDL3
   . Pump CF run loop before enumerating game controllers on MacOS. On MacOS, SDL3's GCController backend discovers USB game controllers asynchronously through the Core Foundation run loop. Without giving the run loop time to process, USB controllers (e.g. Xbox Series X/S) are not detected during initial enumeration (input\input_sdl3.cpp).
   . Process events after raising window on macOS to ensure input focus. On macOS, the window may not have acquired input focus by the time SDL_RaiseWindow returns. Pumping events after raising ensures the FOCUS_GAINED event is dequeued and m_focus_window is set before the input modules start polling, preventing the intermittent loss of keyboard and mouse input on startup. Fixes GitHub #10612 (sdl/video.cpp and sdl3/video.cpp).
+  . SDL3 compile again on MacOS with pre-3.4.0 and a minor cleanup (input\input_sdl3.cpp and sdl3\sdlmain.cpp)
 - Compiling
   . Switched language standard to C++20 and bumped compiler requirement to GCC 11. Hackery to allow UTF-8 strings as well as plain strings: Allow char8_t for names in field configuration helper (emu\ioport.h). Allow char8_t for descriptions and manufacturers (emu\device.h and emu\gamedrv.h). Allow char8_t message input (util\language.h). Allow char8_t format and string arguments with char output (util\strformat.h). Deal with UTF-8 strings as a distinct type (ui\videoopt.cpp).
     . Fixed things C++20 doesn't allow
       . Deal with UTF-8 strings as a distint type (ui\info.cpp, imagedev\cassette.cpp)
       . Avoid arithmetic between different enum types (ui\inputmap.cpp, debugger\qt\dasmwindow.cpp, debugger\qt\mainwindow.cpp, sound\coreaudio_sound.cpp, cpu\drcbec.cpp, mit\tx0_v.cpp, konami\3dom2.cpp, machine\mc68328.cpp, cpu\mips\mips1.cpp, cpu\mips\r4000.cpp). Avoid arithmetic between enum and floating point (dec\pdp1.cpp, konami\firebeat.cpp, mit\tx0.cpp, sound\lc7535.cpp and sound\spkrdev.cpp)
       . Avoid comparing enum to floatint point (sound\discrete.h). Fixed deprecated uses of volatile variables (gaelco\gaelco3d_m.cpp). Don't use UTF-8 qualifier on pure ASCII strings, just assume char is ASCII-like (ui\toolbar.ipp). Provide an explicit constructor (osd\interface\audio.h). Fixed uninitialised class member warning (util\server_http_impl.hpp).
+    . Eliminated many temporary std::string objects. Also updated compiling documentation. Mentioned the possibility to use the x86-64 clang/libc++/ucrt environment with MSYS2 on Windows. Removed link to tools at mamedev.org - it's trivially easy to get an up-to-date MSYS2 environment by following the instructions (initialsetup\compilingmame.rst).
+    . Got rid of another wannabe std::span (mame\luaengine_debug.cpp). Fixed another C++20 thing that apparently only breaks with some compiler/OS/Qt version combinations (qt\deviceinformationwindow.cpp).
   . Added ATTR_COLD pass to PCI sound cards
+  . Fixed errors linking jedutil and romcmp on newer Linux (src\tools.lua)
 - Debugger
   . Added Edit menu with clipboard shortcuts. The macOS Cocoa debugger only adds Debug and Run menus to the menu bar, so standard Cmd+X/C/V shortcuts are never routed through the responder chain to the command input NSTextField. Add an Edit menu with Cut, Copy, and Paste items to enable clipboard operations (debugger\debugosx.mm).
 
