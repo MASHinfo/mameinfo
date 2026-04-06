@@ -66,7 +66,10 @@
   . PowerPC drc: Fixed several errors in the 601 legacy POWER instructions. DOZI: The immediate value needed to be sign-extended, an unsigned comparison was used where signed is correct, and the operation is a subtract, not an add. DOZ: Same errors as DOZI minus the sign extension since there's no immediate involved. ABS/NABS: Fixed the condition register update. MASKIR: Flag update was trashing the result register and CR0 wasn't updated. Also fixed a typo in a comment for DIVWx (code was correct) (powerpc\ppcdrc.cpp).
 - SOUND
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
-  . Sound Interface: Provide an explicit constructor (osd\interface\audio.h). Removed unused function declarations (emu\sound.h). Removed CoreAudio options that no longer do anything (lib\osdobj_common.cpp). Crossfade abuffer on overrun. Update abuffer last sample on clear (sound\sound_module.cpp). Removed aueffectutil - it's no longer useful (tools\aueffectutil-Info.plist and tools\aueffectutil.mm).
+  . Sound Interface
+    . Provide an explicit constructor (osd\interface\audio.h). Removed unused function declarations (emu\sound.h). Removed CoreAudio options that no longer do anything (lib\osdobj_common.cpp).
+    . Crossfade abuffer on overrun. Update abuffer last sample on clear (sound\sound_module.cpp). Removed aueffectutil - it's no longer useful (tools\aueffectutil-Info.plist and tools\aueffectutil.mm).
+    . Added noexcept specifier for XAudio2 engine callbacks (sound\xaudio2_sound.cpp)
   . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Fixes a burst of white static noise occurs in Pink Sweets, when certain voice clips play (ID 09408). Struct savestate issue (sound\ymz770.cpp).
 - DEVICE
   . AT28C16 2Kx8 EEPROM: Small cleanup to indentation (machine\at28c16.cpp)
@@ -147,7 +150,7 @@
     . Added support for building with MSYS2 CLANG64 with less fuss (makefile). Updated ClangCL build settings to C++20 (scripts\genie.lua).
     . Cleaned up some more stuff to prepare for 64-bit offs_t
     . Move build system adjusttment and fixes: Bumped minimum clang version to 13 - clang 12 is just too buggy. Assume Qt 6 will be used, dropped Qt 5 support. Fixed finding Qt headers on Fedora and hopefully other distros. Always use static SDL2 on Windows.
-    . Removed support for SysV operating systems. They’re dead on the desktop (file\posixptty.cpp, sdl\sdlprefix.h and sdl3\sdlprefix.h).
+    . Removed support for SysV operating systems. They're dead on the desktop (file\posixptty.cpp, sdl\sdlprefix.h and sdl3\sdlprefix.h).
     . Removed outdated LUA compatibility macros. They weren't doing anything sincewe updated to LUA 5.4 (the compatibility options changed, but we just left the old macros in place, which no longer had any effect) (scripts\genie.lua, scripts\src\3rdparty.lua, scripts\src\tools.lua, scripts\toolchain.lua).
   . Got rid of MAME_DELEGATE_DIFFERENT_MEMBER_ABI hack. This was supposed to allow calling i686 "thiscall" member functions viaa free function pointer. It had been disabled for years as it stopped working in GCC. Simply having the code present breaks compiling with Clang 22.1 even when it isn't enabled (util\delegate.h).
   . Removed unused member variables (netdev\pcap.cpp)
