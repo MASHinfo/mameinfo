@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 6th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 7th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -54,8 +54,9 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.288GIT
 
-- New games: Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
-- New clones: F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Red Hawk (China & Hong Kong) and Tiger Road (US bootleg, set 2)
+- New games: Adventure Canoe and Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
+- New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version) and International Superstar Soccer Deluxe (SNES bootleg)
+- New clones: F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Red Hawk (China & Hong Kong), Tiger Road (US bootleg, set 2) and Trivia ? Whiz (6221-00, Original rev question ROMs)
 - New drivers: dyna_dc4000.cpp	
 - New devices: cmi8738, cs4281, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596b_acpi, vt82c596_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
@@ -64,12 +65,13 @@
   . Intel I386: Added CPUID brand ID for Pentium 3 and 4 (i386\i386.cpp and i386\i486ops.hxx). Avoid arithmetic between different enum types (i386\i386dasm.h).
   . Motorola MC68000 (Musashi): Only allow one fault per instruction at a time (m68000\m68kcpu.cpp)
   . PowerPC drc: Fixed several errors in the 601 legacy POWER instructions. DOZI: The immediate value needed to be sign-extended, an unsigned comparison was used where signed is correct, and the operation is a subtract, not an add. DOZ: Same errors as DOZI minus the sign extension since there's no immediate involved. ABS/NABS: Fixed the condition register update. MASKIR: Flag update was trashing the result register and CR0 wasn't updated. Also fixed a typo in a comment for DIVWx (code was correct) (powerpc\ppcdrc.cpp).
+  . Zilog Z86xx: Fixed disassembly of opcode D7 (LD x(r2), r1 - indexed register write). The register nibble roles were swapped and the operand order showed it as a read instead of a write. Both C7 and D7 encode byte 1 the same way (high nibble = r1, low nibble = r2). The only difference is operand order: C7 reads from indexed, D7 writes to indexed. Before: D7 DC 01 disassembles as "LD R12, 01h(R13)". After:  D7 DC 01 disassembles as "LD 01h(R12), R13" (z8\z8dasm.cpp).
 - SOUND
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
   . Sound Interface
     . Provide an explicit constructor (osd\interface\audio.h). Removed unused function declarations (emu\sound.h). Removed CoreAudio options that no longer do anything (lib\osdobj_common.cpp).
     . Crossfade abuffer on overrun. Update abuffer last sample on clear (sound\sound_module.cpp). Removed aueffectutil - it's no longer useful (tools\aueffectutil-Info.plist and tools\aueffectutil.mm).
-    . Added noexcept specifier for XAudio2 engine callbacks (sound\xaudio2_sound.cpp)
+    . Added noexcept specifier for XAudio2 engine callbacks (sound\xaudio2_sound.cpp). Fixed a convergence problem when a rate-adaptive stream is not connected (emu\sound.cpp).
   . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Fixes a burst of white static noise occurs in Pink Sweets, when certain voice clips play (ID 09408). Struct savestate issue (sound\ymz770.cpp).
 - DEVICE
   . AT28C16 2Kx8 EEPROM: Small cleanup to indentation (machine\at28c16.cpp)
@@ -77,6 +79,7 @@
   . DECO 104/146 Protection: Cleaned up code. Made fixed configuration constructor parameters. Suppress side effects for debugger reads properly. Made member variables private, reduced unnecessary includes. Use m_ prefix for member variables, use explicitly sized integers for values that are saved. Use logmacro.h for configurable logging. Use BIT helper to extract individual bits. Fixed descramble input.
   . Floppy: Allow specifying explicit start and end sectors when getting PC MFM track data. Ensoniq VFX and EPS family floppies use 10 sectors per track, starting at sector 0 rather than the more common sector 1. The code in 'esq16_dsk.cpp' handles this when loading floppy images, but not when saving them. This attempts to fix this in a way that is not only specific to Ensoniq's floppy images, but to possibly other future ones as well. In 'flopimg.cpp', allow specifying explicit start and end sectors when getting PC MFM track data. In 'esq16_dsk.cpp', use this to explicitly specifying sectors 0 to 9 when getting the track data to save (formats\flopimg.cpp and formats\esq16_dsk.cpp).
   . H8 Serial Communications Interface: Added TODO note. Correct m_ssr_read logic (h8\h8_sci.cpp).
+  . Intel 8251 USART: Sync mode fixes: Fixed parity handling for SYNC mode. Send sync characters when TX empty. Small cleanup (machine\i8251.cpp).
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
@@ -99,11 +102,15 @@
 - deco32.cpp: Added notes of sprite flicker
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
+- namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
+- tigeroad.cpp: Measured video timing and MCU freq
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
+- Bionic Commando: Assume same video timing as Tiger Road
 - Bogey Manor: Added scanline timer
+- Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
 - Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area.
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
@@ -118,10 +125,10 @@
 - Splatterhouse: Removed space in title (ID 09421)
 - Syusse Oozumou: Added scanline timer from tagteam/matmania, also invert vblank flag in this driver too (similar inactive crowd bug as matmania).
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
-- Description changes of Danger Track (bootleg of Rally-X), F-1 Dream (set 2), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)) and Tiger Road (US bootleg, set 1)
+- Description changes of Danger Track (bootleg of Rally-X), F-1 Dream (set 2), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
 - Fixed rom names in royalmah.cpp
-- Renamed (f1dream) to (f1dreama)
-- Dipswitch fixes in gng.cpp and sg_vga.cpp
+- Renamed (f1dream) to (f1dreama), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
+- Dipswitch fixes in gng.cpp, namcos10.cpp and sg_vga.cpp
 - MAME
   . VIDEO RENDERING SYSTEM: Removed Altivec/VMX bilinear filtering implementation. PowerPC on desktop is dead (video\rgbutil.cpp).
   . DEVICES
@@ -152,13 +159,15 @@
     . Move build system adjusttment and fixes: Bumped minimum clang version to 13 - clang 12 is just too buggy. Assume Qt 6 will be used, dropped Qt 5 support. Fixed finding Qt headers on Fedora and hopefully other distros. Always use static SDL2 on Windows.
     . Removed support for SysV operating systems. They're dead on the desktop (file\posixptty.cpp, sdl\sdlprefix.h and sdl3\sdlprefix.h).
     . Removed outdated LUA compatibility macros. They weren't doing anything sincewe updated to LUA 5.4 (the compatibility options changed, but we just left the old macros in place, which no longer had any effect) (scripts\genie.lua, scripts\src\3rdparty.lua, scripts\src\tools.lua, scripts\toolchain.lua).
+    . Target Windows 10 API. Removed MODERN_WIN_API flag.
   . Got rid of MAME_DELEGATE_DIFFERENT_MEMBER_ABI hack. This was supposed to allow calling i686 "thiscall" member functions viaa free function pointer. It had been disabled for years as it stopped working in GCC. Simply having the code present breaks compiling with Clang 22.1 even when it isn't enabled (util\delegate.h).
+  . Switch GitHub Actions Windows x86-64 workflows from MSVCRT to UCRT (github\workflows\ci-windows.yml and makefile). Don't generate errors for format warnings with GCC/UCRT (scripts\src\3rdparty.lua).
   . Removed unused member variables (netdev\pcap.cpp)
   . Added ATTR_COLD pass to PCI sound cards
   . Fixed errors linking jedutil and romcmp on newer Linux (src\tools.lua)
 - Debugger
   . Added Edit menu with clipboard shortcuts. The macOS Cocoa debugger only adds Debug and Run menus to the menu bar, so standard Cmd+X/C/V shortcuts are never routed through the responder chain to the command input NSTextField. Add an Edit menu with Cut, Copy, and Paste items to enable clipboard operations (debugger\debugosx.mm).
-  . Fixed Qt debugger build on Windows with Clang. Qt provides inline definitions of dllimport functions, which causes a warning. There are too many of them to practically leave the warning enabled for this module (osd\modules.lua). It's no longer possible to get a working Qt 5 setup with MSYS2, and there's no 32-bit Qt 6 package. Updated docs to reflect this (docs\source\initialsetup\compilingmame.rst). Fixed build with Qt < 6.6 (qt\debuggerview.cpp).
+  . Fixed Qt debugger build on Windows with Clang. Qt provides inline definitions of dllimport functions, which causes a warning. There are too many of them to practically leave the warning enabled for this module (osd\modules.lua). It's no longer possible to get a working Qt 5 setup with MSYS2, and there's no 32-bit Qt 6 package. Updated docs to reflect this (docs\source\initialsetup\compilingmame.rst). Fixed build with Qt < 6.6 (qt\debuggerview.cpp). Fixed build with Qt 6 on AArch64 (debugger\debugqt.cpp).
 
 
 
