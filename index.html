@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 7th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 8th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -101,10 +101,13 @@
 - dassault.cpp and rohga.cpp: Removed unnecessary decocomn.cpp (DECO Common Video Functions) dependency. Moved alt sprite format config into machine_config. Fixed Hangzo ROM region size (main CPU ROM is ~1MB (only first 1MB is mapped at hotb_base_map) and no second "oki1" bank). Reduced unused arguments in dassault.cpp.
 - deco32.cpp: Added notes of sprite flicker
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
+- goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
+- namcos86.cpp: Tighter quantum
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
+- taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE.
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
 - tigeroad.cpp: Measured video timing and MCU freq
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
@@ -138,6 +141,7 @@
     . Removed misguided qualifiers (osd\osdsync.cpp). UTF-8 strings will use a distinct character type (ui\devopt.cpp). Added pattern explainations for -listbios (mame\clifront.cpp).
     . Fixed potential crash in Video Options menu on Windows (ui\submenu.cpp)
   . INPUT: Support SDL3 (input\input_dinput.cpp)
+  . 3RDPARTY: Sync AsmJit with upstream version 1.21 (3rdparty\asmjit).
   . Avoid use of volatile assignement result as value (emu\validity.cpp)
   . Save state: Cleaned up interface for reporting error messages (emu\save.cpp)
   . Avoid arithmetic between different enum types (mame\infoxml.cpp)
@@ -159,7 +163,7 @@
     . Move build system adjusttment and fixes: Bumped minimum clang version to 13 - clang 12 is just too buggy. Assume Qt 6 will be used, dropped Qt 5 support. Fixed finding Qt headers on Fedora and hopefully other distros. Always use static SDL2 on Windows.
     . Removed support for SysV operating systems. They're dead on the desktop (file\posixptty.cpp, sdl\sdlprefix.h and sdl3\sdlprefix.h).
     . Removed outdated LUA compatibility macros. They weren't doing anything sincewe updated to LUA 5.4 (the compatibility options changed, but we just left the old macros in place, which no longer had any effect) (scripts\genie.lua, scripts\src\3rdparty.lua, scripts\src\tools.lua, scripts\toolchain.lua).
-    . Target Windows 10 API. Removed MODERN_WIN_API flag.
+    . Target Windows 10 API. Removed MODERN_WIN_API flag. Retire superseded Intel C++ Compiler target.
   . Got rid of MAME_DELEGATE_DIFFERENT_MEMBER_ABI hack. This was supposed to allow calling i686 "thiscall" member functions viaa free function pointer. It had been disabled for years as it stopped working in GCC. Simply having the code present breaks compiling with Clang 22.1 even when it isn't enabled (util\delegate.h).
   . Switch GitHub Actions Windows x86-64 workflows from MSVCRT to UCRT (github\workflows\ci-windows.yml and makefile). Don't generate errors for format warnings with GCC/UCRT (scripts\src\3rdparty.lua).
   . Removed unused member variables (netdev\pcap.cpp)
