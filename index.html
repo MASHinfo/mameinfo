@@ -18,8 +18,8 @@
 <bgsound src="" loop="-1">
 
 <center>
-<font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.287</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 9th April 2026</font><p>
+<font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 10th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -30,11 +30,11 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/Mameinfo0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo 0.287 (3.77 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/Mameinfo + MAMEUI-inifiles-0288GIT (10th Apr).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0288GIT (10th Apr) (4.46 MB)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/MAMEUI-inifiles-0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.287 Category-, Version and Alltime inifiles (1014 kB)</b></font></a><br><br>
+<a href="https://www.mameworld.info/mameinfo/download/MAMEUI-inifiles-0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.287 Category-, Version and Alltime inifiles (1014 kB)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.287 (6.41 MB)</b></font></a><br><br>
+<a href="https://www.mameworld.info/mameinfo/download/NEWS.txt"><font size="+1" face="Arial" color="#eeeeee"><b>MAME NEWS from 0.37b1 - 0.287 (6.41 MB)</b></font></a><br><br>
 
 <a href="https://www.mameworld.info/mameinfo/download/PCB-infos0153.zip"><font size="+1" face="Arial" color="#eeeeee"><b>PCB-infos 0.153 (2.11 MB)</b></font></a><br><br>
 
@@ -56,7 +56,7 @@
 
 - New games: Adventure Canoe and Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
 - New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg) and Mali Saiche
-- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Red Hawk (China & Hong Kong), Tiger Road (US bootleg, set 2) and Trivia ? Whiz (6221-00, Original rev question ROMs)
+- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Red Hawk (China & Hong Kong), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2) and Trivia ? Whiz (6221-00, Original rev question ROMs)
 - New drivers: dyna_dc4000.cpp	
 - New devices: cmi8738, cs4281, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
@@ -71,7 +71,7 @@
   . Sound Interface
     . Provide an explicit constructor (osd\interface\audio.h). Removed unused function declarations (emu\sound.h). Removed CoreAudio options that no longer do anything (lib\osdobj_common.cpp).
     . Crossfade abuffer on overrun. Update abuffer last sample on clear (sound\sound_module.cpp). Removed aueffectutil - it's no longer useful (tools\aueffectutil-Info.plist and tools\aueffectutil.mm).
-    . Added noexcept specifier for XAudio2 engine callbacks (sound\xaudio2_sound.cpp). Fixed a convergence problem when a rate-adaptive stream is not connected (emu\sound.cpp).
+    . Added noexcept specifier for XAudio2 engine callbacks (sound\xaudio2_sound.cpp). Fixed a convergence problem when a rate-adaptive stream is not connected (emu\sound.cpp). Fixes (MESS) Yamaha PSR-7x/PSS-6/11/12 freeze MAME at start (ID 09429).
   . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Fixes a burst of white static noise occurs in Pink Sweets, when certain voice clips play (ID 09408). Struct savestate issue (sound\ymz770.cpp).
 - DEVICE
   . AT28C16 2Kx8 EEPROM: Small cleanup to indentation (machine\at28c16.cpp)
@@ -102,20 +102,23 @@
 - deco32.cpp: Added notes of sprite flicker
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
 - goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
-- liberate.cpp: Use a memory_view for the overlaid bank
+- liberate.cpp: Use a memory_view for the overlaid bank. Fixes clone 'Pro Sports - Bowling, Tennis, and Golf (USA)' internally crashed in attract mode after 95 seconds (ID 09431).
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
-- namcos86.cpp: Tighter quantum
+- namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
+- rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
 - taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE.
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
-- tigeroad.cpp: Measured video timing and MCU freq. Improved F-1 Dream soundlatch timing.
+- tigeroad.cpp
+  . Measured video timing and MCU freq. Added manual sprite DMA trigger and irq4. Correct objram range. Removed m_has_coinlock variable.
+  . Improved F-1 Dream soundlatch timing. Prevent scheduler issue after halting maincpu.
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
-- Bionic Commando: Assume same video timing as Tiger Road
+- Bionic Commando: Assume same video timing as tigeroad. Prevent scheduler issue after halting maincpu. Correct objram range. Assume interrupt timing is same as f1dream hw (no change) and coinlock in service mode is deliberate.
 - Bogey Manor: Added scanline timer
 - Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
-- Dream Hold: Correct GFX decode/tilemaps
+- Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
 - Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area.
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
@@ -132,7 +135,7 @@
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
 - Description changes of Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Dream Hold, F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
 - Fixed rom names in royalmah.cpp
-- Renamed (f1dream) to (f1dreama), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
+- Renamed (f1dream) to (f1dreama), (shimpact) to (shimpactl1), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
 - Dipswitch fixes in gng.cpp, namcos10.cpp and sg_vga.cpp
 - MAME
   . VIDEO RENDERING SYSTEM: Removed Altivec/VMX bilinear filtering implementation. PowerPC on desktop is dead (video\rgbutil.cpp).
@@ -143,7 +146,7 @@
     . Removed misguided qualifiers (osd\osdsync.cpp). UTF-8 strings will use a distinct character type (ui\devopt.cpp). Added pattern explainations for -listbios (mame\clifront.cpp).
     . Fixed potential crash in Video Options menu on Windows (ui\submenu.cpp)
   . INPUT: Support SDL3 (input\input_dinput.cpp)
-  . 3RDPARTY: Sync AsmJit with upstream version 1.21 (3rdparty\asmjit).
+  . 3RDPARTY: Sync AsmJit with upstream version 1.21 (3rdparty\asmjit). Sync GENie with upstream 1196 (3rdparty\genie).
   . Avoid use of volatile assignement result as value (emu\validity.cpp)
   . Save state: Cleaned up interface for reporting error messages (emu\save.cpp)
   . Avoid arithmetic between different enum types (mame\infoxml.cpp)
@@ -166,6 +169,7 @@
     . Removed support for SysV operating systems. They're dead on the desktop (file\posixptty.cpp, sdl\sdlprefix.h and sdl3\sdlprefix.h).
     . Removed outdated LUA compatibility macros. They weren't doing anything sincewe updated to LUA 5.4 (the compatibility options changed, but we just left the old macros in place, which no longer had any effect) (scripts\genie.lua, scripts\src\3rdparty.lua, scripts\src\tools.lua, scripts\toolchain.lua).
     . Target Windows 10 API. Removed MODERN_WIN_API flag. Retire superseded Intel C++ Compiler target.
+  . Added support for VS2026: Local fix for GENie resource include directory bug, sent upstream as bkaradzic/GENie#572. Local fix to disable broken command line escaping and to use MPARAM instead of hard-coded -m64.
   . Got rid of MAME_DELEGATE_DIFFERENT_MEMBER_ABI hack. This was supposed to allow calling i686 "thiscall" member functions viaa free function pointer. It had been disabled for years as it stopped working in GCC. Simply having the code present breaks compiling with Clang 22.1 even when it isn't enabled (util\delegate.h).
   . Switch GitHub Actions Windows x86-64 workflows from MSVCRT to UCRT (github\workflows\ci-windows.yml and makefile). Don't generate errors for format warnings with GCC/UCRT (scripts\src\3rdparty.lua).
   . Removed unused member variables (netdev\pcap.cpp)
