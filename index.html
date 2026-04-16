@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 15th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 16th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -38,7 +38,7 @@
 
 <a href="https://www.mameworld.info/mameinfo/download/PCB-infos0153.zip"><font size="+1" face="Arial" color="#eeeeee"><b>PCB-infos 0.153 (2.11 MB)</b></font></a><br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b><a href="https://www.mameworld.info/mameinfo/download/Compile MAME with Clang 22 or GCC 15 on Windows 10 (15th Apr).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME64 or MAME(XP 32bit) with Clang 22 or GCC 15 on Windows 10 (Start a script and compile immediately) (15th Apr)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b><a href="https://www.mameworld.info/mameinfo/download/Compile MAME with Clang 22 or GCC 15 on Windows 10 (15th_Apr).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME64 or MAME(XP 32bit) with Clang 22 or GCC 15 on Windows 10 (Start a script and compile immediately) (15th_Apr)</b></font></a><br><br>
 
 <a href="https://www.mameworld.info/mameinfo/download/Compile MAME with GCC 11.2 on Windows XP (3rd Apr).zip"><font size="+1" face="Arial" color="#eeeeee"><b>Compile MAME with GCC 11.2 on Windows XP (Start a script and compile immediately) (3rd Apr)</b></font></a><br><br>
 
@@ -55,10 +55,10 @@
 0.288GIT
 
 - New games: Adventure Canoe and Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
-- New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg) and Mali Saiche
-- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2) and Trivia ? Whiz (6221-00, Original rev question ROMs)
+- New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Mali Saiche, Mini Bar and 'unknown Dyna mahjong game (V1.60)'.
+- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
 - New drivers: dyna_dc4000.cpp	
-- New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, intel_mbm, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
+- New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
   . Dynamic Re-Compiling: Removed i686 recompiler back-end. Without a practical way to make Windows i686 builds, it's just going to rot. Also, x86-64 is now older than Pac-Man was when MAME was initially created. It's dead on the desktop (cpu\drcbex86.cpp).
   . Intel 8051: Changed address space names to resemble those used by Intel's tools (mcs51\i8051.cpp and mcs51\mcs51ops.cpp)
@@ -70,7 +70,7 @@
   . MPEG audio: Added m_ prefixes to class variables (sound\mpeg_audio.cpp)
   . Sound Interface
     . Provide an explicit constructor (osd\interface\audio.h). Removed unused function declarations (emu\sound.h). Removed CoreAudio options that no longer do anything (lib\osdobj_common.cpp).
-    . Crossfade abuffer on overrun. Update abuffer last sample on clear (sound\sound_module.cpp). Removed aueffectutil - it's no longer useful (tools\aueffectutil-Info.plist and tools\aueffectutil.mm).
+    . Crossfade abuffer on overrun. Update abuffer last sample on clear. Fixed std::memmove bytes param (sound\sound_module.cpp). Removed aueffectutil - it's no longer useful (tools\aueffectutil-Info.plist and tools\aueffectutil.mm).
     . Added noexcept specifier for XAudio2 engine callbacks (sound\xaudio2_sound.cpp). Fixed a convergence problem when a rate-adaptive stream is not connected (emu\sound.cpp). Fixes (MESS) Yamaha PSR-7x/PSS-6/11/12 freeze MAME at start (ID 09429).
   . Yamaha YMZ770/YMZ774: Don't apply next prepared phrase volume/panning before current block finished. Fixes a burst of white static noise occurs in Pink Sweets, when certain voice clips play (ID 09408). Struct savestate issue (sound\ymz770.cpp).
 - DEVICE
@@ -79,6 +79,8 @@
   . DECO 104/146 Protection: Cleaned up code. Made fixed configuration constructor parameters. Suppress side effects for debugger reads properly. Made member variables private, reduced unnecessary includes. Use m_ prefix for member variables, use explicitly sized integers for values that are saved. Use logmacro.h for configurable logging. Use BIT helper to extract individual bits. Fixed descramble input.
   . Floppy: Allow specifying explicit start and end sectors when getting PC MFM track data. Ensoniq VFX and EPS family floppies use 10 sectors per track, starting at sector 0 rather than the more common sector 1. The code in 'esq16_dsk.cpp' handles this when loading floppy images, but not when saving them. This attempts to fix this in a way that is not only specific to Ensoniq's floppy images, but to possibly other future ones as well. In 'flopimg.cpp', allow specifying explicit start and end sectors when getting PC MFM track data. In 'esq16_dsk.cpp', use this to explicitly specifying sectors 0 to 9 when getting the track data to save (formats\flopimg.cpp and formats\esq16_dsk.cpp).
   . H8 Serial Communications Interface: Added TODO note. Correct m_ssr_read logic (h8\h8_sci.cpp).
+  . IGS023 Video System: Use BIT helper to extract single bits and util::sext to sign extend values. Use logmacro.h for logging feature. Use address maps for RAM/video register area. Implemented additional features: Sprite DMA, disable specific layer and ccanline counter (verified from hardware). Expanded palette area for fix possible out of bound text palette issue. Reference: https://github.com/laoo/PGMTech (igs\igs023_video.cpp).
+  . Imgtool: Use UTF-8 console I/O on Windows, don't use wide char streams (imgtool\imgtool.cpp).
   . Intel 8251 USART: Sync mode fixes: Fixed parity handling for SYNC mode. Send sync characters when TX empty. Small cleanup (machine\i8251.cpp).
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
@@ -102,15 +104,21 @@
 - dassault.cpp and rohga.cpp: Removed unnecessary decocomn.cpp (DECO Common Video Functions) dependency. Moved alt sprite format config into machine_config. Fixed Hangzo ROM region size (main CPU ROM is ~1MB (only first 1MB is mapped at hotb_base_map) and no second "oki1" bank). Reduced unused arguments in dassault.cpp.
 - deco32.cpp: Added notes of sprite flicker
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
+- galaga.cpp: Use resnet for palette for bosco, digdug and galaga.
 - goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
+- igs011.cpp: Moved IGS011 (including decryption, protection, and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging. Fixed post-load function. Added notes about graphical issues on dbc title screen.
+- lanmao.cpp and marywu.cpp: Added meter counter feedback
 - liberate.cpp: Use a memory_view for the overlaid bank. Fixes clone 'Pro Sports - Bowling, Tennis, and Golf (USA)' internally crashed in attract mode after 95 seconds (ID 09431).
+- lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
 - stella8085.cpp: Deduplicate and translate service keyboard. Fixed inputs in game 'Disc'.
-- stellafr.cpp: Fixed memory map for SuS. Added mem map for SuS. Split devices with TK or RTC. Most of the devices with "Spiel und Speicher Modul" use timekeeper(tk), but some of them a RTC instead. Adapt init functions and CPU frequency.
+- stellafr.cpp
+  . Noved game Gluecks-Stern to correct driver
+  . Fixed memory map for SuS. Added mem map for SuS. Split devices with TK or RTC. Most of the devices with "Spiel und Speicher Modul" use timekeeper(tk), but some of them a RTC instead. Adapt init functions and CPU frequency.
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
 - taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE.
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
@@ -118,14 +126,16 @@
   . Measured video timing and MCU freq. Added manual sprite DMA trigger and irq4. Correct objram range. Removed m_has_coinlock variable.
   . Improved F-1 Dream soundlatch timing. Prevent scheduler issue after halting maincpu.
 - zaccaria.cpp: Small accuracy improvement for clock_device when result divided clock is not an integer (zaccaria\zaccaria_a.cpp)
+- zaxxon.cpp: Cleaned up a little
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
 - Bionic Commando: Assume same video timing as tigeroad. Prevent scheduler issue after halting maincpu. Correct objram range. Assume interrupt timing is same as f1dream hw (no change) and coinlock in service mode is deliberate.
 - Bogey Manor: Added scanline timer
 - Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
 - Doraemon no Dokodemo Door: Added Japanese button descriptions
 - Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
+- Fortune I: Fixed vram banking
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
-- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area.
+- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select.
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
 - Mobile Suit Gundam EX Revue: Demoted game as MACHINE_IMPERFECT_TIMING. It has overall timing issues and also displays a black screen when the flip screen DIP switch is on.
 - Mysterious Stones: Added TODO note, vblank flag was wrong way around here too (eg. it started writing gfx at the start of active display area instead of at start of vblank). Assume it has 16 interrupts per frame.
@@ -134,11 +144,12 @@
 - Rally X / New Rally X: Added hyphen to title (ID 09422)
 - Rampart: Correction to P3 buttons
 - Sengoku no Jieitai: Increased Z80 clock. Fixes start music too low-pitched and slow (ID 09416).
+- Skill Drop Georgia: Fixed black screen at start in Skill Drop Georgia and clones, unable to call up debugger.
 - Slotters Club: Redumped YMZ280B sound ROM
 - Splatterhouse: Removed space in title (ID 09421)
 - Syusse Oozumou: Added scanline timer from tagteam/matmania, also invert vblank flag in this driver too (similar inactive crowd bug as matmania).
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
-- Description changes of Black Tiger (US), Black Tiger (US, older), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
+- Description changes of Black Tiger (US), Black Tiger (US, older), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Ridge Racer (World, RRC, Three Monitor Version), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
 - Fixed rom names in royalmah.cpp
 - Renamed (dreamcha) to (dreamhld), (f1dream) to (f1dreama), (shimpact) to (shimpactl1), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
 - Dipswitch fixes in gng.cpp, lanmao.cpp, namcos10.cpp and sg_vga.cpp
@@ -238,7 +249,6 @@
   . Cassette: Use helper functions from multibyte.h (formats\wavfile.cpp). Added support for cassette images in AIFF format (formats\cassimg.h).
   . Floppy: Let the controller idle during soft reset. Note: (MESS) MikroMikko 2 expects to read 0 from MSR while the FDC is in reset (machine\upd765.cpp).
   . Imagetek I4100/4220/4300 VDP: Fixed tilemap scroll in flip screen set (video\imagetek_i4100.cpp)
-  . Imgtool: Use UTF-8 console I/O on Windows, don't use wide char streams (imgtool\imgtool.cpp).
   . Intel 8253 PIT: Improved timing accuracy. The counter is loaded and decremented on the falling edge of CLK. GATE and GATE transitions (for edge-sensitive modes) are sampled on the rising edge of CLK. Mode 3 treats GATE as edge-sensitive. In modes 2 and 3, GATE has an immediate effect on OUT. Deferred the execution of 'set_clock_signal'. Removed 8253 timing workarounds from (MESS) sixtrak. Ensure the recent fix for mode 3 does not yet apply to 'set_clk' configurations (machine\pit8253.cpp).
   . Kaneko PANDORA GFX: Cleanups and updates. Use shortened typename value for consistency. Use BIT macro for single bit flags. Fixed loggings, spacings and namings. Make some variables constant. Reduced literal tag usages. Fill empty sprite gfx region to transparent. Removed unnecessary checks. Fixed comments (Original chip has 14 bit tile code, used at djboy.cpp and hvyunit.cpp). Added notes for sprite bitmap RAM. Fixed sprite trail and notes. Chip has double buffering, so this commit fixes sprite trail match to PCB (ex: airbustr).
   . Konami 051733 math chip: Reduced code size a bit (konami\k051733.cpp)
@@ -284,7 +294,6 @@
 - kaneko16.cpp: Added licensees to metadata and tidied code
 - kontest.cpp and mogura.cpp: Small cleanup/improvements. Only loop over 8*8 blocks that need to be drawn (kontest.cpp).
 - lastduel.cpp: Reduced RAM size for Last Duel and correct spriteram range. Removed unneeded variables and init palette to black. Added manual sprite DMA trigger.
-- lanmao.cpp and marywu.cpp: Added meter counter feedback
 - metro.cpp
   . Fixed tilemap scroll in flip screen set. Fixes flyingship in stage 6 of Varia Metal has misplaced graphics (video\imagetek_i4100.cpp) (ID 09376).
   . Improved metadata: Added region-specific titles to descriptions, and explanatory comments. Added assumed regions to descriptions based on game UI language. Fixed toride2gg set title (non-adauchi gaiden set unlike previously described metadata). Added distributor metadata for lastfortk set. Use the standard mahjong matrix (metro\metro.cpp).
@@ -309,7 +318,7 @@
 - snk6502.cpp: Added/Fixed screen raw params. Removed unneeded high freq timer.
 - snowbros.cpp: Fixed comment order sort to MSB first and same byte. Split driver states per hardware configs. Simplified sound bankswitch method for snowbro3 and clones. Reduced duplicates. Fixed toto dip switch config for describe broken title screen. Added korean titles when exists. Fixed metadata due to title screen.
 - statriv2.cpp: Got rid of tag lookups, made use of derived classes and other small cleanups. Updated notes.
-- stellafr.cpp: Added/Redumped DSP rom. Noved game Gluecks-Stern to correct driver.
+- stellafr.cpp: Added/Redumped DSP rom
 - taitojc.cpp: Changed screen raw params (matches vsync measurement 99.999%)
 - tmnt2.cpp: Removed unneeded variable. Added VIDEO_ALWAYS_UPDATE flag to Golfing Greats.
 - trackfld.cpp: Cleanup. Consolidate in single driver file (except for audio device). Use same raw parameters for screen as contemporary Konami games (konami\trackfld.cpp). Inputs don't magically change on reset. Also tidy some stuff up (konami\trackfld_a.cpp). Use scanline timer for NMI generation as in parent set for clone Yie Ar Kung-Fu (bootleg GX361 conversion).
