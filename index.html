@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 16th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -30,7 +30,7 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/Mameinfo + MAMEUI-inifiles-0288GIT (10th Apr).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0288GIT (10th Apr) (4.46 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/Mameinfo + MAMEUI-inifiles-0288GIT (17th Apr).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0288GIT (17th Apr) (4.46 MB)</b></font></a><br><br>
 
 <a href="https://www.mameworld.info/mameinfo/download/MAMEUI-inifiles-0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.287 Category-, Version and Alltime inifiles (1014 kB)</b></font></a><br><br>
 
@@ -54,9 +54,9 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.288GIT
 
-- New games: Adventure Canoe and Mahjong Dai Chuuka Ken (Japan, P830 006A-005)
-- New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Mali Saiche, Mini Bar and 'unknown Dyna mahjong game (V1.60)'.
-- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
+- New games: Adventure Canoe
+- New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar and 'unknown Dyna mahjong game (V1.60)'.
+- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
 - New drivers: dyna_dc4000.cpp	
 - New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
@@ -84,6 +84,7 @@
   . Intel 8251 USART: Sync mode fixes: Fixed parity handling for SYNC mode. Send sync characters when TX empty. Small cleanup (machine\i8251.cpp).
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
+  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related. Fixes Air Combat 3D colors.
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
   . PC LPT: Added PS/2 bidirectional mode support (machine\pc_lpt.cpp)
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp)
@@ -106,12 +107,14 @@
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
 - galaga.cpp: Use resnet for palette for bosco, digdug and galaga.
 - goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
-- igs011.cpp: Moved IGS011 (including decryption, protection, and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging. Fixed post-load function. Added notes about graphical issues on dbc title screen.
+- igs011.cpp: Moved IGS011 (including decryption, protection and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging. Fixed post-load function. Added notes about graphical issues on dbc title screen.
 - lanmao.cpp and marywu.cpp: Added meter counter feedback
 - liberate.cpp: Use a memory_view for the overlaid bank. Fixes clone 'Pro Sports - Bowling, Tennis, and Golf (USA)' internally crashed in attract mode after 95 seconds (ID 09431).
 - lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
+- namcos21.cpp: Upper palette entries 0 & 1 controls mixing. Fixes winrun/winrungp/winrun91 title screen priority.
+- namcos21_c67.cpp: Preliminary mixing register hookup. Fixed Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related. Fixes Air Combat 3D colors (namco\namcos21_3d.cpp)
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
@@ -133,9 +136,9 @@
 - Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
 - Doraemon no Dokodemo Door: Added Japanese button descriptions
 - Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
-- Fortune I: Fixed vram banking
+- Fortune I: Fixed vram banking. Fixes screen is mostly filled with garbage in clone Video Poker (v1403) (ID 09443).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
-- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select.
+- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select. Hookup sound ROM bankswitch.
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
 - Mobile Suit Gundam EX Revue: Demoted game as MACHINE_IMPERFECT_TIMING. It has overall timing issues and also displays a black screen when the flip screen DIP switch is on.
 - Mysterious Stones: Added TODO note, vblank flag was wrong way around here too (eg. it started writing gfx at the start of active display area instead of at start of vblank). Assume it has 16 interrupts per frame.
@@ -144,12 +147,12 @@
 - Rally X / New Rally X: Added hyphen to title (ID 09422)
 - Rampart: Correction to P3 buttons
 - Sengoku no Jieitai: Increased Z80 clock. Fixes start music too low-pitched and slow (ID 09416).
-- Skill Drop Georgia: Fixed black screen at start in Skill Drop Georgia and clones, unable to call up debugger.
+- Skill Drop Georgia: Fixed black screen at start in Skill Drop Georgia and clones, unable to call up debugger (ID 09439).
 - Slotters Club: Redumped YMZ280B sound ROM
 - Splatterhouse: Removed space in title (ID 09421)
 - Syusse Oozumou: Added scanline timer from tagteam/matmania, also invert vblank flag in this driver too (similar inactive crowd bug as matmania).
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
-- Description changes of Black Tiger (US), Black Tiger (US, older), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Ridge Racer (World, RRC, Three Monitor Version), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
+- Description changes of Black Tiger (US), Black Tiger (US, older), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
 - Fixed rom names in royalmah.cpp
 - Renamed (dreamcha) to (dreamhld), (f1dream) to (f1dreama), (shimpact) to (shimpactl1), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
 - Dipswitch fixes in gng.cpp, lanmao.cpp, namcos10.cpp and sg_vga.cpp
