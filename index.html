@@ -55,7 +55,7 @@
 0.288GIT
 
 - New games: Adventure Canoe
-- New Non-Working games: The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar and 'unknown Dyna mahjong game (V1.60)'.
+- New Non-Working games: Galaxian Fever (Japan), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Shooting Paradise (Japan) and 'unknown Dyna mahjong game (V1.60)'.
 - New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
 - New drivers: dyna_dc4000.cpp	
 - New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
@@ -82,7 +82,8 @@
   . IGS023 Video System: Use BIT helper to extract single bits and util::sext to sign extend values. Use logmacro.h for logging feature. Use address maps for RAM/video register area. Implemented additional features: Sprite DMA, disable specific layer and ccanline counter (verified from hardware). Expanded palette area for fix possible out of bound text palette issue. Reference: https://github.com/laoo/PGMTech (igs\igs023_video.cpp).
   . Imgtool: Use UTF-8 console I/O on Windows, don't use wide char streams (imgtool\imgtool.cpp).
   . Intel 8251 USART: Sync mode fixes: Fixed parity handling for SYNC mode. Send sync characters when TX empty. Small cleanup (machine\i8251.cpp).
-  . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
+  . Namco 186/187 or C355/187 (sprites): Removed hardcoded namcos21 scroll adjust. Added notes (shared\namco_c355spr.cpp). Assume same C355 scroll for ds5000 and gal3 offset as namcos21.
+  . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM). 
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
   . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors.
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
@@ -108,8 +109,9 @@
 - galaga.cpp: Use resnet for palette for bosco, digdug and galaga.
 - goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
 - igs011.cpp
-  . Moved IGS011 (including decryption, protection and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging. Fixed post-load function. Added notes about graphical issues on dbc title screen.
-  . Bad graphics on clone 'Daai Baan Sing (Hong Kong, V027H)' title screen is an original game bug. Added Dragon World original game bugs to header comment.
+  . Moved IGS011 (including decryption, protection and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging and post-load function. Added remapping for rotated trackball (seems to glitch occasionally).
+  . Added notes about graphical issues on clone 'Daai Baan Sing (Hong Kong, V027H)' title screen. Bad graphics on clone 'Daai Baan Sing (Hong Kong, V027H)' title screen is an original game bug.
+  . Added Dragon World original game bugs to header comment.
 - lanmao.cpp and marywu.cpp: Added meter counter feedback
 - liberate.cpp: Use a memory_view for the overlaid bank. Fixes clone 'Pro Sports - Bowling, Tennis, and Golf (USA)' internally crashed in attract mode after 95 seconds (ID 09431).
 - lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
@@ -118,9 +120,9 @@
 - namcos21.cpp: Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority.
 - namcos21_c67.cpp
   . Preliminary mixing register hookup, fixes Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors (namco\namcos21_3d.cpp).
-  . Hookup video enable bit (Solvalou after POST). Removed Cyber Sled specific kickstart delay, fixes title screen appearance.
-  . Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
-- namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
+  . Hookup video enable bit (Solvalou after POST). Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp). Added internal artwork (layout\solvalou.lay).
+  . Removed Cyber Sled specific kickstart delay, fixes title screen appearance
+- namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
 - stella8085.cpp: Deduplicate and translate service keyboard. Fixed inputs in game 'Disc'.
@@ -136,14 +138,16 @@
 - zaccaria.cpp: Small accuracy improvement for clock_device when result divided clock is not an integer (zaccaria\zaccaria_a.cpp)
 - zaxxon.cpp: Cleaned up a little
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
+- Bao Qing Tian: Moved 'Bao Qing Tian' to Dynax driver and made it boot. Wrong colors, so not working for now.
 - Bionic Commando: Assume same video timing as tigeroad. Prevent scheduler issue after halting maincpu. Correct objram range. Assume interrupt timing is same as f1dream hw (no change) and coinlock in service mode is deliberate.
 - Bogey Manor: Added scanline timer
 - Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
 - Doraemon no Dokodemo Door: Added Japanese button descriptions
 - Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
+- DS-5000 Driving Simulator: Added some base execution
 - Fortune I: Fixed vram banking. Fixes screen is mostly filled with garbage in clone Video Poker (v1403) (ID 09443).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
-- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select. Hookup sound ROM bankswitch.
+- Happy Planet: Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp. Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select and sound ROM bankswitch. Updated PCB info.
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
 - Mobile Suit Gundam EX Revue: Demoted game as MACHINE_IMPERFECT_TIMING. It has overall timing issues and also displays a black screen when the flip screen DIP switch is on.
 - Mysterious Stones: Added TODO note, vblank flag was wrong way around here too (eg. it started writing gfx at the start of active display area instead of at start of vblank). Assume it has 16 interrupts per frame.
