@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 18th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -84,7 +84,7 @@
   . Intel 8251 USART: Sync mode fixes: Fixed parity handling for SYNC mode. Send sync characters when TX empty. Small cleanup (machine\i8251.cpp).
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
-  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related. Fixes Air Combat 3D colors.
+  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors.
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
   . PC LPT: Added PS/2 bidirectional mode support (machine\pc_lpt.cpp)
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp)
@@ -107,14 +107,19 @@
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
 - galaga.cpp: Use resnet for palette for bosco, digdug and galaga.
 - goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
-- igs011.cpp: Moved IGS011 (including decryption, protection and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging. Fixed post-load function. Added notes about graphical issues on dbc title screen.
+- igs011.cpp
+  . Moved IGS011 (including decryption, protection and video) and IGS012 into separates devices. Fixed relocate protection area function. Fixed naming for per-game protection functions. Fixed logging. Fixed post-load function. Added notes about graphical issues on dbc title screen.
+  . Bad graphics on clone 'Daai Baan Sing (Hong Kong, V027H)' title screen is an original game bug. Added Dragon World original game bugs to header comment.
 - lanmao.cpp and marywu.cpp: Added meter counter feedback
 - liberate.cpp: Use a memory_view for the overlaid bank. Fixes clone 'Pro Sports - Bowling, Tennis, and Golf (USA)' internally crashed in attract mode after 95 seconds (ID 09431).
 - lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
-- namcos21.cpp: Upper palette entries 0 & 1 controls mixing. Fixes winrun/winrungp/winrun91 title screen priority.
-- namcos21_c67.cpp: Preliminary mixing register hookup. Fixed Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related. Fixes Air Combat 3D colors (namco\namcos21_3d.cpp)
+- namcos21.cpp: Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority.
+- namcos21_c67.cpp
+  . Preliminary mixing register hookup, fixes Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors (namco\namcos21_3d.cpp).
+  . Hookup video enable bit (Solvalou after POST). Removed Cyber Sled specific kickstart delay, fixes title screen appearance.
+  . Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp).
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
@@ -164,7 +169,10 @@
   . UI/OSD
     . Removed misguided qualifiers (osd\osdsync.cpp). UTF-8 strings will use a distinct character type (ui\devopt.cpp). Added pattern explainations for -listbios (mame\clifront.cpp).
     . Fixed potential crash in Video Options menu on Windows (ui\submenu.cpp)
-  . INPUT: Support SDL3 (input\input_dinput.cpp)
+    . Forward pointer events to input modules (windows\window.cpp)
+  . INPUT
+    . Support SDL3 (input\input_dinput.cpp)
+    . Made Win32 lightgun module usable with pen/touch (input\input_win32.cpp)
   . 3RDPARTY: Sync AsmJit with upstream version 1.21 (3rdparty\asmjit). Sync GENie with upstream 1196 (3rdparty\genie).
   . Use UTF-8 console I/O when built with UCRT (windows\winmain.cpp)
   . Avoid use of volatile assignement result as value (emu\validity.cpp)
