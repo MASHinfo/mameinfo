@@ -87,7 +87,9 @@
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM). 
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
   . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors. Updated aircomb QA note.
-  . Namco System 21 DSP Setup (5x C67 type): Reorder display command processing and removed obsolete yield_hack (namco\namcos21_dsp_c67.cpp).
+  . Namco System 21 DSP Setup (5x C67 type)
+    . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Issue a DSP chip reset when the line is high, fixes Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
+    . Reorder display command processing and removed obsolete yield_hack (namco\namcos21_dsp_c67.cpp).
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
   . NEC uPD7801: Fixed port C direction bits
   . PC LPT: Added PS/2 bidirectional mode support (machine\pc_lpt.cpp)
@@ -120,10 +122,10 @@
 - lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
-- namcos21.cpp: Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority.
+- namcos21.cpp: Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority. Improved bgpen.
 - namcos21_c67.cpp
   . Preliminary mixing register hookup, fixes Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors (namco\namcos21_3d.cpp).
-  . Hookup video enable bit (Solvalou after POST). Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp). Added internal artwork (layout\solvalou.lay).
+  . Hookup video enable bit (Solvalou after POST). Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp). Added internal artwork (layout\solvalou.lay). Solvalou uses less poly colors.
   . Removed Cyber Sled specific kickstart delay, fixes title screen appearance.
   . Tweak analog controls. Improved bgpen blend. Added note about DSP clock.
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
