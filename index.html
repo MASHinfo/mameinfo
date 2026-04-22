@@ -56,8 +56,8 @@
 
 - New games: Adventure Canoe
 - New Working games: Air Combat (AC1, Japan), Air Combat (AC2, US), Cyber Sled (CY1, World?), Cyber Sled (CY2, World) and Solvalou (SV1, Japan)
-- New Non-Working games: Galaxian Fever (Japan, ver 1.28), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Shooting Paradise (Japan, ver 1.10) and 'unknown Dyna mahjong game (V1.60)'.
-- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
+- New Non-Working games: Fengyun Zhengba, Galaxian Fever (Japan, ver 1.28), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Shooting Paradise (Japan, ver 1.10) and 'unknown Dyna mahjong game (V1.60)'.
+- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
 - New drivers: dyna_dc4000.cpp	
 - New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
@@ -135,13 +135,14 @@
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
+- sg_vga.cpp
+  . Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp.
+  . Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select and sound ROM bankswitch. Updated PCB info.
+- ssingles.cpp: Convert VRAM to use std::unique_ptr rather than share_ptr. Allows visibility in debugger. Preliminary kanji hookup for 'Computer Quiz Atama no Taisou (Japan)'.
 - stella8085.cpp: Deduplicate and translate service keyboard. Fixed inputs in game 'Disc'.
 - stellafr.cpp
   . Noved game Gluecks-Stern to correct driver
   . Fixed memory map for SuS. Added mem map for SuS. Split devices with TK or RTC. Most of the devices with "Spiel und Speicher Modul" use timekeeper(tk), but some of them a RTC instead. Adapt init functions and CPU frequency.
-- sg_vga.cpp
-  . Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp.
-  . Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select and sound ROM bankswitch. Updated PCB info.
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
 - taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE.
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
