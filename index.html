@@ -30,7 +30,7 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/Mameinfo + MAMEUI-inifiles-0288GIT (17th Apr).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0288GIT (17th Apr) (4.46 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://www.mameworld.info/mameinfo/download/Mameinfo + MAMEUI-inifiles-0288GIT (24th Apr).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0288GIT (24th Apr) (4.47 MB)</b></font></a><br><br>
 
 <a href="https://www.mameworld.info/mameinfo/download/MAMEUI-inifiles-0287.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.287 Category-, Version and Alltime inifiles (1014 kB)</b></font></a><br><br>
 
@@ -56,14 +56,15 @@
 
 - New games: Adventure Canoe
 - New Working games: Air Combat (AC1, Japan), Air Combat (AC2, US), Cyber Sled (CY1, World?), Cyber Sled (CY2, World) and Solvalou (SV1, Japan)
-- New Non-Working games: Fengyun Zhengba, Galaxian Fever (Japan, ver 1.28), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Scalextric (Spain, set 1), Shooting Paradise (Japan, ver 1.10) and 'unknown Dyna mahjong game (V1.60)'.
-- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Scalextric (America), Scalextric (England, set 1), Scalextric (England, set 2), Scalextric (France, set 1), Scalextric (France, set 2), Scalextric (Germany), Scalextric (Italy, set 1), Scalextric (Italy, set 2), Scalextric (Portugal), Scalextric (Spain, set 2), Scalextric (Spain, set 3), Scalextric (Spain, set 4), Scalextric (Spain, set 5), Scalextric (USA), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
-- New drivers: atamanot.cpp, dyna_dc4000.cpp and scalextric.cpp
+- New Non-Working games: Fengyun Zhengba, Galaxian Fever (Japan, ver 1.28), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Scalextric (Spain, set 1), Shooting Paradise (Japan, ver 1.10). Super Rally (v0204, 2-Feb-1996) and 'unknown Dyna mahjong game (V1.60)'.
+- New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Scalextric (America), Scalextric (England, set 1), Scalextric (England, set 2), Scalextric (France, set 1), Scalextric (France, set 2), Scalextric (Germany), Scalextric (Italy, set 1), Scalextric (Italy, set 2), Scalextric (Portugal), Scalextric (Spain, set 2), Scalextric (Spain, set 3), Scalextric (Spain, set 4), Scalextric (Spain, set 5), Scalextric (USA), Super Rally (v0107), Super Rally (v0201, 6-Nov-1995), Super Rally (v0203, 19-Dec-1995), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
+- New drivers: atamanot.cpp, dyna_dc4000.cpp, scalextric.cpp and sralslot.cpp
 - New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
   . Dynamic Re-Compiling: Removed i686 recompiler back-end. Without a practical way to make Windows i686 builds, it's just going to rot. Also, x86-64 is now older than Pac-Man was when MAME was initially created. It's dead on the desktop (cpu\drcbex86.cpp).
   . Intel 8051: Changed address space names to resemble those used by Intel's tools (mcs51\i8051.cpp and mcs51\mcs51ops.cpp)
   . Intel I386: Added CPUID brand ID for Pentium 3 and 4 (i386\i386.cpp and i386\i486ops.hxx). Avoid arithmetic between different enum types (i386\i386dasm.h).
+  . Mitsubishi M37450: Port arrays were the wrong size (m6502\m3745x.cpp)
   . Motorola MC68000 (Musashi): Only allow one fault per instruction at a time (m68000\m68kcpu.cpp)
   . PowerPC drc: Fixed several errors in the 601 legacy POWER instructions. DOZI: The immediate value needed to be sign-extended, an unsigned comparison was used where signed is correct, and the operation is a subtract, not an add. DOZ: Same errors as DOZI minus the sign extension since there's no immediate involved. ABS/NABS: Fixed the condition register update. MASKIR: Flag update was trashing the result register and CR0 wasn't updated. Also fixed a typo in a comment for DIVWx (code was correct) (powerpc\ppcdrc.cpp).
   . Zilog Z86xx: Fixed disassembly of opcode D7 (LD x(r2), r1 - indexed register write). The register nibble roles were swapped and the operand order showed it as a read instead of a write. Both C7 and D7 encode byte 1 the same way (high nibble = r1, low nibble = r2). The only difference is operand order: C7 reads from indexed, D7 writes to indexed. Before: D7 DC 01 disassembles as "LD R12, 01h(R13)". After:  D7 DC 01 disassembles as "LD 01h(R12), R13" (z8\z8dasm.cpp).
@@ -88,7 +89,7 @@
   . Namco 186/187 or C355/187 (sprites): Removed hardcoded namcos21 scroll adjust. Added notes. Removed assumption that it has 2 active spritelists (shared\namco_c355spr.cpp). Assume same C355 scroll for ds5000 and gal3 offset as namcos21.
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM). 
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
-  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors. Updated aircomb QA note.
+  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related, fixes Air Combat 3D colors. Guard against possible array OOB (namco\namcos21_3d.cpp)
   . Namco System 21 DSP Setup (5x C67 type)
     . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Issue a DSP chip reset when the line is high, fixes Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
     . Reorder display command processing and removed obsolete yield_hack and other hacks (namco\namcos21_dsp_c67.cpp).
@@ -126,21 +127,23 @@
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
 - namcos21.cpp
-  . Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority.
+  . Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority. Mark winrungp GPU prg roms as bad dump.
   . Improved bgpen. Imperfect sound flag for the driving games. Removed GPU maskram and winrun_ prefix from functions/variables. Tweak analog controls for the driving games.
-  . Improved non-3d layer a bit. Removed unneeded maincpu yield and mark savestates as supported. Small cleanup. Moved draw_quads to 3D device (namco\namcos21_dsp.cpp).
+  . Improved non-3d layer a bit. Removed unneeded maincpu yield and mark savestates as supported. Small cleanup. Moved draw_quads to 3D device (namco\namcos21_dsp.cpp). Correction to sound bank write.
 - namcos21_c67.cpp
   . Promoted Air Combat (AC1, Japan), Air Combat (AC2, US), Cyber Sled (CY1, World?), Cyber Sled (CY2, World) and Solvalou (SV1, Japan) to working.
-  . Preliminary mixing register hookup, fixes Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors (namco\namcos21_3d.cpp).
+  . Preliminary mixing register hookup, fixes Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors (namco\namcos21_3d.cpp). Updated aircomb QA note.
   . Hookup video enable bit (Solvalou after POST). Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp). Added internal artwork (layout\solvalou.lay). Reorder display command processing, fixes Solvalou crashes during the first level (namco\namcos21_dsp_c67.cpp) (ID 02085). Solvalou uses less poly colors. Added more views to Solvalou internal artwork.
-  . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat (namco\namcos21_dsp_c67.cpp).
-  . Tweak analog controls. Improved bgpen blend. Added note about DSP clock.
+  . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat (namco\namcos21_dsp_c67.cpp) (ID 06302).
+  . Tweak analog controls. Improved bgpen blend. Added note about DSP clock. Correction to sound bank write.
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
+- namcos6.cpp: Fleshed out driver
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
 - sg_vga.cpp
   . Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp.
   . Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select and sound ROM bankswitch. Updated PCB info.
+  . Hooked up hopper
 - ssingles.cpp: Convert VRAM to use std::unique_ptr rather than share_ptr. Allows visibility in debugger.
 - stella8085.cpp: Deduplicate and translate service keyboard. Fixed inputs in game 'Disc'.
 - stellafr.cpp
@@ -162,7 +165,7 @@
 - Computer Quiz Atama no Taisou: Preliminary kanji hookup. Split game in own driver. Convert protection area to address_map_bank. Hookup NMI and try to get a sense over ROM bank.
 - Doraemon no Dokodemo Door: Added Japanese button descriptions
 - Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
-- Driver's Eyes: Improved bgpen blend
+- Driver's Eyes: Improved bgpen blend. Correction to sound bank write.
 - DS-5000 Driving Simulator: Added some base execution
 - Fortune I: Fixed vram banking. Fixes screen is mostly filled with garbage in clone Video Poker (v1403) (ID 09443).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
@@ -181,10 +184,10 @@
 - Splatterhouse: Removed space in title (ID 09421)
 - Syusse Oozumou: Added scanline timer from tagteam/matmania, also invert vblank flag in this driver too (similar inactive crowd bug as matmania).
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
-- Description changes of Black Tiger (US), Black Tiger (US, older), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan, ver 1.00), Mahjong Quest (Japan, no nudity), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
+- Description changes of Black Tiger (US), Black Tiger (US, older), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Doki Doki! Flower (DFL1, Ver. A07), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan, ver 1.00), Mahjong Quest (Japan, no nudity), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs) and Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs).
 - Fixed rom names in royalmah.cpp
 - Renamed (dreamcha) to (dreamhld), (f1dream) to (f1dreama), (shimpact) to (shimpactl1), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
-- Dipswitch fixes in dyna_dc4000.cpp, dynax.cpp, gng.cpp, homedata.cpp, lanmao.cpp, namcos10.cpp, ps_m3.cpp and sg_vga.cpp
+- Dipswitch fixes in dyna_dc4000.cpp, dynax.cpp, gng.cpp, homedata.cpp, lanmao.cpp, namcos6.cpp, namcos10.cpp, ps_m3.cpp and sg_vga.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Removed Altivec/VMX bilinear filtering implementation. PowerPC on desktop is dead (video\rgbutil.cpp).
