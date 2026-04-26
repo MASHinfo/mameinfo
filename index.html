@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 25th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 26th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -59,7 +59,7 @@
 - New Non-Working games: Fengyun Zhengba, Galaxian Fever (Japan, ver 1.28), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Scalextric (Spain, set 1), Shooting Paradise (Japan, ver 1.10). Super Rally (v0204, 2-Feb-1996) and 'unknown Dyna mahjong game (V1.60)'.
 - New clones: Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Golden Tee 3D Golf Tournament (v2.30), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Scalextric (America), Scalextric (England, set 1), Scalextric (England, set 2), Scalextric (France, set 1), Scalextric (France, set 2), Scalextric (Germany), Scalextric (Italy, set 1), Scalextric (Italy, set 2), Scalextric (Portugal), Scalextric (Spain, set 2), Scalextric (Spain, set 3), Scalextric (Spain, set 4), Scalextric (Spain, set 5), Scalextric (USA), Super Rally (v0107), Super Rally (v0201, 6-Nov-1995), Super Rally (v0203, 19-Dec-1995), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
 - New drivers: atamanot.cpp, dyna_dc4000.cpp, scalextric.cpp and sralslot.cpp
-- New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, jaleco_zoomspr, aleco_zoomspr_bigrun, jaleco_road, jaleco_zoom_road, kbd_type2_hle, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
+- New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, jaleco_zoomspr, aleco_zoomspr_bigrun, jaleco_road, jaleco_zoom_road, kbd_type2_hle, mb87077, mixer, pc6022, polepos_wsg, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - CPU
   . Dynamic Re-Compiling: Removed i686 recompiler back-end. Without a practical way to make Windows i686 builds, it's just going to rot. Also, x86-64 is now older than Pac-Man was when MAME was initially created. It's dead on the desktop (cpu\drcbex86.cpp).
   . Intel 8051: Changed address space names to resemble those used by Intel's tools (mcs51\i8051.cpp and mcs51\mcs51ops.cpp)
@@ -82,6 +82,7 @@
   . DECO 104/146 Protection: Cleaned up code. Made fixed configuration constructor parameters. Suppress side effects for debugger reads properly. Made member variables private, reduced unnecessary includes. Use m_ prefix for member variables, use explicitly sized integers for values that are saved. Use logmacro.h for configurable logging. Use BIT helper to extract individual bits. Fixed descramble input.
   . Discrete Netlist: Avoid comparing enum to floatint point (sound\discrete.h). Check for mismatched number of parameters passed to device macros at compile time (lib\netlist\). Use C++20 __VA_OPT__ to simplify device registration code (netlist\nl_setup.cpp). Generate check for correct number of arguments (netlist\build\create_devinc.py).
   . Floppy: Allow specifying explicit start and end sectors when getting PC MFM track data. Ensoniq VFX and EPS family floppies use 10 sectors per track, starting at sector 0 rather than the more common sector 1. The code in 'esq16_dsk.cpp' handles this when loading floppy images, but not when saving them. This attempts to fix this in a way that is not only specific to Ensoniq's floppy images, but to possibly other future ones as well. In 'flopimg.cpp', allow specifying explicit start and end sectors when getting PC MFM track data. In 'esq16_dsk.cpp', use this to explicitly specifying sectors 0 to 9 when getting the track data to save (formats\flopimg.cpp and formats\esq16_dsk.cpp). Override number of tracks for .1dd format. Fixed booting in most if not all hash/smc777.xml FDC failures (formats\d88_dsk.cpp).
+  . Fujitsu MB87077 Volume Controller: Hook up MB87077 to the driving games (namcos21.cpp and namcos21_de.cpp). Changed gain to float (sound\mb87077.cpp).
   . H8 Serial Communications Interface: Added TODO note. Correct m_ssr_read logic (h8\h8_sci.cpp).
   . IGS023 Video System: Use BIT helper to extract single bits and util::sext to sign extend values. Use logmacro.h for logging feature. Use address maps for RAM/video register area. Implemented additional features: Sprite DMA, disable specific layer and ccanline counter (verified from hardware). Expanded palette area for fix possible out of bound text palette issue. Reference: https://github.com/laoo/PGMTech (igs\igs023_video.cpp).
   . Imgtool: Use UTF-8 console I/O on Windows, don't use wide char streams (imgtool\imgtool.cpp).
@@ -135,19 +136,21 @@
 - lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
 - matmania.cpp: Added screen raw params, invert vblank flag and correct soundcpu clock and NMI timing.
 - megasys1.cpp: Cleaned up code: Cleaned up ROM loading and made region names better match Jaleco's naming. Suppress side effects for debugger reads and improved logging. Reduced literal tag usage and preprocessor macros. Slightly optimized sprite drawing (jaleco\megasys1.cpp). Use required_address_space for target space to install handler (jaleco\ms1_gatearray.cpp).
-- namcos2.cpp: Use memory_share_creator for the NVRAM
+- namcos2.cpp: Use memory_share_creator for the NVRAM. Added default NVRAM to 'Valkyrie no Densetsu'.
 - namcos10.cpp: Added the 'Service Mode' DIP switch to Gamshara and Point Blank 3
 - namcos21.cpp
   . Upper palette entries 0 & 1 controls mixing, fixes winrun/winrungp/winrun91 title screen priority. Mark winrungp GPU prg roms as bad dump.
   . Improved bgpen. Imperfect sound flag for the driving games. Removed GPU maskram and winrun_ prefix from functions/variables. Tweak analog controls for the driving games.
   . Improved non-3d layer a bit. Removed unneeded maincpu yield and mark savestates as supported. Small cleanup. Moved draw_quads to 3D device (namco\namcos21_dsp.cpp). Correction to sound bank write.
   . Use memory_share_creator for the NVRAM. Winning Run shifter was the wrong way around.
+  . Hook up 'Fujitsu MB87077 Volume Controller' to the driving games. Lower number of mixers to 2. audiocpu irq0 is unused.
 - namcos21_c67.cpp
-  . Promoted Air Combat (AC1, Japan), Air Combat (AC2, US), Cyber Sled (CY1, World?), Cyber Sled (CY2, World) and Solvalou (SV1, Japan) to working.
+  . Promoted Air Combat (AC1, Japan), Air Combat (AC2, US), Cyber Sled (CY1, World?), Cyber Sled (CY2, World) and Solvalou (SV1, Japan) to working. Added default NVRAM to Solvalou and Starblade. 'uninvert' analog y anyway in Starblade.
   . Preliminary mixing register hookup, fixes Air Combat gameplay priority. Bit 7 of code really doesn't seem depth cue related (namco\namcos21_3d.cpp), fixes Air Combat 3D colors (namco\namcos21_3d.cpp). Updated aircomb QA note.
   . Hookup video enable bit (Solvalou after POST). Issue a DSP chip reset when the line is high, fixes Starblade/Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp). Added internal artwork (layout\solvalou.lay). Reorder display command processing, fixes Solvalou crashes during the first level (namco\namcos21_dsp_c67.cpp) (ID 02085). Solvalou uses less poly colors. Added more views to Solvalou internal artwork.
-  . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat (namco\namcos21_dsp_c67.cpp) (ID 06302).
-  . Tweak analog controls. Improved bgpen blend. Added note about DSP clock. Correction to sound bank write.
+  . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat (namco\namcos21_dsp_c67.cpp) (ID 06302). Correct cybsled speaker placement.
+  . Tweak analog controls. Improved bgpen blend. Added note about DSP clock. Correction to sound bank write. audiocpu irq0 is unused.
+- namcos21_de.cpp: Improved bgpen blend. Correction to sound bank write. Hook up 'Fujitsu MB87077 Volume Controller'. audiocpu irq0 is unused.
 - namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
 - namcos6.cpp: Fleshed out driver
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
@@ -178,7 +181,6 @@
 - Computer Quiz Atama no Taisou: Preliminary kanji hookup. Split game in own driver. Convert protection area to address_map_bank. Hookup NMI and try to get a sense over ROM bank.
 - Doraemon no Dokodemo Door: Added Japanese button descriptions
 - Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
-- Driver's Eyes: Improved bgpen blend. Correction to sound bank write.
 - DS-5000 Driving Simulator: Added some base execution
 - Fortune I: Fixed vram banking. Fixes screen is mostly filled with garbage in clone Video Poker (v1403) (ID 09443).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
