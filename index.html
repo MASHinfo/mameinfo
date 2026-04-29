@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 28th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 29th April 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -99,11 +99,11 @@
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
   . Namco C148 Interrupt Controller: Fixed possible crash. Removed assumption that it clears all irqs when writing to any irqlevel reg. posirq line doesn't belong in this device. Assume 1d4xxx is busack (namco\namco_c148.cpp).
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
-  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related, fixes Air Combat 3D colors. Guard against possible array OOB (namco\namcos21_3d.cpp)
+  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related, fixes Air Combat 3D colors. Guard against possible array OOB. Shorthand variable types. Removed some obsolete stuff (namco\namcos21_3d.cpp)
   . Namco System 21 DSP Setup (1x TMS320C25 type): Moved draw_quads to 3D device. Shorthand variable types (namco\namcos21_dsp.cpp).
   . Namco System 21 DSP Setup (5x C67 type)
-    . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Issue a DSP chip reset when the line is high, fixes Solvalou 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
-    . Reorder display command processing and removed obsolete yield_hack and other hacks. Moved draw_quads to 3D device. Shorthand variable types (namco\namcos21_dsp_c67.cpp).
+    . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Issue a DSP chip reset when the line is high, fixes Solvalou and Starblade 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
+    . Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat and Solvalou crashes during the first level. Removed obsolete yield_hack and other hacks. Moved draw_quads to 3D device. Shorthand variable types. Added a missing side effects check (namco\namcos21_dsp_c67.cpp).
   . Namco System 21 DSP Setup (1x TMS320C25 type): Moved draw_quads to 3D device (namco\namcos21_dsp.cpp)
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
   . NEC uPD7801: Fixed port C direction bits
@@ -158,9 +158,14 @@
   . Tweak analog controls. Improved bgpen blend. Added note about DSP clock. Correction to sound bank write. audiocpu irq0 is unused. Small improvement to sprite layer 0 priority.
   . Video disable bg is black. Assume audiocpu rom range is c000-ffff
 - namcos21_de.cpp: Improved bgpen blend. Correction to sound bank write. Hook up 'Fujitsu MB87077 Volume Controller'. audiocpu irq0 is unused. Video disable bg is black. Assume audiocpu rom range is c000-ffff.
-- namcos22.cpp: Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
+- namcos22.cpp
+  . Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
+  . Make pointrom access a bit more similar to namcos21
 - namcos6.cpp: Fleshed out driver
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
+- pacman.cpp
+  . Fixed clone 'Ms. Pacman Champion Edition / Zola-Puc Gal' timer selection, I/O mux behavior and added speed dipswitch.
+  . Removed clones Crush Roller (set 4)/(set 5) rombanks
 - psikyosh.cpp: Use tilemaps to draw tile map layers. Also reduced literal tag usage, optimized a little and cleaned up code. Fixed sprite flip and zbuffer. Fixed Z buffer bitmap address calculation in sprite draw routine. Fixed save state support. Fixed spacings. Added notes (psikyo\psikyosh_v.cpp).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
 - segas32.cpp: Use tilemap for text layer and cleaned up code. Moved imperfect graphics flag to state class to unclutter system definitions. Reduced literal tag usage and added side effect checks to read handlers. Fixed color amount in gfx layout.
@@ -175,7 +180,7 @@
   . Fixed memory map for SuS. Added mem map for SuS. Split devices with TK or RTC. Most of the devices with "Spiel und Speicher Modul" use timekeeper(tk), but some of them a RTC instead. Adapt init functions and CPU frequency.
 - suprnova.cpp: Cleaned up code and fixed minor issues: Added side effect checks for debugger reads. Fixed possible bitmap out-of-bounds errors. Improved logging. Minor optimizations. Replaced pointers with references, made some variables const and use abbreviated integer types. Reduced duplication and improved consistency.
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
-- taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE.
+- taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE. Fixed regression with sprite area cliprect (taito\taitosj_v.cpp).
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
 - tigeroad.cpp
   . Measured video timing and MCU freq. Added manual sprite DMA trigger and irq4. Correct objram range. Removed m_has_coinlock variable.
@@ -195,7 +200,7 @@
 - Fortune I: Fixed vram banking. Fixes screen is mostly filled with garbage in clone Video Poker (v1403) (ID 09443).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
-- Kuzmich-Egorych: Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR
+- Kuzmich-Egorych: Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR. Fixed low-memory -ramsize crash by protecting HGR reads (apple\apple2video.cpp)
 - Mahjong games: Cleaned up another batch of mahjong inputs
 - Mobile Suit Gundam EX Revue: Demoted game as MACHINE_IMPERFECT_TIMING. It has overall timing issues and also displays a black screen when the flip screen DIP switch is on.
 - Mysterious Stones: Added TODO note, vblank flag was wrong way around here too (eg. it started writing gfx at the start of active display area instead of at start of vblank). Assume it has 16 interrupts per frame.
