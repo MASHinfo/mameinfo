@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 30th April 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 1st May 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -120,7 +120,7 @@
   . Z80 SCC Channel: Fixed external clock source selection and start bit timing (machine\z80scc.cpp)
   . Zilog Z80 DMA Controller: Fixed counter state returning natural value in (MESS) ZX Spectrum Next mode (machine\z80dma.cpp).
 - atarig42.cpp and atarigx2.cpp: Optimized tilemap drawing. Note: tileinfo.category value for playfield tilemap is controlled by overall bank 0 it can be optimized to single tilemap draw with variable priority value controlled at bank.
-- atlantis.cpp and midzeus.cpp: Set m_system from setter not from strcmp, fixes thegrid/crusnexo/mwskins clones (video\zeus2.cpp)
+- atlantis.cpp and midzeus.cpp: Set m_system from setter not from strcmp, fixes thegrid/crusnexo/mwskins clones (video\zeus2.cpp).
 - bogeyman.cpp, matmania.cpp, mystston.cpp, ssozumo.cpp and tagteam.cpp: Added TODO note about vcount timing
 - cave.cpp: Made 013 sprite generator a separated device (previously in atlus\cave_v.cpp) (atlus\sprite013.cpp). Suppress side effects for debugger reads. Use single-pass sprite drawing. Cleaned up code.
 - cischeat.cpp and scudhamm.cpp
@@ -159,7 +159,7 @@
   . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat (namco\namcos21_dsp_c67.cpp) (ID 06302). Correct cybsled speaker placement.
   . Tweak analog controls. Improved bgpen blend. Added note about DSP clock. Correction to sound bank write. audiocpu irq0 is unused. Small improvement to sprite layer 0 priority.
   . Video disable bg is black. Assume audiocpu rom range is c000-ffff. Assume reset_all_subcpus also resets the associated C148. Tighter quantum just to be sure (by same factor of previous DSP underclock). Tweak video timing and some other clocks.
-- namcos21_de.cpp: Improved bgpen blend. Correction to sound bank write. Hook up 'Fujitsu MB87077 Volume Controller'. audiocpu irq0 is unused. Video disable bg is black. Assume audiocpu rom range is c000-ffff. Assume reset_all_subcpus also resets the associated C148. Tweak video timing and some other clocks.
+- namcos21_de.cpp: Improved bgpen blend. Correction to sound bank write. Hook up 'Fujitsu MB87077 Volume Controller'. audiocpu irq0 is unused. Video disable bg is black. Assume audiocpu rom range is c000-ffff. Assume reset_all_subcpus also resets the associated C148. Tweak video timing and some other clocks. Disable sound output for left and right PCBs.
 - namcos22.cpp
   . Do disabled textures pen a bit differently. Assume disabled textures pen is 15bit. OR texture color with high bits of cz_adjust (namco\namcos22_v.cpp). Trigonometry isn't necessary and multiplications can be reduced in trackball remapping.
   . Make pointrom access a bit more similar to namcos21
@@ -193,6 +193,7 @@
 - American Poker II: Demoted clone Rabbit Poker (Arizona Poker v1.1?) to not working (undumped PIC for protection?). 
 - Bao Qing Tian: Moved 'Bao Qing Tian' to Dynax driver and made it boot. Wrong colors, so not working for now.
 - Bionic Commando: Assume same video timing as tigeroad. Prevent scheduler issue after halting maincpu. Correct objram range. Assume interrupt timing is same as f1dream hw (no change) and coinlock in service mode is deliberate.
+- BloodStorm: Added 2.01 sound ROM for the newer revisions and improved ROM labels
 - Bogey Manor: Added scanline timer
 - Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
 - Computer Quiz Atama no Taisou: Preliminary kanji hookup. Split game in own driver. Convert protection area to address_map_bank. Hookup NMI and try to get a sense over ROM bank.
@@ -203,7 +204,7 @@
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
 - Jr. Pac-Man and Pengo: Derive mcfg from pacman
-- Kuzmich-Egorych: Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR. Fixed low-memory -ramsize crash by protecting HGR reads (apple\apple2video.cpp)
+- Kuzmich-Egorych: Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR. Fixed low-memory -ramsize crash by protecting HGR reads. Fixed ivelultr/dodo/laser2c text rendering. Align character bits to match hardware reference. Also cleanup template instantiations (apple\apple2video.cpp).
 - Mahjong games: Cleaned up another batch of mahjong inputs. Exposed base mahjong matrix panel class to simplify creating devices that are essentially mahjong panels with weird labels (shared\mahjong.cpp) (Drivers: bnstars.cpp, ddenlovr.cpp, dynax.cpp, fromanc2.cpp, fromance.cpp, ghosteo.cpp, goodejan.cpp, homedata.cpp, igs_fear.cpp, igs_m027.cpp, igs_m027_023vid.cpp, igs011.cpp, igs017.cpp, igsmahjong.cpp, kiwame.cpp, mahjong.cpp, metro.cpp, mirage.cpp, mjkjidai.cpp, mjsister.cpp, ms32.cpp, nyanpai.h, ojankohs.cpp, psikyo4.cpp, royalmah.cpp, seibuspi.cpp, seta2.cpp, srmp5.cpp, srmp6.cpp, ssv.cpp, stv.cpp, taito_f2.cpp, taitogn.cpp, tmmjprd.cpp and vsmjtria.cpp)
 - Mobile Suit Gundam EX Revue: Demoted game as MACHINE_IMPERFECT_TIMING. It has overall timing issues and also displays a black screen when the flip screen DIP switch is on.
 - Mysterious Stones: Added TODO note, vblank flag was wrong way around here too (eg. it started writing gfx at the start of active display area instead of at start of vblank). Assume it has 16 interrupts per frame.
@@ -222,7 +223,7 @@
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
 - Top Landing: Dumped motor ROM board
 - Description changes of Black Tiger (US), Black Tiger (US, older), BloodStorm (vX.XX), Cuty Line Limited (ver.1.30, CLLB), Danger Track (bootleg of Rally-X), Doki Doki! Flower (DFL1, Ver. A07), Dream Hold (Rev-FET100), F-1 Dream (set 2), El Dorado (Dyna D9101 HW, V1.4D), El Dorado (Dyna D9101 HW, V1.5U, Dyna/Grayhound), El Dorado (Dyna D9105 HW, V1.1J), El Dorado (Dyna D9105 HW, V1.1TA), El Dorado (Dyna D9105 HW, V1.1U), El Dorado (Dyna D9105 HW, V2.0D), El Dorado (Dyna D9106 HW, V5.1DR), Happy Planet (Japan, ver 1.00), Mahjong Quest (Japan, no nudity), Makaimura (Japan revision A?), Mysterious Stones: Dr. John's Adventure, Mysterious Stones: Dr. Kick in Adventure, Mysterious Stones: Dr. Kick in Adventure (Itisa PCB), New Rally-X, New Rally-X (bootleg?), Rally-X, Rally-X (32k Ver.?), Rally-X (Midway), Rally-X (Model Racing bootleg), Rally-X (Tecnidiver bootleg), Rally-X (Video Game bootleg), Scud Hammer (Japan, older version?), Scud Hammer (Japan, ver 1.4), Splatterhouse (Japan, SH1), Splatterhouse (World, new version (SH3)), Splatterhouse (World, old version (SH2)), Tiger Road (US bootleg, set 1), Trivia ? Whiz (6221-00, Rev A question ROMs), Trivia ? Whiz (6221-03, U5-0, Rev B question ROMs), Trivia ? Whiz Edition 2 (6221-05, Original rev Sex trivia ROMs), Trivia ? Whiz Edition 2 (6221-05, Rev A question ROMs), Winning Run '91 (Japan) (1991/03/05, Ver 1.0) and Winning Run: Suzuka GP (Japan) (89/12/03, Ver.02)
-- Fixed rom names in royalmah.cpp
+- Fixed rom names in itech32.cpp and royalmah.cpp
 - Renamed (dreamcha) to (dreamhld), (f1dream) to (f1dreama), (shimpact) to (shimpactl1), (trvwza) to (trvwzs) and (trvwzb) to (trvwza).
 - Dipswitch fixes in dyna_dc4000.cpp, dynax.cpp, gng.cpp, homedata.cpp, lanmao.cpp, namcos6.cpp, namcos10.cpp, pacman.cpp, ps_m3.cpp and sg_vga.cpp
 - MAME
