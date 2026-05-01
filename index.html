@@ -58,7 +58,7 @@
 - New Working games: Air Combat (AC1, Japan), Air Combat (AC2, US), Cyber Sled (CY1, World?), Cyber Sled (CY2, World) and Solvalou (SV1, Japan)
 - New Non-Working games: Charmy Dash (Japan), Fengyun Zhengba, Galaxian Fever (Japan, ver 1.28), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), International Superstar Soccer Deluxe (SNES bootleg), Lucky Colors (v1.1i) (Italy), Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, Royal Selection (Japan, ver. 1.01), Scalextric (Spain, set 1), Shooting Paradise (Japan, ver 1.10). Super Rally (v0204, 2-Feb-1996) and 'unknown Dyna mahjong game (V1.60)'.
 - New clones: BloodStorm (v2.16), Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Golden Tee 3D Golf Tournament (v2.30), Looping (US, set 4), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Super High Impact (rev LA2 10/22/91), Scalextric (America), Scalextric (England, set 1), Scalextric (England, set 2), Scalextric (France, set 1), Scalextric (France, set 2), Scalextric (Germany), Scalextric (Italy, set 1), Scalextric (Italy, set 2), Scalextric (Portugal), Scalextric (Spain, set 2), Scalextric (Spain, set 3), Scalextric (Spain, set 4), Scalextric (Spain, set 5), Scalextric (USA), Super Rally (v0107), Super Rally (v0201, 6-Nov-1995), Super Rally (v0203, 19-Dec-1995), Tiger Road (US bootleg, set 2), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru
-- New drivers: atamanot.cpp, dyna_dc4000.cpp, scalextric.cpp and sralslot.cpp
+- New drivers: atamanot.cpp, dyna_dc4000.cpp, scalextric.cpp, scudhamm.cpp and sralslot.cpp
 - New devices: cmi8738, cs4281, dio98259, fsa_channel, i7220_1, igs011, igs012, intel_mbm, jaleco_road, jaleco_zoom_road, jaleco_zoomspr, jaleco_zoomspr_bigrun, kbd_type2_hle, mb87077, mixer, pc6022, polepos_wsg, rselect_panel, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf and ymf740c
 - New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
 - CPU
@@ -97,10 +97,10 @@
   . Kaneko VU002 Sprites: Added double buffering. Use fixed size framebuffers to fix save state support. Implemented double buffered framebuffer. Fixed framebuffer clear behaviour - match as kan_pand.cpp (also double buffered) and real hardware (kaneko\kaneko_spr.cpp).
   . Namco 186/187 or C355/187 (sprites): Removed hardcoded namcos21 scroll adjust. Added notes. Removed assumption that it has 2 active spritelists (shared\namco_c355spr.cpp). Assume same C355 scroll for ds5000 and gal3 offset as namcos21.
   . Namco C123 (4x + 2x Tilemaps), Namco C169 (ROZ) and Namco 186/187 or C355/187 (sprites): Use device_delegate for callbacks. Added default behaviour when callbacks are unset (just copy directly from RAM).
-  . Namco C148 Interrupt Controller: Fixed possible crash. Removed assumption that it clears all irqs when writing to any irqlevel reg. posirq line doesn't belong in this device. Assume 1d4xxx is busack (namco\namco_c148.cpp).
+  . Namco C148 Interrupt Controller: Fixed possible crash. Removed assumption that it clears all irqs when writing to any irqlevel reg. posirq line doesn't belong in this device. Assume 1d4xxx is busack. Make ext read a callback (namco\namco_c148.cpp).
   . Namco C45 Road: Use .m for address map instead trampolines. Removed device_memory_interface related stuff (not needed due to above). Made some variables const, use util::sext for sign extension. Reduced literal tag usage (namco\namco_c45road.cpp).
-  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related, fixes Air Combat 3D colors. Guard against possible array OOB. Shorthand variable types. Removed some obsolete stuff (namco\namcos21_3d.cpp)
-  . Namco System 21 DSP Setup (1x TMS320C25 type): Moved draw_quads to 3D device. Shorthand variable types. Removed winrun_ prefix. Saftety mask for possible array OOB. Different method for sending data to renderer. Added poly size mismatch check (namco\namcos21_dsp.cpp).
+  . Namco System 21 3D Rasterizer: Fixed x/y end limits. Bit 7 of code really doesn't seem depth cue related, fixes Air Combat 3D colors. Guard against possible array OOB. Shorthand variable types. Removed some obsolete stuff. Z param can be negative (namco\namcos21_3d.cpp)
+  . Namco System 21 DSP Setup (1x TMS320C25 type): Moved draw_quads to 3D device. Shorthand variable types. Removed winrun_ prefix. Saftety mask for possible array OOB. Different method for sending data to renderer. Added poly size mismatch check. Improved DSP comram (namco\namcos21_dsp.cpp).
   . Namco System 21 DSP Setup (5x C67 type)
     . Removed Cyber Sled specific kickstart delay, fixes title screen appearance. Issue a DSP chip reset when the line is high, fixes Solvalou and Starblade 3D graphics after exiting service mode (namco\namcos21_dsp_c67.cpp).
     . Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat and Solvalou crashes during the first level. Removed obsolete yield_hack and other hacks. Moved draw_quads to 3D device. Shorthand variable types. Added a missing side effects check (namco\namcos21_dsp_c67.cpp).
@@ -166,7 +166,7 @@
 - namcos6.cpp: Fleshed out driver
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
 - pacman.cpp
-  . Fixed clone 'Ms. Pacman Champion Edition / Zola-Puc Gal' timer selection, I/O mux behavior and added speed dipswitch.
+  . Fixed clone 'Ms. Pacman Champion Edition / Zola-Puc Gal' timer selection, I/O mux behavior and added 'Speed' dipswitch (ID 05446).
   . Removed clones Crush Roller (set 4)/(set 5) rombanks
 - psikyosh.cpp: Use tilemaps to draw tile map layers. Also reduced literal tag usage, optimized a little and cleaned up code. Fixed sprite flip and zbuffer. Fixed Z buffer bitmap address calculation in sprite draw routine. Fixed save state support. Fixed spacings. Added notes (psikyo\psikyosh_v.cpp).
 - rawthrillspc.cpp: BIOS 1 is 1.0.4, not 1.0.3.
@@ -190,7 +190,7 @@
 - zaccaria.cpp: Small accuracy improvement for clock_device when result divided clock is not an integer (zaccaria\zaccaria_a.cpp)
 - zaxxon.cpp: Cleaned up a little
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
-- American Poker II: Demoted clone Rabbit Poker (Arizona Poker v1.1?) to not working (undumped PIC for protection?). 
+- American Poker II: Demoted clone Rabbit Poker (Arizona Poker v1.1?) to not working (undumped PIC for protection?) (ID 09449). 
 - Bao Qing Tian: Moved 'Bao Qing Tian' to Dynax driver and made it boot. Wrong colors, so not working for now.
 - Bionic Commando: Assume same video timing as tigeroad. Prevent scheduler issue after halting maincpu. Correct objram range. Assume interrupt timing is same as f1dream hw (no change) and coinlock in service mode is deliberate.
 - BloodStorm: Added 2.01 sound ROM for the newer revisions and improved ROM labels
@@ -279,6 +279,7 @@
   . Removed unused member variables (netdev\pcap.cpp)
   . Added ATTR_COLD pass to PCI sound cards
   . Fixed errors linking jedutil and romcmp on newer Linux (src\tools.lua)
+  . Address some GCC16.1 warnings
 - Debugger
   . Added Edit menu with clipboard shortcuts. The MacOS Cocoa debugger only adds Debug and Run menus to the menu bar, so standard Cmd+X/C/V shortcuts are never routed through the responder chain to the command input NSTextField. Add an Edit menu with Cut, Copy, and Paste items to enable clipboard operations (debugger\debugosx.mm).
   . Fixed Qt debugger build on Windows with Clang. Qt provides inline definitions of dllimport functions, which causes a warning. There are too many of them to practically leave the warning enabled for this module (osd\modules.lua). It's no longer possible to get a working Qt 5 setup with MSYS2, and there's no 32-bit Qt 6 package. Updated docs to reflect this (docs\source\initialsetup\compilingmame.rst). Fixed build with Qt < 6.6 (qt\debuggerview.cpp). Fixed build with Qt 6 on AArch64 (debugger\debugqt.cpp).
