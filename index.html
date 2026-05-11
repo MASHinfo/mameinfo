@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 10th May 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 11th May 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -113,6 +113,7 @@
     . Reorder display command processing, fixes Cyber Sled crash after defeating round 3 in Vs. Computer Combat and Solvalou crashes during the first level. Removed obsolete yield_hack and other hacks. Moved draw_quads to 3D device. Shorthand variable types. Added a missing side effects check (namco\namcos21_dsp_c67.cpp).
     . Correct some dsp edge triggered ports and removed C67 underclock hack. Saftety mask for possible array OOB. Added poly size mismatch check (namco\namcos21_dsp_c67.cpp).
   . Namco WSG: Use device_memory_interface for waveform memory, allow config per hardware (ex: RAM in 20pacgal.cpp). Split Pole Position WSG into separate device. Added notes for polepos panning. Correct polepos sound device type. Added address map for common 15XX/CUS30 interface. Removed unnecessary configuration, use templated base class instead (also packed flag). Fixed mixing. Use logmacro.h for logging, reduced preprocessor macros and use references rather than pointers. Split device state for per-hardware differences. Fixed allocated size for sound register area. Made some variables const. Correct 20pacgal sound device type (sound\namco.cpp).
+  . NEC V50/V53: Correctly clock the V50/V53 DMAU based on the input clock (nec\v5x.cpp)
   . NEC uPD7801: Fixed port C direction bits
   . PC LPT: Added PS/2 bidirectional mode support (machine\pc_lpt.cpp)
   . PCI: Set HCHalted on cleared Run/Stop bit (machine\pci-usb.cpp)
@@ -213,13 +214,16 @@
   . Noved game Gluecks-Stern to correct driver
   . Fixed memory map for SuS. Added mem map for SuS. Split devices with TK or RTC. Most of the devices with "Spiel und Speicher Modul" use timekeeper(tk), but some of them a RTC instead. Adapt init functions and CPU frequency.
 - suprnova.cpp: Cleaned up code and fixed minor issues: Added side effect checks for debugger reads. Fixed possible bitmap out-of-bounds errors. Improved logging. Minor optimizations. Replaced pointers with references, made some variables const and use abbreviated integer types. Reduced duplication and improved consistency.
+- system1.cpp: Removed set_vblank_int
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
 - taitosj.cpp: Small cleanup to input ports. Fixed array OOB access on sprite bitmap. Fixed nomcu ram range (adcanoe test mode). Set screen VIDEO_ALWAYS_UPDATE. Fixed regression with sprite area cliprect (taito\taitosj_v.cpp).
 - taitowlf.cpp: Hookup Super I/O. Base implementation of a Winbond W83877TF Super I/O (machine\w83877tf.cpp).
 - tigeroad.cpp
   . Measured video timing and MCU freq. Added manual sprite DMA trigger and irq4. Correct objram range. Removed m_has_coinlock variable.
   . Improved F-1 Dream soundlatch timing. Prevent scheduler issue after halting maincpu.
-- vamphalf.cpp: Added Korean game titles to comments and fixed various issues. Suppress side effects for debugger reads and fixed save state issues. Reduced duplication. Use BIT helper to extract bits and reduced literal tag usage.
+- vamphalf.cpp
+  . Added Korean game titles to comments and fixed various issues. Suppress side effects for debugger reads and fixed save state issues. Reduced duplication. Use BIT helper to extract bits and reduced literal tag usage.
+  . Hookup FPGA protection devices (misc\vamphalf_prot.cpp) to Mission Craft and Wyvern Wings. TODO: Mission Craft sound dies during stage 1-5. Fix Wyvern Wings upper limit of credits count not really understood.
 - voyager.cpp: Improved single shot playback for Trident 4DWave PCI sound card. Added ATTR_COLD pass (pci\trident_4dwavedx.cpp). Preliminary status/command hookup. Enough to make Voyager driver happy during Linux boot (pci\trident_4dwavedx.cpp, sound\ac97_stac9704.cpp).
 - zaccaria.cpp: Small accuracy improvement for clock_device when result divided clock is not an integer (zaccaria\zaccaria_a.cpp)
 - zaxxon.cpp: Cleaned up a little
@@ -239,6 +243,7 @@
 - DS-5000 Driving Simulator: Added some base execution
 - Fortune I: Fixed vram banking. Fixes screen is mostly filled with garbage in clone Video Poker (v1403) (ID 09443).
 - Ghosts'n Goblins: Makaimura (Japan) is an older version (has more bugs than rev b/g), so it's probably rev a. Only first japan revision (makaimur) has the debug dipsw (invincibility).
+- Gunbuster: Fixed sprite positioning
 - I, Robot: Cleanups and updates: Use logmacro.h for logging. Suppress side effects for debugger reads. Reduced literal tag usage and runtime tag lookups. Use configured banking. Use tilemap.h for text layer. Fixed save state support. Cleaned up code. Fixed ROM region sizes.
 - Jr. Pac-Man and Pengo: Derive mcfg from pacman
 - Kuzmich-Egorych: Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR. Fixed low-memory -ramsize crash by protecting HGR reads. Fixed ivelultr/dodo/laser2c text rendering. Align character bits to match hardware reference. Also cleanup template instantiations (apple\apple2video.cpp).
