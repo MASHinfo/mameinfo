@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 12th May 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 13th May 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -150,6 +150,9 @@
 - deco32.cpp: Added notes of sprite flicker
 - dooyong.cpp: Cleaned up code: Use device_gfx_interface to decode graphics and explicitly sized integers (dooyong\dooyong_tilemap.cpp). Reduced duplication and use m_palette->basemem() for banked palette RAM handler (dooyong\dooyong.cpp).
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
+- dynax.cpp
+  . Moved 'Bao Qing Tian' to Dynax driver and made it boot. Wrong colors, so not working for now.
+  . Dumped internal ROM for 'Mahjong Tokkyu Kaiten-ban Part 2 (Japan)'
 - firebeat.cpp: Added lamp outputs for Pop'n Music games
 - galaga.cpp: Use resnet for palette for bosco, digdug and galaga.
 - goldstar.cpp: Some minor cleanups. Fixed graphics banks/ROM banking for clone Tetris + Cherry Master (+K, Canada Version, encrypted) and added technical notes. The program is partially decrypted and needs more work. Added bipolar PROMs banking for better colors (still imperfect).
@@ -174,7 +177,7 @@
   . Promoted games to working: Bare Knuckle III (Conny bootleg of Mega Drive version), Contra (Conny bootleg of Mega Drive version), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), Gunstar Heroes / Snake Rattle n' Roll / Joe & Mac (Conny bootleg of Mega Drive versions) and Side Pocket (Conny bootleg of Mega Drive version)
 - megasys1.cpp: Cleaned up code: Cleaned up ROM loading and made region names better match Jaleco's naming. Suppress side effects for debugger reads and improved logging. Reduced literal tag usage and preprocessor macros. Slightly optimized sprite drawing (jaleco\megasys1.cpp). Use required_address_space for target space to install handler (jaleco\ms1_gatearray.cpp).
 - namcos2.cpp
-  . Use memory_share_creator for the NVRAM. Assume audiocpu rom range is c000-ffff. Correct voice0 rom access.
+  . Use memory_share_creator for the NVRAM. Assume audiocpu rom range is c000-ffff.
   . Added default NVRAM to 'Valkyrie no Densetsu'. Redumped tile ROMs for clone Final Lap 2 (Japan). Fixed shared data ROMs for Final Lap 2 (Japan). The Japanese Versions is used 2 fls1_dat0 and fls1_dat1 Shared data ROMs.
 - namcos6.cpp: Fleshed out driver
 - namcos86.cpp: Tighter quantum. Fixes clone Rolling Thunder (oldest) watchdog bites and game resets itself (ID 09430).
@@ -233,7 +236,6 @@
 - zerozone.cpp: Reduced audio CPU ROM region size to match mapped area. Also use BIT helper to extract bits.
 - Ace Driver: Racing Evolution: Fixed name entry screen palette issues
 - American Poker II: Demoted clone Rabbit Poker (Arizona Poker v1.1?) to not working (undumped PIC for protection?) (ID 09449). 
-- Bao Qing Tian: Moved 'Bao Qing Tian' to Dynax driver and made it boot. Wrong colors, so not working for now.
 - Bionic Commando: Assume same video timing as tigeroad. Prevent scheduler issue after halting maincpu. Correct objram range. Assume interrupt timing is same as f1dream hw (no change) and coinlock in service mode is deliberate.
 - BloodStorm: Added 2.01 sound ROM for the newer revisions and improved ROM labels
 - Bogey Manor: Added scanline timer
