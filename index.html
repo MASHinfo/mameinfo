@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 20th May 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 23rd May 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -54,14 +54,22 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.289GIT
 
-- New Non-Working games: Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
+- New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Kimme und Korn (F4), Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
 - New games: Planet Patrol
 - New clones: Mahjong Angel Kiss (ver 1.0, 92048-01 version) and Money Money (set 3)
+- New drivers: hkcastle.cpp
 - New devices: scsi_tape_news
+- adp.cpp: Changed ROM extensions for all games to match their PCB footprint position names.
+- pgm2.cpp: Added some notes and correct a couple of decryption keys (igs\igs036crypt.cpp)
+- stv.cpp: Extend mirror ranges of registers (sega\saturn_cd_hle.cpp)
 - Multi GAME XL: Hookup basic video and hookup palette bank
-- Puzznic: Added PAL rom c20-05.ic3 (Confirmed/Matches Japan Set)
-- Description changes of Bao Qing Tian (TIC) and Mahjong Angel Kiss (ver 1.0, 92047-01 version)
+- Pop'n Run - The Videogame: Removed "Yukai Tsukai" from companystring and useless quantum (besides, with the scanline timer it's already more than 60hz).
+- Puzznic: Added PAL rom c20-05.ic3 (Confirmed/Matches Japan Set) to Puzznic (World) and clone (US)
+- Ruleta Magica: Make it execute some code. Hook up UART. Basic video hookup. Map I2C EEPROM and Timekeeper.
+- Description changes of Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Pop'n Run: The Video Game (set 1), Pop'n Run: The Video Game (set 2), Ridge Racer (World, RRC, three monitor version), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000) and San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000)
+- Fixed rom names in adp.cpp
 - Dipswitch fixes in extrema_m27sv.cpp
+
 
 
 
@@ -338,6 +346,7 @@
     . Don't show the option to write to a floppy diff (it still isn't implemented, it can be re-added if it's ever implemented), don't pop the menus when selecting an item and avoid actual work in destructors (ui\filesel.cpp). Show more detail in the info box below the menu for software items and presets, substantially simplified the code for walking media devices (ui\filemngr.cpp). Got rid of the media information menu and added media information to the system information menu (ui\info.cpp).
     . Allow immediately adjusting the hovered item with pen/mouse, saving a click (ui\menu.cpp). Fall back to settings from INI files later in the search path (frontend\mame\mameopts.cpp).
     . Make earlier INI files take precedence over later INI files at the same priority level (util\options.cpp). Updated documentation on INI file handling.
+    . Better handling of active pointers when resetting items. Fixes items showing hovered state when they shouldn't. Not a regression, but more visible now than previously due to other changes. Also improved some metadata (ui\menu.cpp).
   . INPUT
     . Support SDL3 (input\input_dinput.cpp)
     . Made Win32 lightgun module usable with pen/touch (input\input_win32.cpp)
