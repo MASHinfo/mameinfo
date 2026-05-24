@@ -57,18 +57,21 @@
 - New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Itadaki Nyandora Kids, Kimme und Korn (F4), Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
 - New games: Planet Patrol
 - New clones: Mahjong Angel Kiss (ver 1.0, 92048-01 version) and Money Money (set 3)
+- New AGEMAME games: Castello II (W1), Disco (W1), Granada (W1), Fifty Five (F1), Logo (W1), Monopoly Tisch (F2), Multi (F2), Optimus (W1), Sunny Top (W1), Swing, Turbo Sunny (W1), Viva, Vulkan (F2), Wuerfel Fix (F2) and Wuerfel Fix (F3)
 - New drivers: hkcastle.cpp
 - New devices: scsi_tape_news
 - adp.cpp: Changed ROM extensions for all games to match their PCB footprint position names.
 - jankmg2.cpp: Added CTC and sound and output stubs
 - pgm2.cpp: Added some notes and correct a couple of decryption keys (igs\igs036crypt.cpp)
 - stv.cpp: Extend mirror ranges of registers (sega\saturn_cd_hle.cpp)
+- La Cucaracha: Added LCD screen and GFX bank
 - Multi GAME XL: Hookup basic video and hookup palette bank
-- Pop'n Run - The Videogame: Removed "Yukai Tsukai" from companystring and useless quantum (besides, with the scanline timer it's already more than 60hz).
+- Pop'n Run - The Videogame: Removed "Yukai Tsukai" from companystring (ID 09463) and useless quantum (besides, with the scanline timer it's already more than 60hz).
 - Puzznic: Added PAL rom c20-05.ic3 (Confirmed/Matches Japan Set) to Puzznic (World) and clone (US)
 - Ruleta Magica: Make it execute some code. Hook up UART. Basic video hookup. Map I2C EEPROM and Timekeeper.
-- Description changes of Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Pop'n Run: The Video Game (set 1), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000) and San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000)
-- Fixed rom names in adp.cpp
+- Description changes of Action (F2), Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Granada (F1), Komet (F1), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Money (F1), Pop'n Run: The Video Game (set 1), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000), San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000) and Turbo Sunny (F1)
+- Fixed rom names in adp.cpp, namcos2.cpp, stellafr.cpp
+- Renamed (action) to (actionf2), (grnada) to (grnadaf1) and (turbosun) to (trbsunf1)
 - Dipswitch fixes in extrema_m27sv.cpp
 - MAME
   . Split midway project into bally and williams according to brand owner. Videa/Sente stuff from the brief period before it was acquired by Bally is still in the bally project.
@@ -151,10 +154,9 @@
   . SCSI CD-ROM: Added a CDROM_2X device that reasonably throttles the read speed to what you'd see with a 2X CD-ROM drive (nscsi\cd.cpp)
   . SCSI Hard Disk: Allow only lun=0 for test unit ready (nscsi\hd.cpp)
   . SiS 630 Host-to-PCI Bridge: Removed debug_break on smiact trigger (machine\sis630_host.cpp)
-  . Slot device: Cleaned up boilerplate for slot devices
   . SiS 630 VGA i/f: Hookup fast page address (video\pc_vga_sis.cpp)
   . SiS 6326 AGP/PCI card: Added shifter behaviour on High/True Color depths (pci\sis6326.cpp)
-  . Slot device: Added special validity check for driver-level slots to prevent image and slot names from colliding (emu\dislot.cpp)
+  . Slot device: Cleaned up boilerplate for slot devices. Added special validity check for driver-level slots to prevent image and slot names from colliding (emu\dislot.cpp)
   . Stepper Motor: Integrated the draw functionality and the outputs in the class (machine\steppers.cpp)
   . Via VT82C598MVP "Apollo MVP3" Host: Work around SMI mapping for '691 (machine\vt82c598mvp.cpp)
   . VT82C586B: Rename to '596 and implement actual '596B (machine\vt82c586b_acpi.cpp)
@@ -168,8 +170,10 @@
 - bishi.cpp: Hooked up lamp outputs
 - bogeyman.cpp, matmania.cpp, mystston.cpp, ssozumo.cpp and tagteam.cpp: Added TODO note about vcount timing
 - brkthru.cpp: Use single-pass sprite drawing. Also use abbreviated integer types and use BIT helper for extracting bits.
-- bwing.cpp: Cleaned up code: Use palette_ext and set_format for palette handling. Use single pass sprite draw routine. Use BIT helper to extract bits.
-- calchase.cpp: Convert 'California Chase' to ISA remap (isa\svga_trident.cpp). Demoted 'Eggs Playing Chicken' to MACHINE_NOT_WORKING.
+- bwing.cpp: Cleaned up code. Use palette_ext and set_format for palette handling. Use single pass sprite draw routine. Use BIT helper to extract bits.
+- calchase.cpp
+  . Convert 'California Chase' to ISA remap (isa\svga_trident.cpp)
+  . Demoted 'Eggs Playing Chicken' to MACHINE_NOT_WORKING
 - cave.cpp: Made 013 sprite generator a separated device (previously in atlus\cave_v.cpp) (atlus\sprite013.cpp). Suppress side effects for debugger reads. Use single-pass sprite drawing. Cleaned up code.
 - cdi.cpp: Cleaned up some stuff (philips\cdicdic.cpp). Fixed crashes after (de)interlacing was added (philips\mcd212.cpp). Fixes (MESS) cdimono2 and cdi910 crash at start (ID 09458).
 - cesclass.cpp: Default NVRAM is 1-filled. Hookup LED display thru per-game artworks. LED score and trophy are mapped linearly (layout\ces_tsclass.lay).
@@ -183,7 +187,7 @@
 - ddenlovr.cpp: Added proper inputs for Royal Selection
 - dec0.cpp: Split driver state class for different configurations and cleaned up code: Reduced literal tag usage and runtime tag lookups. Added side effect checks for reads. Use BIT helper to extract individual bits and abbreviated integer types. Improved logging.
 - deco32.cpp: Added notes of sprite flicker
-- dooyong.cpp: Cleaned up code: Use device_gfx_interface to decode graphics and explicitly sized integers (dooyong\dooyong_tilemap.cpp). Reduced duplication and use m_palette->basemem() for banked palette RAM handler (dooyong\dooyong.cpp).
+- dooyong.cpp: Cleaned up code. Use device_gfx_interface to decode graphics and explicitly sized integers (dooyong\dooyong_tilemap.cpp). Reduced duplication and use m_palette->basemem() for banked palette RAM handler (dooyong\dooyong.cpp).
 - dyna_dc4000.cpp: Moved DC4000 based games (aladdin, aladdina, cmast92, cmast92a, eldoradd, eldoraddo, eldoraddob, eldoraddoc and eldoraddod) from goldstar.cpp to separate driver (skeleton\dyna_dc4000.cpp).
 - dynax.cpp
   . Moved 'Bao Qing Tian' to Dynax driver and made it boot. Wrong colors, so not working for now.
@@ -205,7 +209,7 @@
   . Better default trackball sensitivity
 - liberate.cpp: Use a memory_view for the overlaid bank. Fixes clone 'Pro Sports - Bowling, Tennis, and Golf (USA)' internally crashed in attract mode after 95 seconds (ID 09431).
 - looping.cpp: Improved protection. Fixes skybump, loopingu, loopingua and loopingub resets itself at random moments (ID 09453). Small cleanup to interrupts.
-- lordgun.cpp: Cleaned up and updated code: Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
+- lordgun.cpp: Cleaned up and updated code. Suppress side effects for debugger reads. Split driver state per hardware configuration. Reduced duplicated code, literal tags and run-time tag lookups. Fixed possible sprite wraparound. Expanded and corrected notes.
 - lsasquad.cpp: Consolidate driver into single file. Added anonymous namespace. Moved daikaiju specifics into own state. Added FIXME comments to obviously dubious code. Added debug tilemap viewer.
 - malzak.cpp: Consolidate driver into single file
 - marywu.cpp: Added meter counter feedback
@@ -255,12 +259,13 @@
   . Added DX-101 device. I don't think DX-102 is part of video hardware. X1-010 ROM is possibly bankswitched, bank method is similar as seta\seta2.cpp.
   . Hookup vblank irq and added inputs and sound. Fixed bitplane order and refine visible area. Hookup medal select and sound ROM bankswitch. Updated PCB info.
   . Hooked up hopper
-- ssingles.cpp: Convert VRAM to use std::unique_ptr rather than share_ptr. Allows visibility in debugger.
 - stella8085.cpp: Deduplicate and translate service keyboard. Fixed inputs in game 'Disc'.
 - stellafr.cpp
   . Noved game Gluecks-Stern to correct driver
   . Fixed memory map for SuS. Added mem map for SuS. Split devices with TK or RTC. Most of the devices with "Spiel und Speicher Modul" use timekeeper(tk), but some of them a RTC instead. Adapt init functions and CPU frequency.
-- suprnova.cpp: Cleaned up code and fixed minor issues: Added side effect checks for debugger reads. Fixed possible bitmap out-of-bounds errors. Improved logging. Minor optimizations. Replaced pointers with references, made some variables const and use abbreviated integer types. Reduced duplication and improved consistency.
+- suprnova.cpp
+  . Cleaned up code and fixed minor issues: Added side effect checks for debugger reads. Fixed possible bitmap out-of-bounds errors. Improved logging. Minor optimizations. Replaced pointers with references, made some variables const and use abbreviated integer types. Reduced duplication and improved consistency.
+  . Allow undocumented button 3 to be used in Cyvern. Note: This button is undocumented and not shown in test mode, but it gives an alternate primary weapon fire mode.
 - system1.cpp: Removed set_vblank_int
 - tagteam.cpp: 16 (not 17) interrupts per frame according to PCB videos. Removed RES_NET_AMP_EMITTER from preliminary color resnet.
 - taitopjc.cpp: Identified CRTC params and hookup set_raw
@@ -283,9 +288,8 @@
 - BloodStorm: Added 2.01 sound ROM for the newer revisions and improved ROM labels
 - Bogey Manor: Added scanline timer
 - Combat School: Correct Z80 clock. Added some address mirrors and removed obsolete note about music timing.
-- Computer Quiz Atama no Taisou: Preliminary kanji hookup. Split game in own driver. Convert protection area to address_map_bank. Hookup NMI and try to get a sense over ROM bank.
+- Computer Quiz Atama no Taisou: Preliminary kanji hookup. Split game in own driver (atamanot.cpp). Convert protection area to address_map_bank. Hookup NMI and try to get a sense over ROM bank.
 - Cube Quest: Removed DISK_IMAGE_READONLY_OPTIONAL. Laserdisc is supposed to be optional afterall. Added conf switch to disable Laserdisc.
-- Cyvern: Allow undocumented button 3 to be used. Note: This button is undocumented and not shown in test mode, but it gives an alternate primary weapon fire mode.
 - Doraemon no Dokodemo Door: Added Japanese button descriptions
 - Dream Hold: Correct GFX decode/tilemaps. Avoided lockup. Added preliminary inputs and sound.
 - DS-5000 Driving Simulator: Added some base execution
@@ -299,7 +303,7 @@
 - Imola Grand Prix: Fixed manufacturer metadata
 - Jr. Pac-Man and Pengo: Derive mcfg from pacman
 - Kung-Fu Master: Replaced BAD_DUMP sound ROM in clone Kung-Fu Senjyo (bootleg, Spanish) with one from another romset.
-- Kuzmich-Egorych: Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR. Fixed low-memory -ramsize crash by protecting HGR reads. Fixed ivelultr/dodo/laser2c text rendering. Align character bits to match hardware reference. Also cleanup template instantiations (apple\apple2video.cpp).
+- Kuzmich-Egorych: Improved more video timing. C021 MONOCOLOR does not affect HGR, it converts all video output to grayscale, but only when using composite video. C029 NEWVIDEO bit5 is documented as only affecting DHGR, but it also affects HGR when C05E 7M timing is active. Emulate softswitch-specific delays. Improved read_floatingbus(). Fixed off-by-one wrapping hpos. Fixed -aux std80 crash by applying m_aux_mask to DGR and DHGR. Fixed low-memory -ramsize crash by protecting HGR reads. Fixed ivelultr/dodo/laser2c text rendering. Align character bits to match hardware reference. Also cleanup template instantiations (apple\apple2video.cpp)
 - Mahjong games: Cleaned up another batch of mahjong inputs. Exposed base mahjong matrix panel class to simplify creating devices that are essentially mahjong panels with weird labels (shared\mahjong.cpp) (Drivers: bnstars.cpp, ddenlovr.cpp, dynax.cpp, fromanc2.cpp, fromance.cpp, ghosteo.cpp, goodejan.cpp, homedata.cpp, igs_fear.cpp, igs_m027.cpp, igs_m027_023vid.cpp, igs011.cpp, igs017.cpp, igsmahjong.cpp, kiwame.cpp, mahjong.cpp, metro.cpp, mirage.cpp, mjkjidai.cpp, mjsister.cpp, ms32.cpp, nyanpai.h, ojankohs.cpp, psikyo4.cpp, royalmah.cpp, seibuspi.cpp, seta2.cpp, srmp5.cpp, srmp6.cpp, ssv.cpp, stv.cpp, taito_f2.cpp, taitogn.cpp, tmmjprd.cpp and vsmjtria.cpp)
 - Malzak: Convert screen to raw params
 - Marine Date: Cleanups. Bit2 of color PROM low shift down red gradient like blue, makes boundaries to better match refs (actual algo still unknown). Fixed sprite-to-sprite priority (mermaid goes above player). Experimentally narrow collision to 8x8 block (softlocks maybe fixed, needs testing). Fixed incorrect upright mode (ID 07311).
@@ -311,8 +315,8 @@
 - PinMAME: Added PLD dumps for Galaxy Play 2. Note: Bruteforced, but tested and working OK.
 - The Predators (prototype): Identified 'unknown Falcon gambling machine' as 'The Predators (prototype)' (Williams / Q Video System 1986). Changed falconun.cpp driver to predators.cpp.
 - Progressive Clown Magic: Fleshed out driver. Needs sound mostly. Added hopper and improved inputs.
-- Puzznic: Correct MCU clock and added PCB info
-- Rally X / New Rally X: Added hyphen to title (ID 09422)
+- Puzznic: Correct MCU clock. Added PCB info.
+- Rally-X / New Rally-X: Added hyphen to title (ID 09422)
 - Rampart: Correction to P3 buttons
 - Ring & Ball: Ring & Ball is not a clone of Funny Strip
 - ROLLing eX.tre.me: Hookup coin counter
@@ -323,6 +327,7 @@
 - Splatterhouse: Removed space in title (ID 09421)
 - SSI Poker: Improvements. Redumped and confirmed the graphics ROMs. Redumped and replaced the bipolar PROM. Correct the ROM names. Confirmed the graphics ROMs for sets 2.4 and 3.0. New parent-clone relationship, being the more recent set the parent. Added technical notes.
 - Star Force: Dumped PROMs for clone Star Force (encrypted, bootleg)
+- Swinging Singles: Convert VRAM to use std::unique_ptr rather than share_ptr. Allows visibility in debugger.
 - Syusse Oozumou: Added scanline timer from tagteam/matmania, also invert vblank flag in this driver too (similar inactive crowd bug as matmania).
 - Thunder Ceptor: Use bool for Boolean variables, made some variables const. Reduced literal tag usage. Use bufsprite.h for buffered sprite RAM. Fixed save state issues.
 - Top Landing: Dumped motor ROM board
@@ -400,8 +405,6 @@
   . Added Edit menu with clipboard shortcuts. The MacOS Cocoa debugger only adds Debug and Run menus to the menu bar, so standard Cmd+X/C/V shortcuts are never routed through the responder chain to the command input NSTextField. Add an Edit menu with Cut, Copy, and Paste items to enable clipboard operations (debugger\debugosx.mm).
   . Fixed Qt debugger build on Windows with Clang. Qt provides inline definitions of dllimport functions, which causes a warning. There are too many of them to practically leave the warning enabled for this module (osd\modules.lua). It's no longer possible to get a working Qt 5 setup with MSYS2, and there's no 32-bit Qt 6 package. Updated docs to reflect this (docs\source\initialsetup\compilingmame.rst). Fixed build with Qt < 6.6 (qt\debuggerview.cpp). Fixed build with Qt 6 on AArch64 (debugger\debugqt.cpp).
   . Use C++20 bit functions (tools\unidasm.cpp)
-
-
 
 
 
