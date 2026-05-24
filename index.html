@@ -54,23 +54,24 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.289GIT
 
-- New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Kimme und Korn (F4), Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
+- New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Itadaki Nyandora Kids, Kimme und Korn (F4), Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
 - New games: Planet Patrol
 - New clones: Mahjong Angel Kiss (ver 1.0, 92048-01 version) and Money Money (set 3)
 - New drivers: hkcastle.cpp
 - New devices: scsi_tape_news
 - adp.cpp: Changed ROM extensions for all games to match their PCB footprint position names.
+- jankmg2.cpp: Added CTC and sound and output stubs
 - pgm2.cpp: Added some notes and correct a couple of decryption keys (igs\igs036crypt.cpp)
 - stv.cpp: Extend mirror ranges of registers (sega\saturn_cd_hle.cpp)
 - Multi GAME XL: Hookup basic video and hookup palette bank
 - Pop'n Run - The Videogame: Removed "Yukai Tsukai" from companystring and useless quantum (besides, with the scanline timer it's already more than 60hz).
 - Puzznic: Added PAL rom c20-05.ic3 (Confirmed/Matches Japan Set) to Puzznic (World) and clone (US)
 - Ruleta Magica: Make it execute some code. Hook up UART. Basic video hookup. Map I2C EEPROM and Timekeeper.
-- Description changes of Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Pop'n Run: The Video Game (set 1), Pop'n Run: The Video Game (set 2), Ridge Racer (World, RRC, three monitor version), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000) and San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000)
+- Description changes of Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Pop'n Run: The Video Game (set 1), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000) and San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000)
 - Fixed rom names in adp.cpp
 - Dipswitch fixes in extrema_m27sv.cpp
-
-
+- MAME
+  . Split midway project into bally and williams according to brand owner. Videa/Sente stuff from the brief period before it was acquired by Bally is still in the bally project.
 
 
 
@@ -79,8 +80,7 @@
 - New games: Adventure Canoe, Crayon Shin-chan no Daruma Otoshi da Zo, Galactic Warriors (Bubble System), The Great Hongyun Shu 1996 (Conny bootleg of Mega Drive version), Keirin Derby II, Konami RF2 - Red Fighter (Bubble System) and The Predators (prototype)
 - New Working games: Air Combat (AC1, Japan), Air Combat (AC2, US), Bare Knuckle III (Conny bootleg of Mega Drive version), Contra (Conny bootleg of Mega Drive version), Cyber Sled (CY1, World?), Cyber Sled (CY2, World), Gunstar Heroes / Snake Rattle n' Roll / Joe & Mac (Conny bootleg of Mega Drive versions), Side Pocket (Conny bootleg of Mega Drive version) and Solvalou (SV1, Japan).
 - New Non-Working games: Charmy Dash (Japan), Dao Lang, Fengyun Zhengba, Four Jokers, Galaxian Fever (Japan, ver 1.28), Gongfu Xiongmao, International Superstar Soccer Deluxe (SNES bootleg), Liang Jian, Liang Zhi Hudie, Lucky Colors (v1.1i) (Italy), Magical Tonic, Mahjong Dai Chuuka Ken (Japan, P830 006A-005), Mali Saiche, Mini Bar, PK Zhiwang, Pro Bowl (v5.15), Qian Duoduo, Royal Selection (Japan, ver. 1.01), Scalextric (Spain, set 1), Shooting Paradise (Japan, ver 1.10). Super Rally (v0204, 2-Feb-1996), Tiaozhan Wang, 'unknown Dyna mahjong game (V1.60)', Wu Hujiang, Wu Hujiang Jiaqiang Ban and Xiao Qingwa.
-- New clones: The Aladdin (V1.1U), BloodStorm (v2.16), Come-Cocos (Ms. Pac-Man) ('Made in Greece' Triunvi bootleg, set 3), Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Final Lap 2 (Japan, Rev B), Golden Tee 3D Golf Tournament (v2.30), Ketsui: Kizuna Jigoku Tachi (IKD 2007 Special - 2007 Cave Matsuri Version), Looping (US, set 4), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), New Lucky 8 Lines (set 22, W-4 with MC68705 MCU), New Lucky 8 Lines (set 23, W-4), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Raiga - Strato Fighter (Japan, set 2), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, Three Monitor Version), Ryuusei Janshi Kirara Star (ver 1.0, 91022-10 version), Scalextric (America), Scalextric (England, set 1), Scalextric (England, set 2), Scalextric (France, set 1), Scalextric (France, set 2), Scalextric (Germany), Scalextric (Italy, set 1), Scalextric (Italy, set 2), Scalextric (Portugal), Scalextric (Spain, set 2), Scalextric (Spain, set 3), Scalextric (Spain, set 4), Scalextric (Spain, set 5), Scalextric (USA), Space Panic (bootleg), Speed Ball (set 2), Super High Impact (rev LA2 10/22/91), Super Rally (v0107), Super Rally (v0201, 6-Nov-1995), Super Rally (v0203, 19-Dec-1995), Tiger Road (US bootleg, set 2), Tiger-Heli (bootleg set 5), Trivia (Questions Series 15), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru.
-- Removed games: 'unknown Falcon gambling machine'
+- New clones: The Aladdin (V1.1U), BloodStorm (v2.16), Come-Cocos (Ms. Pac-Man) ('Made in Greece' Triunvi bootleg, set 3), Cuty Line Limited (ver.1.30, CLLJ, set 1), Cuty Line Limited (ver.1.30, CLLJ, set 2), El Dorado (Dyna D9101 HW, V1.2D), F-1 Dream (set 1), Fighting Vipers (Revision A), Final Lap 2 (Japan, Rev B), Golden Tee 3D Golf Tournament (v2.30), Ketsui: Kizuna Jigoku Tachi (IKD 2007 Special - 2007 Cave Matsuri Version), Looping (US, set 4), Mahjong Dai Chuuka Ken (Japan, P830-004A-004), Mahjong Vegas (Japan, set 3), Nandemo Seal Iinkai (Jungle Taitei ver 1.1), New Lucky 8 Lines (set 22, W-4 with MC68705 MCU), New Lucky 8 Lines (set 23, W-4), Pac-Man (Cocamatic, Spanish bootleg on Galaxian hardware), Raiga - Strato Fighter (Japan, set 2), Red Hawk (China & Hong Kong), Ridge Racer (World, RRC, three monitor version), Ryuusei Janshi Kirara Star (ver 1.0, 91022-10 version), Scalextric (America), Scalextric (England, set 1), Scalextric (England, set 2), Scalextric (France, set 1), Scalextric (France, set 2), Scalextric (Germany), Scalextric (Italy, set 1), Scalextric (Italy, set 2), Scalextric (Portugal), Scalextric (Spain, set 2), Scalextric (Spain, set 3), Scalextric (Spain, set 4), Scalextric (Spain, set 5), Scalextric (USA), Space Panic (bootleg), Speed Ball (set 2), Super High Impact (rev LA2 10/22/91), Super Rally (v0107), Super Rally (v0201, 6-Nov-1995), Super Rally (v0203, 19-Dec-1995), Tiger Road (US bootleg, set 2), Tiger-Heli (bootleg set 5), Trivia (Questions Series 15), Trivia ? Whiz (6221-00, Original rev question ROMs) and Yanjamaru.
 - New drivers: atamanot.cpp, probowl.cpp, dyna_dc4000.cpp, es9606.cpp, predators.cpp, scalextric.cpp, scudhamm.cpp and sralslot.cpp
 - New devices: battlera_vce, cmi8738, cs4281, dio98259, fsa_channel, gunbustr_link, i7220_1, igs011, igs012, intel_mbm, jaleco_road, jaleco_zoom_road, jaleco_zoomspr, jaleco_zoomspr_bigrun, kbd_type2_hle, mb87077, misncrft_fpga_prot, mixer, pc6022, polepos_wsg, rselect_panel, scsi_cdrom2x, smbus_pipc, sprite013, vt82c596_acpi, vt82c596b_acpi, vt82c596b_isa, vt82c691_bridge, vt82c691_host, w83877tf, williams_predators_sound, worldadv_fpga_prot, wyvernwg_fpga_prot and ymf740c
 - New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
@@ -303,6 +303,7 @@
 - Neo Mania: Hookup inputs (centronics\neomania_adapter.cpp)
 - Octopussy: Octopussy is not a Master Crane clone
 - PinMAME: Added PLD dumps for Galaxy Play 2. Note: Bruteforced, but tested and working OK.
+- The Predators (prototype): Identified 'unknown Falcon gambling machine' as 'The Predators (prototype)' (Williams / Q Video System 1986). Changed falconun.cpp driver to predators.cpp.
 - Progressive Clown Magic: Fleshed out driver. Needs sound mostly. Added hopper and improved inputs.
 - Puzznic: Correct MCU clock and added PCB info
 - Rally X / New Rally X: Added hyphen to title (ID 09422)
