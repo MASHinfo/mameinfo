@@ -60,26 +60,29 @@
 - New AGEMAME games: Castello II (W1), Disco (W1), Granada (W1), Fifty Five (F1), Logo (W1), Monopoly Tisch (F2), Multi (F2), Optimus (W1), Sunny Top (W1), Swing, Turbo Sunny (W1), Viva, Vulkan (F2), Wuerfel Fix (F2) and Wuerfel Fix (F3)
 - New drivers: hkcastle.cpp
 - New devices: scsi_tape_news
+- CPU
+  . Hitachi H8: Formalize the contracts between H8 family peripherals and the CPU and interrupt controller so H8/500 can share.
+  . Texas Instruments TMS34010: Attempted to fix setcd for the case with two bits set. It was definitely wrong before - the mask to clear the first bit was calculated incorrectly.
 - adp.cpp: Changed ROM extensions for all games to match their PCB footprint position names.
 - jankmg2.cpp: Added CTC and sound and output stubs
 - pgm2.cpp: Added some notes and correct a couple of decryption keys (igs\igs036crypt.cpp)
 - stv.cpp: Extend mirror ranges of registers (sega\saturn_cd_hle.cpp)
 - Joker Master 2000 Special Edition: Decrypted clone Joker Master 2000 Special Edition (V1C). Needs own portmap.
-- La Cucaracha: Added LCD screen and GFX bank
-- Multi GAME XL: Hookup basic video and hookup palette bank
+- La Cucaracha: Added LCD screen and GFX bank. Added base inputs and DIPs.
+- Multi GAME XL: Hookup basic video and hookup palette bank. Fixed gfx_layout. Added NVRAM and attribute RAM view selects. Hookup most inputs.
 - Pop'n Run - The Videogame: Removed "Yukai Tsukai" from companystring (ID 09463) and useless quantum (besides, with the scanline timer it's already more than 60hz).
 - Puzznic: Added PAL rom c20-05.ic3 (Confirmed/Matches Japan Set) to Puzznic (World) and clone (US)
 - Ruleta Magica: Make it execute some code. Hook up UART. Basic video hookup. Map I2C EEPROM and Timekeeper.
-- Description changes of Action (F2), Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Granada (F1), Komet (F1), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Money (F1), Pop'n Run: The Video Game (set 1), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000), San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000) and Turbo Sunny (F1)
-- Fixed rom names in adp.cpp, namcos2.cpp, stellafr.cpp
+- Description changes of Action (F2), Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Granada (F1), Komet (F1), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Money (F1), Pop'n Run: The Video Game (set 1), Multi GAME XL (V.11.35 A), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000), San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000) and Turbo Sunny (F1)
+- Fixed rom names in adp.cpp, namcos2.cpp and stellafr.cpp
 - Renamed (action) to (actionf2), (grnada) to (grnadaf1) and (turbosun) to (trbsunf1)
 - Dipswitch fixes in extrema_m27sv.cpp
 - MAME
   . Split midway project into bally and williams according to brand owner. Videa/Sente stuff from the brief period before it was acquired by Bally is still in the bally project.
 - Compiling
   . Marked several device_t overrides as final. There's too much opportunity for confusion if these are overridden further down the tree (emu\driver.h; dooyong.cpp, trackfld.cpp...).
-
-
+  . Retired operations that are in C++20 <bit> (osd\eminline.h)
+  . Updated the rarely-used ci.flt
 
 
 
