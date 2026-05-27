@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.288GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 25th May 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 27th May 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mameinfo.mameworld.info/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://www.mameworld.info/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -54,31 +54,39 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.289GIT
 
-- New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Itadaki Nyandora Kids, Kimme und Korn (F4), Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
+- New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Itadaki Nyandora Kids, Kimme und Korn (F4), Winner's Club - Wild Roses, Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
 - New games: Planet Patrol
-- New clones: Mahjong Angel Kiss (ver 1.0, 92048-01 version) and Money Money (set 3)
+- New clones: Mahjong Angel Kiss (ver 1.0, 92048-01 version), Money Money (set 3) and The New 1997 Joker Master - New York (V3G)
 - New AGEMAME games: Castello II (W1), Disco (W1), Granada (W1), Fifty Five (F1), Logo (W1), Monopoly Tisch (F2), Multi (F2), Optimus (W1), Sunny Top (W1), Swing, Turbo Sunny (W1), Viva, Vulkan (F2), Wuerfel Fix (F2) and Wuerfel Fix (F3)
 - New drivers: hkcastle.cpp
 - New devices: scsi_tape_news
 - CPU
-  . Hitachi H8: Formalize the contracts between H8 family peripherals and the CPU and interrupt controller so H8/500 can share.
+  . Hitachi H8: Formalize the contracts between H8 family peripherals and the CPU and interrupt controller so H8/500 can share. Fixed incorrect disassembly of SCB, PJSR, PJMP and TRAPA (h8500\h8500dasm.cpp).
+  . Motorola MC68000: Update bftst to reluctant reads when fetching data from memory (m68000\m68k_in.lst and m68000\m68kops.cpp)
   . Texas Instruments TMS34010: Attempted to fix setcd for the case with two bits set. It was definitely wrong before - the mask to clear the first bit was calculated incorrectly.
+- DEVICE
+  . Floppy: Added missing header (formats\flopimg.h)
 - adp.cpp: Changed ROM extensions for all games to match their PCB footprint position names.
+- circus.cpp: Update screen per scanline for more accurate collision detection
 - jankmg2.cpp: Added CTC and sound and output stubs
 - pgm2.cpp: Added some notes and correct a couple of decryption keys (igs\igs036crypt.cpp)
 - stv.cpp: Extend mirror ranges of registers (sega\saturn_cd_hle.cpp)
-- Joker Master 2000 Special Edition: Decrypted clone Joker Master 2000 Special Edition (V1C). Needs own portmap.
-- La Cucaracha: Added LCD screen and GFX bank. Added base inputs and DIPs.
+- Captain Zodiac: Base video and inputs
+- Joker Master 2000 Special Edition: Decrypted clone The New 1997 Joker Master (V1C). Needs own portmap.
+- La Cucaracha: Added GFX bank. Added base inputs and DIPs. Replaced video emulation with artwork based LED matrix. Added scrollx and scrolly. Fixed SFX playback at game start (missing OKI mirror). Game engine timer IRQ is more around 100 Hz, for lip sync at game start.
 - Multi GAME XL: Hookup basic video and hookup palette bank. Fixed gfx_layout. Added NVRAM and attribute RAM view selects. Hookup most inputs.
 - Pop'n Run - The Videogame: Removed "Yukai Tsukai" from companystring (ID 09463) and useless quantum (besides, with the scanline timer it's already more than 60hz).
 - Puzznic: Added PAL rom c20-05.ic3 (Confirmed/Matches Japan Set) to Puzznic (World) and clone (US)
 - Ruleta Magica: Make it execute some code. Hook up UART. Basic video hookup. Map I2C EEPROM and Timekeeper.
-- Description changes of Action (F2), Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Granada (F1), Komet (F1), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Money (F1), Pop'n Run: The Video Game (set 1), Multi GAME XL (V.11.35 A), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000), San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000) and Turbo Sunny (F1)
+- Description changes of Ace Driver (World, AD2), Action (F2), Bao Qing Tian (TIC), Final Lap 2 (World, Rev B), Final Lap 3 (World), Granada (F1), Komet (F1), Konami RF2: Red Fighter, Konami RF2: Red Fighter (Bubble System), Mahjong Angel Kiss (ver 1.0, 92047-01 version), Money (F1), The New 1997 Joker Master (V1C), Pop'n Run: The Video Game (set 1), Multi GAME XL (V.11.35 A), Pop'n Run: The Video Game (set 2), San Francisco Rush 2049 (Version 1.04, EPROM 1.02 Jul 9 1999, GUTS 1.03 Sep 3 1999, GAME Sep 8 1999), San Francisco Rush 2049: Special Edition (Version 1.00, GUTS 1.61 Sep 16 2003, GAME Sep 16 2003), San Francisco Rush 2049: Tournament Edition (VERS 0.34 Sep 26 2000, EPROM 0.56 Apr 17 2000), San Francisco Rush 2049: Tournament Edition Unlocked (VERS 0.31 Sep 26 2000, EPROM 0.56 Apr 17 2000) and Turbo Sunny (F1)
 - Fixed rom names in adp.cpp, namcos2.cpp and stellafr.cpp
 - Renamed (action) to (actionf2), (grnada) to (grnadaf1) and (turbosun) to (trbsunf1)
-- Dipswitch fixes in extrema_m27sv.cpp
+- Dipswitch fixes in cpzodiac.cpp, cucaracha.cpp and extrema_m27sv.cpp
 - MAME
+  . DEVICES
+    . Fixed regression with opening sockets (emu\image.cpp). 
   . Split midway project into bally and williams according to brand owner. Videa/Sente stuff from the brief period before it was acquired by Bally is still in the bally project.
+  . Merged NeoGeo project with SNK project
 - Compiling
   . Marked several device_t overrides as final. There's too much opportunity for confusion if these are overridden further down the tree (emu\driver.h; dooyong.cpp, trackfld.cpp...).
   . Retired operations that are in C++20 <bit> (osd\eminline.h)
@@ -124,6 +132,7 @@
 - DEVICE
   . 2C0xxx PPU/PPC: Make debug logging less noisy for various NES/VT devices (video\ppu2c0x.cpp)
   . AT28C16 2Kx8 EEPROM: Small cleanup to indentation (machine\at28c16.cpp)
+  . AT28xx/X28xx EEPROMs: Try to clean up the AT28xx/X28xx EEPROM mess. Duplicated sources in build scripts are bad. Non-existent sources are bad (they make trouble if you use a project generator that actually does something with headers, e.g. Visual Studio, CMake, etc.). Duplicated non-existent sources are really, really bad. Including a .ipp file from the header defeats the purpose. Also, you don't want to be rebuilding everything that uses the device for any implementation change. Virtual member function bodies should never go in the header unless there are performance-critical non-virtual calls to them that can be inlined (i.e. device_start, device_reset, nvram_default are not good cases for this). Inlined or defaulted virtual destructors are a bad idea as it makes it a lot harder to guess where vtables (and hence any other inline virtual member functions) will be instantiated. Unless there's a good reason or the class is a pure virtual interface, it's better to use out-of-line destructors.
   . Bus: Addressed unintuitive behavious in a dozen slot devices. With these slots, you'd get no options if you specified a clock frequency, or the default options if you didn't, or in a few cases, you'd get the options if you specified a default (even nullptr) or no options otherwise. It's completely unintuitive. This pattern shouldn't be allowed to creep back in.
   . DECO 104/146 Protection: Cleaned up code. Made fixed configuration constructor parameters. Suppress side effects for debugger reads properly. Made member variables private, reduced unnecessary includes. Use m_ prefix for member variables, use explicitly sized integers for values that are saved. Use logmacro.h for configurable logging. Use BIT helper to extract individual bits. Fixed descramble input.
   . Discrete Netlist: Avoid comparing enum to floatint point (sound\discrete.h). Check for mismatched number of parameters passed to device macros at compile time (lib\netlist\). Use C++20 __VA_OPT__ to simplify device registration code (netlist\nl_setup.cpp). Generate check for correct number of arguments (netlist\build\create_devinc.py).
@@ -347,6 +356,7 @@
   . DEVICES
     . Allow source and manufacturer strings to be deduplicated. This increases coupling between the "traits" classes generated for driver/device definitions and the device type implementation class, but it noticeably reduces static data size for MAME as a whole (emu\device.h and emu\gamedrv.h).
     . Take std::string_view tag in constructor (emu\device.cpp)
+    . Partially revert "Only allow command line image creation when file is not found and save startup image name for error reporting before trashing it" from MAME 0.282 due to MT09464 (emu\image.cpp).
   . UI/OSD
     . Removed misguided qualifiers (osd\osdsync.cpp). UTF-8 strings will use a distinct character type (ui\devopt.cpp). Added pattern explainations for -listbios (mame\clifront.cpp). Honour -noreadconfig for command line verbs (mame\clifront.cpp).
     . Fixed potential crash in Video Options menu on Windows (ui\submenu.cpp)
@@ -383,6 +393,7 @@
   . Process events after raising window on MacOS to ensure input focus. On MacOS, the window may not have acquired input focus by the time SDL_RaiseWindow returns. Pumping events after raising ensures the FOCUS_GAINED event is dequeued and m_focus_window is set before the input modules start polling, preventing the intermittent loss of keyboard and mouse input on startup. Fixes GitHub #10612 (sdl/video.cpp and sdl3/video.cpp).
   . SDL3 compile again on MacOS with pre-3.4.0 and a minor cleanup (input\input_sdl3.cpp and sdl3\sdlmain.cpp). Fixed linking on Windows with static SDL3.
   . Actually set the "key hold down disable" hint for MacOS (sdl3\sdlmain.cpp)
+  . Don't write to listening sockets, it can cause SIGPIPE (file\posixsocket.cpp).
 - Compiling
   . Switched language standard to C++20 and bumped compiler requirement to GCC 11. Hackery to allow UTF-8 strings as well as plain strings: Allow char8_t for names in field configuration helper (emu\ioport.h). Allow char8_t for descriptions and manufacturers (emu\device.h and emu\gamedrv.h). Allow char8_t message input (util\language.h). Allow char8_t format and string arguments with char output (util\strformat.h). Deal with UTF-8 strings as a distinct type (ui\videoopt.cpp).
     . Fixed things C++20 doesn't allow
