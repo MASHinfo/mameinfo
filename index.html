@@ -54,22 +54,25 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.289GIT
 
-- New Non-Working games: Ganso Janken Man, Hello Kitty no Oshiro e Iko, Itadaki Nyandora Kids, Kimme und Korn (F4), Winner's Club - Wild Roses, Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
+- New Non-Working games: Ganso Janken Man,  Hello Kitty no Oshiro e Iko, Itadaki Nyandora Kids, Kimme und Korn (F4), Winner's Club - Wild Roses, Xiao Mifeng, Xingyun Xiaochou / Xingyun Shouji (V233CN) and Xiyang Tianshi
 - New games: Planet Patrol
 - New clones: Mahjong Angel Kiss (ver 1.0, 92048-01 version), Money Money (set 3) and The New 1997 Joker Master - New York (V3G)
-- New AGEMAME games: Castello II (W1), Disco (W1), Granada (W1), Fifty Five (F1), Logo (W1), Monopoly Tisch (F2), Multi (F2), Optimus (W1), Sunny Top (W1), Swing, Turbo Sunny (W1), Viva, Vulkan (F2), Wuerfel Fix (F2) and Wuerfel Fix (F3)
+- New AGEMAME games: Castello II (W1), Disco (W1), Fifty Five (F1), Granada (W1), Logo (W1), Monopoly Tisch (F2), Multi (F2), Optimus (W1), Sunny Top (W1), Swing, Turbo Sunny (W1), Viva, Vulkan (F2), Wuerfel Fix (F2) and Wuerfel Fix (F3)
 - New drivers: hkcastle.cpp
 - New devices: scsi_tape_news
 - CPU
   . Hitachi H8: Formalize the contracts between H8 family peripherals and the CPU and interrupt controller so H8/500 can share. Fixed incorrect disassembly of SCB, PJSR, PJMP and TRAPA (h8500\h8500dasm.cpp).
   . Motorola MC68000: Update bftst to reluctant reads when fetching data from memory (m68000\m68k_in.lst and m68000\m68kops.cpp)
+  . NEC uPD7801: Fixed uPD7801 INT0 behavior (upd7810/upd7810.cpp and upd7810\upd7810_opcodes.cpp)
   . Texas Instruments TMS34010: Attempted to fix setcd for the case with two bits set. It was definitely wrong before - the mask to clear the first bit was calculated incorrectly.
 - DEVICE
   . Floppy: Added missing header (formats\flopimg.h)
 - adp.cpp: Changed ROM extensions for all games to match their PCB footprint position names.
-- circus.cpp: Update screen per scanline for more accurate collision detection
+- circus.cpp: Update screen per scanline for more accurate collision detection. Added sprite wraparound. Small correction to border lines. Added border to Rip Cord.
 - jankmg2.cpp: Added CTC and sound and output stubs
+- nemesis.cpp: Added bs_ prefix to bubsys games. Mark bs_rf2 a not working. Group bubsys mcfg with the other mcfgs.
 - pgm2.cpp: Added some notes and correct a couple of decryption keys (igs\igs036crypt.cpp)
+- stella8085.cpp: Fixed 4040 board IO (#15382). Added 4040 board IO map. Replaced DIY IO70 with proper 8255 PPI. Replaced device tags. Removed io73.
 - stv.cpp: Extend mirror ranges of registers (sega\saturn_cd_hle.cpp)
 - Captain Zodiac: Base video and inputs
 - Joker Master 2000 Special Edition: Decrypted clone The New 1997 Joker Master (V1C). Needs own portmap.
@@ -83,6 +86,7 @@
 - Renamed (action) to (actionf2), (grnada) to (grnadaf1) and (turbosun) to (trbsunf1)
 - Dipswitch fixes in cpzodiac.cpp, cucaracha.cpp and extrema_m27sv.cpp
 - MAME
+  . MEMORY SYSTEM: Gets rid of a layer of templating in emu\emumem_hedp.cpp and makes a few other things easier to read.
   . DEVICES
     . Fixed regression with opening sockets (emu\image.cpp). 
   . Split midway project into bally and williams according to brand owner. Videa/Sente stuff from the brief period before it was acquired by Bally is still in the bally project.
@@ -91,7 +95,7 @@
   . Marked several device_t overrides as final. There's too much opportunity for confusion if these are overridden further down the tree (emu\driver.h; dooyong.cpp, trackfld.cpp...).
   . Retired operations that are in C++20 <bit> (osd\eminline.h)
   . Updated the rarely-used ci.flt
-
+  . Converted several things from std::enable_if to requires clauses.
 
 
 
