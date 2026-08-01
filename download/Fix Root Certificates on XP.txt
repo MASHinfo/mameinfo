@@ -1,0 +1,41 @@
+How to fix missing or expired Root certificates on XP
+=====================================================
+
+
+NET::ERR_CERT_AUTHORITY_INVALID
+-------------------------------
+
+If you have the error message "NET::ERR_CERT_AUTHORITY_INVALID" when visiting github.com for example, then
+download the missing 'DigiCert Global Root G2' certificate from https://www.digicert.com/kb/digicert-root-certificates.htm
+
+DigiCert Global Root G2:  DigiCertGlobalRootG2.crt  (SHA-256: cb3ccbb76031e5e0138f8dd39a23f9de47ffc35e43c1144cea27d46a5ab1cb5f)
+
+Now open the Run dialog box (Win+R) and type  certmgr.msc  to start the 'Certificate Management Tool'.
+Below 'Personal' is the section 'Trusted Root Certification Authorities'. Import the new certificate with right-click
+on "Certificates" in the left panel and selected All Tasks > Import, then browse to the downloaded certificate and
+select the 'Trusted Root Certification Authorities' store section which is automatically selected by the management tool.
+
+
+
+
+DST Root CA X3
+--------------
+
+For the expired Lets Encrypt certificate download the new 'ISRG Root X1' certificate here: https://letsencrypt.org/certs/isrgrootx1.der
+
+ISRG Root X1:  isrgrootx1.der  (SHA-256: 96bcec06264976f37460779acf28c5a7cfe8a3c0aae11a8ffcee05c0bddf08c6)
+
+Open the Run dialog box (Win+R) and type  certmgr.msc  to start the 'Certificate Management Tool'.
+Below 'Personal' is the section 'Trusted Root Certification Authorities'.
+Find and delete the expired certificate 'DST Root CA X3' (30-9-2021).
+Now import the new with right-click on "Certificates" in the left panel and selected All Tasks > Import,
+then browse to the downloaded certificate and select the 'Trusted Root Certification Authorities' store section
+which is automatically selected by the management tool.
+
+
+
+
+-
+
+   
+
