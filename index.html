@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.289</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 3rd August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 4th August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -59,6 +59,8 @@
 - New drivers: caprstar.cpp
 - New devices: amiga_adscsi2000, amiga_adscsi2080, amiga_dkb3128, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
 - CPU
+  . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
+  . ARM: Simplify handling of unaligned reads (arm\arm.cpp)
   . IBM PowerPC: Help performance on PCI PowerMacs with a 68K DRC: * Apple's 68k DRC frequently generates a code sequence, flushes it, and then regenerates the exact same thing at the exact same address. So we now cache small sequences and can restore them without the overhead of a recompile. This required adding some accessors to the 3 DRC backends. * The entire vTLB (a MAME DRC implementation detail, *not* the 603's architectural TLB) was being used as a comparison for deciding to flush a block rather than just the actual mapping. In particular, the access count bits were causing unnecessary recompiles. * The vTLB was also too small: at its original size it covered just 512K of working set. By trial and error stepping through powers of 2, 4096 was found to give the best results running real Mac software. With these changes, pwrmacg3 went from roughly 160,000 block flushes and recompiles per second to 0 when idling at the Mac OS 8.1 Finder. This also smoothed out regular audio breakups on pippin caused by recompile storms and seems to have even sped up a few of the PPC arcade games by a few ticks. Claude Opus 5 assisted with measuring and isolating the performance issues n (powerpc\ppc.h, ppccom.h and ppcdrc.cpp).
   . Hitachi H8: Use logmacro for verbose logging (h8\h8_timer16.cpp). Minor logging fixes (h8\h8_dma.cpp and h8\h8_sci.cpp). Fixed logerror bug that caused assertion failures in (MESS) jv880 and rd500 (h8\h8_timer16.cpp).
   . Motorola MC68040: On the MC68040 CACR reserved bits must read as 0 (m68000\m68k_in.lst, m68kcpu.h and m68kops.cpp), fixes Amiga CPU detection (GitHub #15792).
@@ -73,10 +75,11 @@
     . Disable LOG_DESC verbose logging left enabled during development (machine\wd_fdc.cpp)
   . Intel 8251 USART: TxEMPTY remains asserted while transmitting sync characters. Empty commit to restart workflow run (machine\i8251.cpp).
   . NCR 5380 SCSI: Protected constructors with default arguments are a bug waiting to happen. Restore base-part self-reset interrupt (regressed by GitHub #15658). Make SCSI bus reset edge-triggered. The SCSI bus reset (chip reset + interrupt) is triggered by the /RST line transitioning to true, not by it merely being asserted. The previous code triggered on the level (icmd_w reset unconditionally on ASSERT RST; scsi_ctrl_changed on ctrl & S_RST), so a device asserting RST while another device already held it would reset and interrupt a second time. Claude Opus 4.8 assisted with datasheet analysis and implementation (machine\ncr5380.cpp).
-  . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (sms.xml) after Z80 core changed (MT09493: When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (video\315_5124.cpp).
+  . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (Game Gear) after Z80 core changed (MT09493: When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (video\315_5124.cpp).
   . Zilog Z80 DMA Controller: Propagate BAO only when changed. Fixes (MESS) abc1600 stack overflow on soft reset (machine\z80dma.cpp).
 - cv1k.cpp: Fixed CV1000 video timings. See: https://github.com/buffis/cv1k_research/tree/main/Video_Timings for analysis incl logic analyzer images/raw data.
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
+- policetr.cpp: Updated comments
 - stella8085.cpp: Don't instantiate devices that don't exist. That shouldn't have been merged in the first place.
 - stv.cpp
   . Sega Saturn DCC: Moved DCC dual CPU comms to an own device. Make it handle slave irq vectoring (sega\saturn_dcc.cpp).
@@ -100,22 +103,26 @@
 - Ring & Ball: Made 'Ring & Ball (Italy, Ver. 2.6)' run. Claude Opus 5.0 identified the unusual split supervisor mode/user mode code encryption method.
 - Super Glob: Connect test switch to enable diagnostics for theglobp and similar epos games (beastfp, beastfpa, theglobp, theglobpa, theglobme, sprglobp, sprglobp2 and sprglbpg).
 - Super Pinball Action: Fixed dipswitch port regression
+- Tong Zi Maque: Fleshed out the driver. Claude Opus 5 completed the decryption, reversed the EEPROM and RTC hook-up and helped with the GFX emulation.
 - Virtua Striker 2 '98: Redumped 'Virtua Striker 2 '98 (Step 2.0)' bad IC17 ROM
 - Description changes of 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)' and 'Print Club 2 Standard Ver1 (U 970921 V1.000)'
 - Renamed (karnova) to (karnov5u) and (koikois) to (koikoisa)
 - Fixed rom names in megasys1.cpp and sbmjb.cpp
 - MAME
   . VIDEO RENDERING SYSTEM: Split the screen_device into multiple devices depending on the actual type. Scripts to do the mass conversions written by Qwen 3.6.
-  . UI/OSD: Clear transient UI BIOS option without preserving command-line priority. When returning to the internal UI, MAME currently clears OPTION_BIOS by setting it to an empty value at command-line priority. This preserves a high-priority empty BIOS option, preventing per-system INI files from setting the BIOS on the next launch when no BIOS menu is shown. Revert the command-line-priority BIOS option instead. This keeps the original intent of clearing transient UI BIOS selections, while allowing game/system INI BIOS settings to apply again on subsequent launches. Fixes GitHub #11313 and #11314 (frontend\mame\mame.cpp).
+  . UI/OSD
+    . Clear transient UI BIOS option without preserving command-line priority. When returning to the internal UI, MAME currently clears OPTION_BIOS by setting it to an empty value at command-line priority. This preserves a high-priority empty BIOS option, preventing per-system INI files from setting the BIOS on the next launch when no BIOS menu is shown. Revert the command-line-priority BIOS option instead. This keeps the original intent of clearing transient UI BIOS selections, while allowing game/system INI BIOS settings to apply again on subsequent launches. Fixes GitHub #11313 and #11314 (frontend\mame\mame.cpp).
+    . Better handling of "main menu" mode. Also cleaned up execute bits and stray BOM characters and added makefile rules to srcclean more files (ui\selmenu.cpp and ui\simpleselgame.cpp).
   . NETWORK: Set PCAP_D_IN after open. BSD implementations of pcap (including macOS) echo your own frames back at you, which breaks MacTCP. Suppress it with PCAP_D_IN where available (netdev\pcap.cpp).
+  . CHDMAN: Added parameter for add/remove pregap in createcd and extractcd (tools\chdman.cpp and util\cdrom.cpp). Changed LZMA compression level to keep the same dictionary size with updated LZMA SDK (util\chdcodec.cpp).
+  . 3RDPARTY: Updated LZMA to 26.02
   . Consolidate drivers into single file (tceptor.cpp)
-  . CHDMAN: Added parameter for add/remove pregap in createcd and extractcd (tools\chdman.cpp and util\cdrom.cpp).
 - Compiling
   . Updated Android builds to use SDL3. Use SDL_INSTALL_ROOT to get proper pkg-config settings and extract include too (osd/sdl3). Make build use OSD=sdl3 by default and fixed compilation. Updated gradle, sdk and java code to SDL3. Fixed sdk warnings (android). Should use pkg-config as others. Require only EMSDK and update docs (asmjs).
   . Attempted fix for Windows build related to gruesome header name collision (windows\window.cpp)
   . Removed #include "sound.h and "video.h" from emu\emu.h
   . Renamed osd\windows\video.cpp/h to osd\windows\winvideo.cpp/h to resolve header name collision 
-
+  . Replaced eminline bit manipulation functions with C++20's <bit> (formats\aiffile.cpp, formats\ap_dsk35.cpp, util\hashing.cpp and util\msdib.cpp). Retire rot[lr]_32 and rot[lr]_64 inline functions in favor of std::rot[lr] from C++20's <bit> (osd\eminline.h).
 
 
 
