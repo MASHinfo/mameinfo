@@ -54,6 +54,7 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.290GIT
 
+- New Working games: 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)'
 - New Non-Working games: Capriccio Star RS, 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Mahjong Emperor (Japan, ver. 1.01), Print Club Sony Creative Ver.5 (J 980721 V1.000) and Sugo Rock Spirit
 - New clones: Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Skat TV (S1) and 'unknown 'Space Invaders' gambling game (encrypted, set 3)'
 - New drivers: caprstar.cpp
@@ -77,6 +78,7 @@
   . NCR 5380 SCSI: Protected constructors with default arguments are a bug waiting to happen. Restore base-part self-reset interrupt (regressed by GitHub #15658). Make SCSI bus reset edge-triggered. The SCSI bus reset (chip reset + interrupt) is triggered by the /RST line transitioning to true, not by it merely being asserted. The previous code triggered on the level (icmd_w reset unconditionally on ASSERT RST; scsi_ctrl_changed on ctrl & S_RST), so a device asserting RST while another device already held it would reset and interrupt a second time. Claude Opus 4.8 assisted with datasheet analysis and implementation (machine\ncr5380.cpp).
   . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (Game Gear) after Z80 core changed (MT09493: When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (video\315_5124.cpp).
   . Zilog Z80 DMA Controller: Propagate BAO only when changed. Fixes (MESS) abc1600 stack overflow on soft reset (machine\z80dma.cpp).
+- cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
 - cv1k.cpp: Fixed CV1000 video timings. See: https://github.com/buffis/cv1k_research/tree/main/Video_Timings for analysis incl logic analyzer images/raw data.
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
 - policetr.cpp: Updated comments
