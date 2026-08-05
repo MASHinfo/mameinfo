@@ -71,6 +71,7 @@
   . Toshiba TMP90xxx/TMP91640: Fixed CPIR infinitely looping. Combined LDI/LDD and added CPD (tlcs90\tlcs90.cpp).
 - SOUND
   . Creative Labs CT1745 SB16 Mixer: Make irq/dma select to be user defined (sound\ct1745.cpp)
+  . RCA CDP1869 VIS: Fixed tone and white noise output. Fixes sound in (MESS) tmc600, comx35, pecom64 and the Cidelsa arcade machines (altair and destryer). Implemented by Claude Opus 5, based on recordings from a real tmc600. Validated that the sound output matches the recordings nigh 100% (sound\cdp1869.cpp).
   . Sound Interface: Open device at emu rate to avoid resampler drift and compare queue bytes against bytes in backpressure check (assisted by GLM-5.1; sound\sdl3_sound.cpp).
 - DEVICE
   . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8)): M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed (isa\cga.cpp).
@@ -78,10 +79,13 @@
     . Removed hardcoded DSDD format, handle SSDD, DSDD, DSHD and DSED (formats\hxcmfm_dsk.cpp).
     . Disable LOG_DESC verbose logging left enabled during development (machine\wd_fdc.cpp)
   . Intel 8251 USART: TxEMPTY remains asserted while transmitting sync characters. Empty commit to restart workflow run (machine\i8251.cpp).
+  . Motorola MC6845 CRTC: Don't recompute parameters before device has started (video\mc6845.cpp)
   . NCR 5380 SCSI: Protected constructors with default arguments are a bug waiting to happen. Restore base-part self-reset interrupt (regressed by GitHub #15658). Make SCSI bus reset edge-triggered. The SCSI bus reset (chip reset + interrupt) is triggered by the /RST line transitioning to true, not by it merely being asserted. The previous code triggered on the level (icmd_w reset unconditionally on ASSERT RST; scsi_ctrl_changed on ctrl & S_RST), so a device asserting RST while another device already held it would reset and interrupt a second time. Claude Opus 4.8 assisted with datasheet analysis and implementation (machine\ncr5380.cpp).
+  . S3 86c764/86c968: Hookup CR50. Fixed SVGA 8-bit mode enable for Cybervision64 (video\pc_vga_s3.cpp). 
   . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (Game Gear) after Z80 core changed (When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (ID 09493) (video\315_5124.cpp).
   . Zilog Z80 DMA Controller: Propagate BAO only when changed. Fixes (MESS) abc1600 stack overflow on soft reset (machine\z80dma.cpp).
   . Z80 SIO: Clear RTS/DTR flags in WR5 on channel reset (machine\z80sio.cpp)
+- cinemat.cpp: Fixed visible area typo. Still doesn't seem to work correctly.
 - cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
 - cv1k.cpp: Fixed CV1000 video timings. See: https://github.com/buffis/cv1k_research/tree/main/Video_Timings for analysis incl logic analyzer images/raw data.
 - dynax.cpp and royalmah.cpp
@@ -93,7 +97,7 @@
 - policetr.cpp: Updated comments
 - stella8085.cpp: Don't instantiate devices that don't exist. That shouldn't have been merged in the first place.
 - stv.cpp
-  . Sega Saturn DCC: Moved DCC dual CPU comms to an own device. Make it handle slave irq vectoring. Recitify slave irqs a bit. Fixes colmns97 and wwshin sound going screwy (sega\saturn_dcc.cpp).
+  . Sega Saturn DCC: Moved DCC dual CPU comms to an own device. Make it handle slave irq vectoring. Recitify slave irqs a bit. Fixes colmns97 and wwshin sound going screwy (ID 04187) (sega\saturn_dcc.cpp).
   . Sega Saturn SMPC: Make CKCHG320/CKCHG352 slower. Fixed vblank-in generation at 240 with VRES=0. Trying to enable a CPU that is already enabled resolve in a NOP. Partially fixes (MESS) gnine97/gnine98. Reset a bunch of things with dotsel command triggered. Delay a bit consecutive CPU enable/disable NOP commands. Allows (MESS) 3dbball* to be bootable again (sega\smpc.cpp).
   . Sega Saturn System Control Unit
     . Convert interrupts to IRQ_CALLBACK_MEMBER. Rewrote timer 0/1 logic. Cleanup, use enums for interrupt sources and DMA operating modes. Initial implementation of a DMA orchestrator (fixes diehard and dnmtdeka have no sound - GitHub #15769) (sega\saturn_scu.cpp).
@@ -101,13 +105,15 @@
     . Added a more consistent delay between DMA wait and move ops. Fixed regressions in danchih, danchiq and (MESS) avg and dejig* (sega\saturn_scu.cpp).
   . Sega Saturn VDP2: Moved CRTC logic in a new VDP2 device. Make it generate blank signals (sega\saturn_vdp2.cpp).
   . Sega SCUDSP: Rewrote DMA to use a timer and removed instant hack (scudsp\scudsp.cpp).
-  . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (sega\saturn_v.cpp).
+  . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn_v.cpp).
   . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn_v.cpp) 
   . Demoted 'Virtual Mahjong 2 - My Fair Lady (J 980608 V1.000)' to MACHINE_NOT_WORKING. Note: Don't think it ever worked, has random sync problems with SH-2 reading sound RAM.
-  . Demoted 'Danchi de Hanafuda (J 990607 V1.400)' and 'Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)' to MACHINE_NOT_WORKING 
+  . Demoted 'Danchi de Hanafuda (J 990607 V1.400)' and 'Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)' to MACHINE_NOT_WORKING.
+  . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
 - system16.cpp: Emulated Beauty Block / IQ Pipe protection (Reverse engineering by Claude Opus 5).
 - Amiga (alg.cpp, arsystems.cpp, cubo.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp)
 - Backfire!: Fixed sound routing
+- Capcom Baseball: 3rd coin is actually service coin. Improved clocks.
 - Euro Bingo 7: Added PAT PLD and counters SEEPROM dumps
 - High Seas Havoc: Improved decryption and hooked up PIC and inputs. Game is playable. Claude Opus 5 did most of the reverse engineering.
 - Operation Wolf: Latch TC0060DCA volume writes, fixed Operation Wolf.
@@ -125,7 +131,9 @@
 - Renamed (karnova) to (karnov5u) and (koikois) to (koikoisa)
 - Fixed rom names in megasys1.cpp and sbmjb.cpp
 - MAME
-  . VIDEO RENDERING SYSTEM: Split the screen_device into multiple devices depending on the actual type. Scripts to do the mass conversions written by Qwen 3.6. Changed the frame_period API to use attotime instead of attoseconds.
+  . VIDEO RENDERING SYSTEM
+    . Split the screen_device into multiple devices depending on the actual type. Scripts to do the mass conversions written by Qwen 3.6. Changed the frame_period API to use attotime instead of attoseconds.
+    . Fixed a ~20 year old bug (dating to 0.106u2) with vector.cpp: The initial point of the first vector line when a new vector list was processed always started at 0,0 instead of starting at the end point of the last line in the most recently processed vector list (emu\vector.cpp).
   . UI/OSD
     . Clear transient UI BIOS option without preserving command-line priority. When returning to the internal UI, MAME currently clears OPTION_BIOS by setting it to an empty value at command-line priority. This preserves a high-priority empty BIOS option, preventing per-system INI files from setting the BIOS on the next launch when no BIOS menu is shown. Revert the command-line-priority BIOS option instead. This keeps the original intent of clearing transient UI BIOS selections, while allowing game/system INI BIOS settings to apply again on subsequent launches. Fixes GitHub #11313 and #11314 (frontend\mame\mame.cpp).
     . Better handling of "main menu" mode. Also cleaned up execute bits and stray BOM characters and added makefile rules to srcclean more files (ui\selmenu.cpp and ui\simpleselgame.cpp).
@@ -140,6 +148,8 @@
   . Removed #include "sound.h and "video.h" from emu\emu.h
   . Renamed osd\windows\video.cpp/h to osd\windows\winvideo.cpp/h to resolve header name collision 
   . Replaced eminline bit manipulation functions with C++20's <bit> (formats\aiffile.cpp, formats\ap_dsk35.cpp, util\hashing.cpp and util\msdib.cpp). Retire rot[lr]_32 and rot[lr]_64 inline functions in favor of std::rot[lr] from C++20's <bit> (osd\eminline.h).
+
+
 
 
 
