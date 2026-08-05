@@ -85,7 +85,7 @@
   . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (Game Gear) after Z80 core changed (When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (ID 09493) (video\315_5124.cpp).
   . Zilog Z80 DMA Controller: Propagate BAO only when changed. Fixes (MESS) abc1600 stack overflow on soft reset (machine\z80dma.cpp).
   . Z80 SIO: Clear RTS/DTR flags in WR5 on channel reset (machine\z80sio.cpp)
-- cinemat.cpp: Fixed visible area typo. Still doesn't seem to work correctly.
+- cinemat.cpp: Fixed visible area typo. Fixed display regression (vector list should be cleared after each frame).
 - cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
 - cv1k.cpp: Fixed CV1000 video timings. See: https://github.com/buffis/cv1k_research/tree/main/Video_Timings for analysis incl logic analyzer images/raw data.
 - dynax.cpp and royalmah.cpp
@@ -139,7 +139,7 @@
     . Better handling of "main menu" mode. Also cleaned up execute bits and stray BOM characters and added makefile rules to srcclean more files (ui\selmenu.cpp and ui\simpleselgame.cpp).
   . NETWORK: Set PCAP_D_IN after open. BSD implementations of pcap (including macOS) echo your own frames back at you, which breaks MacTCP. Suppress it with PCAP_D_IN where available (netdev\pcap.cpp).
   . CHDMAN: Added parameter for add/remove pregap in createcd and extractcd (tools\chdman.cpp and util\cdrom.cpp). Changed LZMA compression level to keep the same dictionary size with updated LZMA SDK (util\chdcodec.cpp).
-  . 3RDPARTY: Updated GLM to version 1.0.3, LZMA to 26.02, utf8proc to version 2.11.3 and ZSTD to version 1.5.7.
+  . 3RDPARTY: Updated ASIO to version 1.38.2, GLM to 1.0.3, LZMA to 26.02, utf8proc to 2.11.3 and ZSTD to 1.5.7.
   . Actually added the rules to clean preset/example INI files (makefile)
   . Consolidate drivers into single file (tceptor.cpp)
 - Compiling
