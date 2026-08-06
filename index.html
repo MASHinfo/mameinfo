@@ -72,18 +72,23 @@
 - SOUND
   . Creative Labs CT1745 SB16 Mixer: Make irq/dma select to be user defined (sound\ct1745.cpp)
   . RCA CDP1869 VIS: Fixed tone and white noise output. Fixes sound in (MESS) tmc600, comx35, pecom64 and the Cidelsa arcade machines (altair and destryer). Implemented by Claude Opus 5, based on recordings from a real tmc600. Validated that the sound output matches the recordings nigh 100% (sound\cdp1869.cpp).
+  . Sega PCM/Sega 315-5218 PCM: Fixed end address off-by-1 regression (sound\segapcm.cpp)
   . Sound Interface: Open device at emu rate to avoid resampler drift and compare queue bytes against bytes in backpressure check (assisted by GLM-5.1; sound\sdl3_sound.cpp).
 - DEVICE
+  . Atari AVG/DVG: Correct vector intensity scaling (see GitHub #15835) (video\avgdvg.cpp)
   . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8)): M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed (isa\cga.cpp).
   . Floppy
     . Removed hardcoded DSDD format, handle SSDD, DSDD, DSHD and DSED (formats\hxcmfm_dsk.cpp).
-    . Disable LOG_DESC verbose logging left enabled during development (machine\wd_fdc.cpp)
+    . Disable LOG_DESC verbose logging left enabled during development (machine\wd_fdc.cpp).
+    . Added weak sector detection. Fixes (MESS) specpl2a and specpls3 can't load floppy images (ID 06957)(ID 07001) (formats\flopimg.cpp). Set weak flag for applicable sectors (formats\dsk_dsk.cpp).
+    . Cleared the FIFO and any stale transfer state from a previous command (machine\upd765.cpp).
   . Intel 8251 USART: TxEMPTY remains asserted while transmitting sync characters. Empty commit to restart workflow run (machine\i8251.cpp).
   . Motorola MC6845 CRTC: Don't recompute parameters before device has started (video\mc6845.cpp)
   . NCR 5380 SCSI: Protected constructors with default arguments are a bug waiting to happen. Restore base-part self-reset interrupt (regressed by GitHub #15658). Make SCSI bus reset edge-triggered. The SCSI bus reset (chip reset + interrupt) is triggered by the /RST line transitioning to true, not by it merely being asserted. The previous code triggered on the level (icmd_w reset unconditionally on ASSERT RST; scsi_ctrl_changed on ctrl & S_RST), so a device asserting RST while another device already held it would reset and interrupt a second time. Claude Opus 4.8 assisted with datasheet analysis and implementation (machine\ncr5380.cpp).
   . S3 86c764/86c968: Hookup CR50. Fixed SVGA 8-bit mode enable for Cybervision64 (video\pc_vga_s3.cpp). 
   . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (Game Gear) after Z80 core changed (When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (ID 09493) (video\315_5124.cpp).
   . Zilog Z80 DMA Controller: Propagate BAO only when changed. Fixes (MESS) abc1600 stack overflow on soft reset (machine\z80dma.cpp).
+  . Z80 SCC Channel: Gate transmit FIFO full logging on LOGTX (machine\z80scc.cpp)
   . Z80 SIO: Clear RTS/DTR flags in WR5 on channel reset (machine\z80sio.cpp)
 - cinemat.cpp: Fixed visible area typo. Fixed display regression (vector list should be cleared after each frame).
 - cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
@@ -228,7 +233,7 @@
   . ICS2115 WaveFront Synthesizer: Changed volume behaviour to match hardware measurements. Reference: https://github.com/MiSTer-devel/Arcade-IGSPGM_MiSTer and https://github.com/laoo/PGMTech.
   . MIDI: Updated PortMidi to upstream version 2.0.8 (3rdparty\portmidi). Fixed discarded const qualifier errors (3rdparty\portmidi\pm_win\pmwin.c).
   . Sega 68k-based Digital Sound Board 2: Implemented ROM banking (sega\dsb2.cpp)
-  . Sega PCM: Split discrete logic variant and 315-5218 variant. Fixed output rate divider for both variants. Use struct for voice registers. Use address map to replace read/write handlers. Use shared_ptr for register storage (sound\segapcm.cpp).
+  . Sega PCM/Sega 315-5218 PCM: Split discrete logic variant and 315-5218 variant. Fixed output rate divider for both variants. Use struct for voice registers. Use address map to replace read/write handlers. Use shared_ptr for register storage (sound\segapcm.cpp).
   . Sound Interface: Fixed a deadlock on exit. coreaudio_stream::close() took m_stream_mutex before calling AUGraphStop. AUGraphStop blocks until the CoreAudio I/O thread finishes any in-flight sink_render callback, and that callback also takes m_stream_mutex -- so holding the mutex across AUGraphStop deadlocks: this thread waits for the callback to finish, the callback waits for the mutex. Stop the graph first (which quiesces the I/O thread, so no further callbacks fire), then take the mutex for the rest of the teardown (sound\coreaudio_sound.cpp).
   . Votrax SC-01: Fixed the noise injection filter (sound\votrax.cpp)
   . Yamaha YMF292-F SCSP
@@ -272,6 +277,7 @@
     . Deassert REQ between phases; hold BSY in COMMAND. scsi_change_phase() now deasserts REQ on entry, so the initiator sees a clean REQ low->high edge with the new phase's C/D-I/O lines settled. Previously the per-byte REQ-deassert timer was cancelled by the next phase's re-assert, leaving REQ continuously high across e.g. COMMAND->DATA-IN, so an initiator that samples the control lines on the REQ edge read the stale previous-phase C/D/I/O. A selected target also asserts BSY on entry to COMMAND, so a fast SEL deassert racing the sel_timer cannot leave BSY low during the connection (scsi\scsihle.cpp).
     . Allow targets to defer phase transitions. An nscsi_full_device target previously had to queue its entire phase sequence (data, status, message) before returning from scsi_command(), so a command involving slow media work had to complete synchronously. Make TARGET_NEXT_CONTROL hold the connection in the current state when the control queue is empty instead of popping an invalid entry, and resume stepping when scsi_data_in()/scsi_data_out()/scsi_status_complete() push new entries. A target can now return from scsi_command() with nothing queued, run the medium operation off a timer, and queue the data/status phases when it finishes. Targets that queue everything up front never reach the new path; no behavior change for existing devices (machine\nscsi_hle.cpp).
   . Slot device: Removed default zero clock for some slots that provide an input clock to cards where it's common to use the input clock to drive devices on the card. It should be possible to use DERIVED_CLOCK in these cards. A default zero clock will just encourage people to be lazy and not set the bus clock. Set the bus clocks for a few systems and added FIXME comments for others.
+  . Z80 SCC Channel: Gate transmit FIFO full logging on LOGTX (machine\z80scc.cpp)
   . Z80 SIO: Fixed Rx interrupt logic (machine\z80sio.cpp)
   . Zilog Z80 DMA Controller: Fixed missing save state. Implemented DMA delay for (MESS) ZX Spectrum Next (allows to stop DMA in Continious mode for ISR) (machine\z80dma.cpp).
 - 1942.cpp and vulgus.cpp: Added 2nd soundlatch. Spriteram is write-only. Added 16x256 sprite size. Improved bg scroll and sound for clone 1942 (bootleg on Vulgus hardware).
