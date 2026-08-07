@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 7th August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 8th August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -62,7 +62,9 @@
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
   . ARM: Simplify handling of unaligned reads (arm\arm.cpp)
-  . Intel P8798: Timers run three times too fast. timer_value() and timer_time_until() are in cycles, not input clocks, so divide down accordingly (mcs96\i8x9x.cpp).
+  . Intel P8798
+    . Timers run three times too fast. timer_value() and timer_time_until() are in cycles, not input clocks, so divide down accordingly (mcs96\i8x9x.cpp).
+    . MULB indexed byte operand and HSO CAM entries lost to exact-equality matching. mulb with an indexed byte operand must read a byte. Fire HSO CAM entries on reached-or-passed, not exact equality. Co-authored-by Claude Opus 5 (mcs96\i8x9x.cpp).
   . IBM PowerPC
     . Help performance on PCI PowerMacs with a 68K DRC: * Apple's 68k DRC frequently generates a code sequence, flushes it, and then regenerates the exact same thing at the exact same address. So we now cache small sequences and can restore them without the overhead of a recompile. This required adding some accessors to the 3 DRC backends. * The entire vTLB (a MAME DRC implementation detail, *not* the 603's architectural TLB) was being used as a comparison for deciding to flush a block rather than just the actual mapping. In particular, the access count bits were causing unnecessary recompiles. * The vTLB was also too small: at its original size it covered just 512K of working set. By trial and error stepping through powers of 2, 4096 was found to give the best results running real Mac software. With these changes, pwrmacg3 went from roughly 160,000 block flushes and recompiles per second to 0 when idling at the Mac OS 8.1 Finder. This also smoothed out regular audio breakups on pippin caused by recompile storms and seems to have even sped up a few of the PPC arcade games by a few ticks. Claude Opus 5 assisted with measuring and isolating the performance issues n (powerpc\ppc.h, ppccom.h and ppcdrc.cpp).
     . Generate the no FPU exception when MSR[FP] is cleared, and added a temporary opt-in hack for some cache-reliant (MESS) Mac OS 9 behavior. Fixes garbage window backgrounds in the Finder and elsewhere on PowerMacs. Claude Opus 5 assisted with tracking down these issues (powerpc/ppc.h, ppccom.cpp and ppcdrc.cpp).
@@ -121,7 +123,7 @@
   . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
   . Fixed regression with CD auto boots (ID 04951). Reset pending playback parameters when issuing a disc seek command. Added logging for disc status changes. Yield commands until status changes are performed. Make it play along with seek rules. Fixes (MESS) jungrhyt crashing when repeating a stage. 0x61 and 0x63 commands needs to calculate proper sectofs/sectnum before checking for a possible rejection. Fixes (MESS) shadtusk crash at startup (sega\saturn_cd_hle.cpp).
 - system16.cpp: Emulated Beauty Block / IQ Pipe protection (Reverse engineering by Claude Opus 5). Fixed gfx in Beauty Block & IQ Pipe.
-- Amiga (alg.cpp, arsystems.cpp, cubo.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp)
+- Amiga (alg.cpp, arsystems.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp)
 - Backfire!: Fixed sound routing
 - Capcom Baseball: 3rd coin is actually service coin. Improved clocks.
 - Cruis'n Exotica: Rework dashboard layout to match the real cabinet (layout\crusnexo.lay)
