@@ -77,6 +77,7 @@
   . RCA CDP1869 VIS: Fixed tone and white noise output. Fixes sound in (MESS) tmc600, comx35, pecom64 and the Cidelsa arcade machines (altair and destryer). Implemented by Claude Opus 5, based on recordings from a real tmc600. Validated that the sound output matches the recordings nigh 100% (sound\cdp1869.cpp).
   . Sega PCM/Sega 315-5218 PCM: Fixed end address off-by-1 regression (sound\segapcm.cpp). Fixes broken engine sounds in Enduro Racer (ID 09512).
   . Sound Interface: Open device at emu rate to avoid resampler drift and compare queue bytes against bytes in backpressure check (assisted by GLM-5.1; sound\sdl3_sound.cpp).
+  . Yamaha YMF292-F SCSP: Implemented main to sound CPU interrupt (sound\scsp.cpp)
 - DEVICE
   . Atari AVG/DVG: Correct vector intensity scaling (see GitHub #15835) (video\avgdvg.cpp)
   . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8)): M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed (isa\cga.cpp).
@@ -99,29 +100,40 @@
 - cv1k.cpp: Fixed CV1000 video timings. See: https://github.com/buffis/cv1k_research/tree/main/Video_Timings for analysis incl logic analyzer images/raw data.
 - dynax.cpp and royalmah.cpp
   . Correct protection implementation for games based on TMP9* using the internal ROM. cafedoll, clone cafedollg and ougonhai now boot.
-  . Descrambled GFX for cafepara and cafebrk. Correct ougonhai memory map. Integrated PR 15838 in a more MAME-like way. Fixes mjtkp2 GFX/colors. Thanks to the original author Gently28.
+  . Descrambled GFX for cafepara and cafebrk. Correct ougonhai memory map. Integrated GitHub #15838 in a more MAME-like way. Fixes mjtkp2 GFX/colors. Thanks to the original author Gently28. Fixed mjtkp2 remaining GFX glitches 
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
 - model3.cpp: Mask texture coordinates in get_texture(). Fixes crash due to out-of-bounds read (sega\model3_v.cpp).
 - namcos22.cpp: Removed some redundant m_poly->wait() calls in screen_update (namco\namcos22_v.cpp)
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
 - policetr.cpp: Updated comments
+- popobear.cpp: Added NVRAM to magkengo and qiwang
 - seattle.cpp: Initialize register file and timer state at reset. Fixes intermittent failure to boot on some Atari games (machine\gt64xxx.cpp).
 - stella8085.cpp: Don't instantiate devices that don't exist. That shouldn't have been merged in the first place.
 - stv.cpp
-  . Sega Saturn DCC: Moved DCC dual CPU comms to an own device. Make it handle slave irq vectoring. Recitify slave irqs a bit. Fixes colmns97 and wwshin sound going screwy (ID 04187) (sega\saturn_dcc.cpp).
-  . Sega Saturn SMPC: Make CKCHG320/CKCHG352 slower. Fixed vblank-in generation at 240 with VRES=0. Trying to enable a CPU that is already enabled resolve in a NOP. Partially fixes (MESS) gnine97/gnine98. Reset a bunch of things with dotsel command triggered. Delay a bit consecutive CPU enable/disable NOP commands. Allows (MESS) 3dbball* to be bootable again (sega\smpc.cpp).
+  . Sega Saturn DCC
+    . Moved DCC dual CPU comms to an own device. Make it handle slave irq vectoring. Recitify slave irqs a bit. Fixes colmns97 and wwshin sound going screwy (ID 04187) (sega\saturn_dcc.cpp).
+    . Bump up base divider interleaving. Fixes sandor and (MESS) 6inchmyd regressions and sandor and clones thunt and thuntk hangs during 2nd gameplay attract demo (music continues) (ID 09516) (sega\saturn_dcc.cpp).
+  . Sega Saturn SMPC
+    . Make CKCHG320/CKCHG352 slower. Fixed vblank-in generation at 240 with VRES=0. Trying to enable a CPU that is already enabled resolve in a NOP. Partially fixes (MESS) gnine97/gnine98 (sega\smpc.cpp).
+    . Reset a bunch of things with dotsel command triggered. Delay a bit consecutive CPU enable/disable NOP commands. Allows (MESS) 3dbball* to be bootable again (sega\smpc.cpp).
   . Sega Saturn System Control Unit
     . Convert interrupts to IRQ_CALLBACK_MEMBER. Rewrote timer 0/1 logic. Cleanup, use enums for interrupt sources and DMA operating modes. Initial implementation of a DMA orchestrator (fixes diehard and dnmtdeka have no sound - GitHub #15769) (sega\saturn_scu.cpp).
     . Operational changes: Treat DMA direct mode as burst, indirect as cycle steal. Gain back a bit of performance by setting DTACK changes at DMA starts and stops only. Set a flag on DMA buses origins, disallow same bus transfers. Groundwork for setting cycle penalties. Fixed pfght regression using DMA as fill. Attempt to fix irq status non-dword writes ( (MESS) burningr*, no noticeable change) (sega\saturn_scu.cpp).
     . Added a more consistent delay between DMA wait and move ops. Fixed regressions in danchih, danchiq and (MESS) avg and dejig* (sega\saturn_scu.cpp).
-  . Sega Saturn VDP2: Moved CRTC logic in a new VDP2 device. Make it generate blank signals (sega\saturn_vdp2.cpp).
   . Sega SCUDSP: Rewrote DMA to use a timer and removed instant hack (scudsp\scudsp.cpp).
-  . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn_v.cpp).
-  . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn_v.cpp) 
+  . Sega Saturn VDP1
+    . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn_v.cpp).
+    . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn_v.cpp).
+    . Fixed sprite window in interlaced mode. Fixes (MESS) amoudan GFXs in main menu and gameplay. Implemented VDP2 4bpp bitmap with zoom mode (sega\saturn_v.cpp).
+    . Don't do sprite window if type is invalid. Fixes several empty dot cases and (MESS) saturnjp [kof96, kof97, samsho4]: VDP1 transparency issue with several games (ID 07508) (sega\saturn_v.cpp).
+  . Sega Saturn VDP2: Moved CRTC logic in a new VDP2 device. Make it generate blank signals (sega\saturn_vdp2.cpp).
+  . Sega Saturn/ST-V CD Block HLE
+    . Fixed regression with CD auto boots. Fixes (MESS) saturnjp [azelpanztai]: Special Function Code Select enable 0004 0000, contact MAMEdev (ID 04951). Reset pending playback parameters when issuing a disc seek command. Added logging for disc status changes. Yield commands until status changes are performed. Make it play along with seek rules. Fixes (MESS) jungrhyt crashing when repeating a stage (sega\saturn_cd_hle.cpp).
+    . 0x61 and 0x63 commands needs to calculate proper sectofs/sectnum before checking for a possible rejection. Fixes (MESS) shadtusk crash at startup (sega\saturn_cd_hle.cpp).
+    . Improved reset selector semantics (sega\saturn_cd_hle.cpp).
   . Demoted 'Virtual Mahjong 2 - My Fair Lady (J 980608 V1.000)' to MACHINE_NOT_WORKING. Note: Don't think it ever worked, has random sync problems with SH-2 reading sound RAM.
   . Demoted 'Danchi de Hanafuda (J 990607 V1.400)' and 'Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)' to MACHINE_NOT_WORKING.
   . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
-  . Fixed regression with CD auto boots (ID 04951). Reset pending playback parameters when issuing a disc seek command. Added logging for disc status changes. Yield commands until status changes are performed. Make it play along with seek rules. Fixes (MESS) jungrhyt crashing when repeating a stage. 0x61 and 0x63 commands needs to calculate proper sectofs/sectnum before checking for a possible rejection. Fixes (MESS) shadtusk crash at startup (sega\saturn_cd_hle.cpp).
 - system16.cpp: Emulated Beauty Block / IQ Pipe protection (Reverse engineering by Claude Opus 5). Fixed gfx in Beauty Block & IQ Pipe.
 - Amiga (alg.cpp, arsystems.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp)
 - Backfire!: Fixed sound routing
@@ -247,7 +259,7 @@
   . Votrax SC-01: Fixed the noise injection filter (sound\votrax.cpp)
   . Yamaha YMF292-F SCSP
     . Added serial interface and hooked up MIDI input/output (sound\scsp.cpp). Send commands to the SCSP via the USART properly. Magical Truck Adventure now successfully reads "region check" code from SCSP (sega\model2.cpp and sega\model3.cpp).
-    . Implemented MSLC delayed sample updates (sound\scsp.cpp). Fixes vstriker repeated samples and srallyc played wrong sound keys at the end of the attract sequence (ID 09202).
+    . Implemented MSLC delayed sample updates. Fixes vstriker repeated samples and srallyc played wrong sound keys at the end of the attract sequence (ID 09202) (sound\scsp.cpp).
     . Improved SDIR ("sound direct") emulation (sound\scsp.cpp)
 - DEVICE
   . Cirrus Logic GD5401/GD5428/GD5430/GD5446: Fixed BitBLT transparent colour mask indices & update VRAM dynamic properties. Fixed BitBLT transparent colour mask register mapping. Update VRAM type handling. Fixed the id of GD5446. Update SR6 read handling (video\pc_vga_cirrus.cpp).
