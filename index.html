@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 8th August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 9th August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -55,9 +55,9 @@
 0.290GIT
 
 - New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)'
-- New Non-Working games: Capriccio Star RS, 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Mahjong Emperor (Japan, ver. 1.01), Miracle Stadium, Premier Eleven (prototype), Print Club Sony Creative Ver.5 (J 980721 V1.000) and Sugo Rock Spirit
+- New Non-Working games: Capriccio Star RS, 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Mahjong Emperor (Japan, ver. 1.01), Miracle Stadium, Premier Eleven (prototype), Print Club Sony Creative Ver.5 (J 980721 V1.000), Sugo Rock Spirit and Tropical Fruits (v11.01)
 - New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Skat TV (S1) and 'unknown 'Space Invaders' gambling game (encrypted, set 3)'
-- New drivers: caprstar.cpp
+- New drivers: caprstar.cpp and eagle_9619b.cpp
 - New devices: amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
@@ -69,6 +69,7 @@
     . Help performance on PCI PowerMacs with a 68K DRC: * Apple's 68k DRC frequently generates a code sequence, flushes it, and then regenerates the exact same thing at the exact same address. So we now cache small sequences and can restore them without the overhead of a recompile. This required adding some accessors to the 3 DRC backends. * The entire vTLB (a MAME DRC implementation detail, *not* the 603's architectural TLB) was being used as a comparison for deciding to flush a block rather than just the actual mapping. In particular, the access count bits were causing unnecessary recompiles. * The vTLB was also too small: at its original size it covered just 512K of working set. By trial and error stepping through powers of 2, 4096 was found to give the best results running real Mac software. With these changes, pwrmacg3 went from roughly 160,000 block flushes and recompiles per second to 0 when idling at the Mac OS 8.1 Finder. This also smoothed out regular audio breakups on pippin caused by recompile storms and seems to have even sped up a few of the PPC arcade games by a few ticks. Claude Opus 5 assisted with measuring and isolating the performance issues n (powerpc\ppc.h, ppccom.h and ppcdrc.cpp).
     . Generate the no FPU exception when MSR[FP] is cleared, and added a temporary opt-in hack for some cache-reliant (MESS) Mac OS 9 behavior. Fixes garbage window backgrounds in the Finder and elsewhere on PowerMacs. Claude Opus 5 assisted with tracking down these issues (powerpc/ppc.h, ppccom.cpp and ppcdrc.cpp).
   . Hitachi H8: Use logmacro for verbose logging (h8\h8_timer16.cpp). Minor logging fixes (h8\h8_dma.cpp and h8\h8_sci.cpp). Fixed logerror bug that caused assertion failures in (MESS) jv880 and rd500 (h8\h8_timer16.cpp).
+  . Hitachi SH7xxx/SH-1/2/3/4: SH family updates. Removed shadow m_am member that was causing confusion in favor of the base class's. Exception vector fetches now mask the fetched PC with m_am. Fixed DRC cycle counts for MULS, MULU, BT/BF, TSTM, BSRF and STC/LDC. Fixed interpreter cycle counts for JMP, ORI and ORM. Fixed interpreter MAC.W and MAC.L to generate correct results. Illegal instructions now trap when they happen instead of some time later. generate_delay_slot() propagates the delay slot's cycle count back to the caller. Fixed DRC delay slot behavior for BSRF, BRAF, JSR, JMP, RTS and RTE. MOV.W @(disp,PC), MOV.L @(disp,PC) and MOVA now use the correct address when in a delay slot. RTE restores PC and SR before the delay slot executes and properly masks SR. LDC.L @Rm+,SR masks the loaded value with SH_FLAGS. SLEEP now actually sleeps on the DRC, it was a no-op before. The FPU now uses the requested rounding mode for both interpreter and DRC. Correctness fixes for the interpreter versions of FTRC, FDIV, FSQRT, FSRRA, FMAC, FTRV and LDS. Fixed 11 cases of copy-pasted very broken UML_TEST (..., m_fpu_pr, 0). DRC FNEG inverts the sign bit in both precisions. DRC FTRC routed to the range-checked implementation. All seven DRC FMOV forms converted to UML via generate_fmov_single/generate_fmov_pair. DRC FLDS, FTRC, FSQRT, FSRRA, FCNVSD, FCNVDS, FIPR and FTRV converted from cfuncs to UML. DRC CLRS, SETS, SHAD, SHLD, LDCDBR, the banked STC/LDC forms and the @-Rn/@Rn+ control-register transfers and LDS/LDS.L to FPSCR converted to UML. Func_FSSCA applies the rounding mode before calling the interpreter. Tested to fix a selection of Saturn software that was marked "doesn't work on DRC" and to generate byte-identical 3D frames between the interpreter and DRC with 6 Naomi games. On both x64 and arm64 hosts and even x64 vs. arm64. Additionally, a generated Lua script performed an FPU torture test which found and verified many of these issues. Debugging and tracing assistance and some suggestions on fixes were provided by Claude Opus 5. Fixed things that should be in the DRC cache.
   . Motorola MC68030: Fixed CACR mask for '030, was causing a few Macs to misdetect as an '040 (m68000\m68k_in.lst and m68000\m68kops.cpp)
   . Motorola MC68040: On the MC68040 CACR reserved bits must read as 0 (m68000\m68k_in.lst, m68kcpu.h and m68kops.cpp), fixes Amiga CPU detection (GitHub #15792).
   . Toshiba TMP90xxx/TMP91640: Fixed CPIR infinitely looping. Combined LDI/LDD and added CPD (tlcs90\tlcs90.cpp).
@@ -118,9 +119,11 @@
     . Reset a bunch of things with dotsel command triggered. Delay a bit consecutive CPU enable/disable NOP commands. Allows (MESS) 3dbball* to be bootable again (sega\smpc.cpp).
   . Sega Saturn System Control Unit
     . Convert interrupts to IRQ_CALLBACK_MEMBER. Rewrote timer 0/1 logic. Cleanup, use enums for interrupt sources and DMA operating modes. Initial implementation of a DMA orchestrator (fixes diehard and dnmtdeka have no sound - GitHub #15769) (sega\saturn_scu.cpp).
-    . Operational changes: Treat DMA direct mode as burst, indirect as cycle steal. Gain back a bit of performance by setting DTACK changes at DMA starts and stops only. Set a flag on DMA buses origins, disallow same bus transfers. Groundwork for setting cycle penalties. Fixed pfght regression using DMA as fill. Attempt to fix irq status non-dword writes ( (MESS) burningr*, no noticeable change) (sega\saturn_scu.cpp).
+    . Operational changes: Treat DMA direct mode as burst, indirect as cycle steal. Gain back a bit of performance by setting DTACK changes at DMA starts and stops only. Set a flag on DMA buses origins, disallow same bus transfers. Groundwork for setting cycle penalties. Fixed pfght regression using DMA as fill. Attempt to fix irq status non-dword writes ((MESS) burningr*, no noticeable change) (sega\saturn_scu.cpp).
     . Added a more consistent delay between DMA wait and move ops. Fixed regressions in danchih, danchiq and (MESS) avg and dejig* (sega\saturn_scu.cpp).
-  . Sega SCUDSP: Rewrote DMA to use a timer and removed instant hack (scudsp\scudsp.cpp).
+  . Sega SCUDSP
+    . Rewrote DMA to use a timer and removed instant hack. Make sure to honor C-Bus transfer fixed adds rule with DMA. Fixes (MESS) mshvssf bad colors in main menu and gameplay (scudsp\scudsp.cpp).
+    . Refine some DMA loose ends: C-Bus DMA reads actually can be either 0 or 4. B-Bus DMA reads are hardwired to +4. DMA CTx pointers actually increments on every transfer (scudsp\scudsp.cpp).
   . Sega Saturn VDP1
     . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn_v.cpp).
     . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn_v.cpp).
@@ -160,13 +163,15 @@
   . VIDEO RENDERING SYSTEM
     . Split the screen_device into multiple devices depending on the actual type. Scripts to do the mass conversions written by Qwen 3.6. Changed the frame_period API to use attotime instead of attoseconds.
     . Fixed a ~20 year old bug (dating to 0.106u2) with vector.cpp: The initial point of the first vector line when a new vector list was processed always started at 0,0 instead of starting at the end point of the last line in the most recently processed vector list (emu\vector.cpp).
+  . INPUT/OUTPUT
+    . Actually added the rules to clean preset/example INI files (makefile)
+    . Allow scripts to enumerate device outputs (emu\output.cpp and mame\luaengine.cpp). 
   . UI/OSD
     . Clear transient UI BIOS option without preserving command-line priority. When returning to the internal UI, MAME currently clears OPTION_BIOS by setting it to an empty value at command-line priority. This preserves a high-priority empty BIOS option, preventing per-system INI files from setting the BIOS on the next launch when no BIOS menu is shown. Revert the command-line-priority BIOS option instead. This keeps the original intent of clearing transient UI BIOS selections, while allowing game/system INI BIOS settings to apply again on subsequent launches. Fixes GitHub #11313 and #11314 (frontend\mame\mame.cpp).
     . Better handling of "main menu" mode. Also cleaned up execute bits and stray BOM characters and added makefile rules to srcclean more files (ui\selmenu.cpp and ui\simpleselgame.cpp).
   . NETWORK: Set PCAP_D_IN after open. BSD implementations of pcap (including macOS) echo your own frames back at you, which breaks MacTCP. Suppress it with PCAP_D_IN where available (netdev\pcap.cpp).
   . CHDMAN: Added parameter for add/remove pregap in createcd and extractcd (tools\chdman.cpp and util\cdrom.cpp). Changed LZMA compression level to keep the same dictionary size with updated LZMA SDK (util\chdcodec.cpp).
   . 3RDPARTY: Updated ASIO to version 1.38.2, GLM to 1.0.3, LZMA to 26.02, PUGIXML to 1.16, utf8proc to 2.11.3 and ZSTD to 1.5.7.
-  . Actually added the rules to clean preset/example INI files (makefile)
   . Consolidate drivers into single file (tceptor.cpp)
 - Compiling
   . Updated Android builds to use SDL3. Use SDL_INSTALL_ROOT to get proper pkg-config settings and extract include too (osd/sdl3). Make build use OSD=sdl3 by default and fixed compilation. Updated gradle, sdk and java code to SDL3. Fixed sdk warnings (android). Should use pkg-config as others. Require only EMSDK and update docs (asmjs).
