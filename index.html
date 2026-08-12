@@ -57,8 +57,8 @@
 - New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400), Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200) and High Seas Havoc
 - New Non-Working games: Capriccio Star RS, 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Mahjong Emperor (Japan, ver. 1.01), Miracle Stadium, Premier Eleven (prototype), Print Club Sony Creative Ver.5 (J 980721 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0) and Tropical Fruits (Eagle, v11.01)
 - New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Skat TV (S1), Solar Fox (cabaret) and 'unknown 'Space Invaders' gambling game (encrypted, set 3)'
-- New drivers: caprstar.cpp, eagle_9715a.cpp and eagle_9619b.cpp
-- New devices: amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
+- New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, lastmisn.cpp
+- New devices: amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, ghostb.cpp, oscar.cpp, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
   . ARM: Simplify handling of unaligned reads (arm\arm.cpp)
@@ -85,6 +85,7 @@
 - DEVICE
   . Atari AVG/DVG: Correct vector intensity scaling (see GitHub #15835) (video\avgdvg.cpp)
   . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8)): M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed (isa\cga.cpp).
+  . DECO 55 / 56 / 74 / 141 Tilemap Generator: Fixed attempt to set zero scroll rows. If only one scroll row configured, don't right-shift it. Caused an assertion failure in debug builds (dataeast\deco16ic.cpp) [Vas Crabb].
   . Floppy
     . Removed hardcoded DSDD format, handle SSDD, DSDD, DSHD and DSED (formats\hxcmfm_dsk.cpp).
     . Disable LOG_DESC verbose logging left enabled during development (machine\wd_fdc.cpp).
@@ -105,6 +106,11 @@
 - chihiro.cpp: Fixed crash regression (shared\xbox.cpp)
 - cinemat.cpp: Fixed visible area typo. Fixed display regression (vector list should be cleared after each frame).
 - cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
+- cobracom.cpp, ghostb.cpp, lastmisn.cpp, oscar.cpp and srdarwin.cpp
+  . Split dec8.cpp driver for different hardware configurations (dataeast\cobracom.cpp, ghostb.cpp, lastmisn.cpp, oscar.cpp and srdarwin.cpp)
+  . Fixed save state/memory region size (reduced unnecessary areas in ROM regions)
+  . Fixed potential out-of-bounds bank selection in dataeast\lastmisn.cpp.
+  . Use memory_share_creator for 16-bit copy of sprite RAM.
 - cv1k.cpp: Fixed CV1000 video timings. See: https://github.com/buffis/cv1k_research/tree/main/Video_Timings for analysis incl logic analyzer images/raw data.
 - cyclemb.cpp and kingdrby.cpp: Normalize blue palette
 - dynax.cpp and royalmah.cpp
@@ -132,7 +138,7 @@
   . Sega Saturn System Control Unit
     . Convert interrupts to IRQ_CALLBACK_MEMBER. Rewrote timer 0/1 logic. Cleanup, use enums for interrupt sources and DMA operating modes. Initial implementation of a DMA orchestrator (fixes diehard and dnmtdeka have no sound - GitHub #15769) (sega\saturn_scu.cpp).
     . Operational changes: Treat DMA direct mode as burst, indirect as cycle steal. Gain back a bit of performance by setting DTACK changes at DMA starts and stops only. Set a flag on DMA buses origins, disallow same bus transfers. Groundwork for setting cycle penalties. Fixed pfght regression using DMA as fill. Attempt to fix irq status non-dword writes ((MESS) burningr*, no noticeable change) (sega\saturn_scu.cpp).
-    . Added a more consistent delay between DMA wait and move ops. Fixes regressions in danchih, danchiq and (MESS) avg and dejig* (ID 06270) (sega\saturn_scu.cpp).
+    . Added a more consistent delay between DMA wait and move ops. Fixes regressions in danchih, danchiq and (MESS) avg and dejig* (sega\saturn_scu.cpp) (ID 06270).
   . Sega SCUDSP
     . Rewrote DMA to use a timer and removed instant hack. Make sure to honor C-Bus transfer fixed adds rule with DMA. Fixes (MESS) mshvssf bad colors in main menu and gameplay (scudsp\scudsp.cpp).
     . Refine some DMA loose ends: C-Bus DMA reads actually can be either 0 or 4. B-Bus DMA reads are hardwired to +4. DMA CTx pointers actually increments on every transfer (scudsp\scudsp.cpp).
@@ -173,7 +179,7 @@
 - Tong Zi Maque: Fleshed out the driver. Claude Opus 5 completed the decryption, reversed the EEPROM and RTC hook-up and helped with the GFX emulation.
 - Description changes of 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', 'Print Club 2 Standard Ver1 (U 970921 V1.000)', Rugby? (Four Roses hardware) and Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0)
 - Fixed rom names in cbasebal.cpp, megasys1.cpp and sbmjb.cpp
-- Renamed (karnova) to (karnov5u) and (koikois) to (koikoisa)
+- Renamed cobracomjb) to (cobracomjbl), (karnova) to (karnov5u), (koikois) to (koikoisa) and (srdarwinb) to (srdarwinjbl)
 - Dipswitch fixes in cmmb.cpp, hshavoc.cpp, pacman.cpp and simple_st0016.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
