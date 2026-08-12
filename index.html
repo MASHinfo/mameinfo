@@ -75,6 +75,7 @@
   . Motorola MC68030: Fixed CACR mask for '030, was causing a few Macs to misdetect as an '040 (m68000\m68k_in.lst and m68000\m68kops.cpp)
   . Motorola MC68040: On the MC68040 CACR reserved bits must read as 0 (m68000\m68k_in.lst, m68kcpu.h and m68kops.cpp), fixes Amiga CPU detection (GitHub #15792).
   . Toshiba TMP90xxx/TMP91640: Fixed CPIR infinitely looping. Combined LDI/LDD and added CPD (tlcs90\tlcs90.cpp).
+  . Zilog Z8001/2: Correct CPU/MMU behavior. Fixed addr_to_reg segment mask to replace full high byte. Fixed MULTW carry-flag boundary. Preserve DIVW/DIVL quotient on representable overflow. Toggle H flag in COMFLG. Write POPL @Rd,@Rs result to memory. Read indirect MULTL operand from memory. Fixed dynamic shift dispatch and count sign-extension [tpaxia]. Fixed RRDB temp register and RLDB/RRDB S flag. Accumulate V flag across shift/rotate steps. Fixed compare-string repeat and block-move Z flag. Fixed SOTIRB/SOUTIB source not incrementing (bumped segment word instead of offset). Fixed block-I/O instruction flags and address increment. Fixed COMB @Rd destination register decode. Trap the 4F extended EPU family at the correct instruction. Preserve the indexed LDA operand across an overlapping destination. Derive the DAB correction table from measured Z8001 behaviour. Leave the tcc destination alone when the condition is false. Fixed the MULTL carry boundary. Take the DIV overflow sign flag from the whole quotient. Order the translate RH1 writeback against the pointer step. Replaced the whole high word when writing a segmented address back. Do not mask PSAPSEG through LDCTL. Read a byte for the non-indexed COMB. Do not mask the FCW written through LDCTL. Calculate DAB correction directly (z8000\z8000.cpp).
 - SOUND
   . Creative Labs CT1745 SB16 Mixer: Make irq/dma select to be user defined (sound\ct1745.cpp)
   . RCA CDP1869 VIS: Fixed tone and white noise output. Fixes sound in (MESS) tmc600, comx35, pecom64 and the Cidelsa arcade machines (altair and destryer). Implemented by Claude Opus 5, based on recordings from a real tmc600. Validated that the sound output matches the recordings nigh 100% (sound\cdp1869.cpp).
@@ -112,7 +113,9 @@
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
   . Correct GFX forBao Qing Tian (TIC). Claude Opus 5 identified the issue.
 - mcr.cpp: Moved most public stuff to protected / private
-- model3.cpp: Mask texture coordinates in get_texture(). Fixes crash due to out-of-bounds read (sega\model3_v.cpp).
+- model3.cpp
+  . Mask texture coordinates in get_texture(). Fixes crash due to out-of-bounds read (sega\model3_v.cpp).
+  . Redumped bad IC17 ROM for 'Virtua Striker 2 '98 (Step 2.0)'
 - namcos22.cpp: Removed some redundant m_poly->wait() calls in screen_update (namco\namcos22_v.cpp)
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
 - policetr.cpp: Updated comments
@@ -122,23 +125,23 @@
 - stv.cpp
   . Sega Saturn DCC
     . Moved DCC dual CPU comms to an own device. Make it handle slave irq vectoring. Recitify slave irqs a bit. Fixes colmns97 and wwshin sound going screwy (ID 04187) (sega\saturn_dcc.cpp).
-    . Bump up base divider interleaving. Fixes sandor and (MESS) 6inchmyd regressions and sandor and clones thunt and thuntk hangs during 2nd gameplay attract demo (music continues) (ID 09516) (sega\saturn_dcc.cpp).
+    . Bump up base divider interleaving. Fixes sandor and clones hangs during 2nd gameplay attract demo (music continues) (ID 09516) (sega\saturn_dcc.h).
   . Sega Saturn SMPC
     . Make CKCHG320/CKCHG352 slower. Fixed vblank-in generation at 240 with VRES=0. Trying to enable a CPU that is already enabled resolve in a NOP. Partially fixes (MESS) gnine97/gnine98 (sega\smpc.cpp).
     . Reset a bunch of things with dotsel command triggered. Delay a bit consecutive CPU enable/disable NOP commands. Allows (MESS) 3dbball* to be bootable again (sega\smpc.cpp).
   . Sega Saturn System Control Unit
     . Convert interrupts to IRQ_CALLBACK_MEMBER. Rewrote timer 0/1 logic. Cleanup, use enums for interrupt sources and DMA operating modes. Initial implementation of a DMA orchestrator (fixes diehard and dnmtdeka have no sound - GitHub #15769) (sega\saturn_scu.cpp).
     . Operational changes: Treat DMA direct mode as burst, indirect as cycle steal. Gain back a bit of performance by setting DTACK changes at DMA starts and stops only. Set a flag on DMA buses origins, disallow same bus transfers. Groundwork for setting cycle penalties. Fixed pfght regression using DMA as fill. Attempt to fix irq status non-dword writes ((MESS) burningr*, no noticeable change) (sega\saturn_scu.cpp).
-    . Added a more consistent delay between DMA wait and move ops. Fixed regressions in danchih, danchiq and (MESS) avg and dejig* (sega\saturn_scu.cpp).
+    . Added a more consistent delay between DMA wait and move ops. Fixes regressions in danchih, danchiq and (MESS) avg and dejig* (ID 06270) (sega\saturn_scu.cpp).
   . Sega SCUDSP
     . Rewrote DMA to use a timer and removed instant hack. Make sure to honor C-Bus transfer fixed adds rule with DMA. Fixes (MESS) mshvssf bad colors in main menu and gameplay (scudsp\scudsp.cpp).
     . Refine some DMA loose ends: C-Bus DMA reads actually can be either 0 or 4. B-Bus DMA reads are hardwired to +4. DMA CTx pointers actually increments on every transfer (scudsp\scudsp.cpp).
   . Sega Saturn VDP1
-    . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn_v.cpp).
-    . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn_v.cpp).
-    . Fixed sprite window in interlaced mode. Fixes (MESS) amoudan GFXs in main menu and gameplay. Implemented VDP2 4bpp bitmap with zoom mode (sega\saturn_v.cpp).
-    . Don't do sprite window if type is invalid. Fixes several empty dot cases and (MESS) saturnjp [kof96, kof97, samsho4]: VDP1 transparency issue with several games (ID 07508) (sega\saturn_v.cpp).
-    . Fixed VDP1 GFX alignment with flipy + clip y. Fixes (MESS) draculax inverted castle map plus some enemies glitching out when on top of screen (sega\saturn_v.cpp).
+    . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn.cpp).
+    . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn.cpp).
+    . Fixed sprite window in interlaced mode. Fixes (MESS) amoudan GFXs in main menu and gameplay. Implemented VDP2 4bpp bitmap with zoom mode (sega\saturn.cpp).
+    . Don't do sprite window if type is invalid. Fixes several empty dot cases and (MESS) saturnjp [kof96, kof97, samsho4]: VDP1 transparency issue with several games (ID 07508) (sega\saturn.cpp).
+    . Fixed VDP1 GFX alignment with flipy + clip y. Fixes (MESS) draculax inverted castle map plus some enemies glitching out when on top of screen (sega\saturn.cpp).
   . Sega Saturn VDP2: Moved CRTC logic in a new VDP2 device. Make it generate blank signals (sega\saturn_vdp2.cpp).
   . Sega Saturn/ST-V CD Block HLE
     . Fixed regression with CD auto boots. Fixes (MESS) saturnjp [azelpanztai]: Special Function Code Select enable 0004 0000, contact MAMEdev (ID 04951). Reset pending playback parameters when issuing a disc seek command. Added logging for disc status changes. Yield commands until status changes are performed. Make it play along with seek rules. Fixes (MESS) jungrhyt crashing when repeating a stage (sega\saturn_cd_hle.cpp).
@@ -147,7 +150,7 @@
   . Demoted 'Virtual Mahjong 2 - My Fair Lady (J 980608 V1.000)' to MACHINE_NOT_WORKING. Note: Don't think it ever worked, has random sync problems with SH-2 reading sound RAM.
   . Demoted 'Danchi de Hanafuda (J 990607 V1.400)' and 'Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)' to MACHINE_NOT_WORKING.
   . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
-  . Promoted colmns97, danchih and danchiq to working
+  . Promoted colmns97, danchih and danchiq to working. Cleaned up various Saturn code and made relationship between headers, sources and classes less confusing.
 - system16.cpp: Emulated Beauty Block / IQ Pipe protection (Reverse engineering by Claude Opus 5). Fixed gfx in Beauty Block & IQ Pipe.
 - taito_l.cpp and tnzs.cpp: Lower cpu quantum a bit
 - Amiga (alg.cpp, arsystems.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp)
@@ -158,7 +161,7 @@
 - Euro Bingo 7: Added PAT PLD and counters SEEPROM dumps
 - High Seas Havoc: Improved decryption and hooked up PIC and inputs. Game is playable. Claude Opus 5 did most of the reverse engineering.
 - Operation Wolf: Latch TC0060DCA volume writes, fixes Operation Wolf.
-- Mahjong Shinkirou Deja Vu: Fixed CPIR infinitely looping (tlcs90\tlcs90.cpp). Fixes tiles in players hand are not sorted automatically when start the game (ID 00964).
+- Mahjong Shinkirou Deja Vu: Fixed CPIR infinitely looping (tlcs90\tlcs90.cpp). Fixes mjdejavu and clone mjdejav2 tiles in players hand are not sorted automatically when start the game (ID 00964).
 - Pac-Carnival: Dumped/Verified PLDs
 - Paperboy: Fixed factory reset EEPROM for calibrated controls
 - Psychic Force 2012: Fixed intermitant fatalerror in pf2012 and (MESS) p5txla. The PCI core can call remap() before the device gets reset (machine\w83877tf.cpp).
@@ -166,8 +169,8 @@
 - Scorpion: Fixed rom loading for clone Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2) and promoted game to working.
 - Super Glob: Connect test switch to enable diagnostics for theglobp and similar epos games (beastfp, beastfpa, theglobp, theglobpa, theglobme, sprglobp, sprglobp2 and sprglbpg).
 - Super Pinball Action: Fixed dipswitch port regression
+- Tao Taido: Fixed player 2 controls in clone Tao Taido (6 button version). Note: For a long time in clone taotaidoa, player 2's kick buttons (4-6) actually causes player 1 to kick in-game, as if they pressed their own corresponding kick buttons. The game checks player 3 and 4 inputs, which are visible in the service mode's input test program, and reuses them for kick buttons. As noted in the driver notes, players 3 and 4 aren't used at all in the 2-button parent taotaido or the 2/3-button clone taotaido3. Adjusting the 'P4' port to map buttons 1-3, rather than three of the directions, to player 2's buttons 4-6 allows player 2 to kick as expected.
 - Tong Zi Maque: Fleshed out the driver. Claude Opus 5 completed the decryption, reversed the EEPROM and RTC hook-up and helped with the GFX emulation.
-- Virtua Striker 2 '98: Redumped 'Virtua Striker 2 '98 (Step 2.0)' bad IC17 ROM
 - Description changes of 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', 'Print Club 2 Standard Ver1 (U 970921 V1.000)', Rugby? (Four Roses hardware) and Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0)
 - Fixed rom names in cbasebal.cpp, megasys1.cpp and sbmjb.cpp
 - Renamed (karnova) to (karnov5u) and (koikois) to (koikoisa)
@@ -182,7 +185,9 @@
   . UI/OSD
     . Clear transient UI BIOS option without preserving command-line priority. When returning to the internal UI, MAME currently clears OPTION_BIOS by setting it to an empty value at command-line priority. This preserves a high-priority empty BIOS option, preventing per-system INI files from setting the BIOS on the next launch when no BIOS menu is shown. Revert the command-line-priority BIOS option instead. This keeps the original intent of clearing transient UI BIOS selections, while allowing game/system INI BIOS settings to apply again on subsequent launches. Fixes GitHub #11313 and #11314 (frontend\mame\mame.cpp).
     . Better handling of "main menu" mode. Also cleaned up execute bits and stray BOM characters and added makefile rules to srcclean more files (ui\selmenu.cpp and ui\simpleselgame.cpp).
-  . NETWORK: Set PCAP_D_IN after open. BSD implementations of pcap (including macOS) echo your own frames back at you, which breaks MacTCP. Suppress it with PCAP_D_IN where available (netdev\pcap.cpp).
+  . NETWORK
+    . Set PCAP_D_IN after open. BSD implementations of pcap (including macOS) echo your own frames back at you, which breaks MacTCP. Suppress it with PCAP_D_IN where available (netdev\pcap.cpp).
+    . Fixed inverted success/failure return from send(). pcap_sendpacket() returns 0 on success and PCAP_ERROR on failure, but netdev_pcap::send() was returning the byte count only when the call failed and 0 on success. Removed orphaned dead comment in send() (netdev\pcap.cpp).
   . CHDMAN
     . Added parameter for add/remove pregap in createcd and extractcd (tools\chdman.cpp and util\cdrom.cpp). Changed LZMA compression level to keep the same dictionary size with updated LZMA SDK (util\chdcodec.cpp).
     . Added GDI pregap support (tools\chdman.cpp and util\cdrom.cpp)
@@ -210,6 +215,7 @@
 - New drivers: capr2.cpp, captaven.cpp, carnival37.cpp, cosmo68k.cpp, dragngun.cpp, fghthist.cpp, hkcastle.cpp, hvysmsh.cpp, luckyjkr.cpp, pres2k.cpp and st25.cpp
 - New devices: amd_29lv160dt, auto3a_terminal, ca3280_vca, ca3280_vca_lin, ct1741, dsi32, eidemax, fdc9266, flashbeats_spectrum, floppy_35_sssd, generalplus_gpr27p512a, h8_refresh, h8500_frt, h8500_intc, h8520_intc, h8532_intc, h8534_intc, hynix_hy27uf084g2m, neo_zmc, ns32202, ns32cg16, nscsi_sa1403d, opus_pm100, opus_pm110, pd32, s97801_device, s97801_kbd, s97801_terminal, sandisk_nand_128mb_512, sandisk_nand_256mb_512, scsi_tape_news, sega_315_5218, segapcm_discrete, subsino_sg001, upd71071, upd72065, upd7265, va_comparator, va_const, va_lambda, va_scale_offset, va_vca, va_vco, wd37c65 and wd37c65b
 - New Clrmame: https://mamedev.emulab.it/clrmamepro/#downloads
+- Bob Zed (What's new): https://youtu.be/rAhMV7dpCbc
 - CPU
   . AM9517A: Refactor upd71071 based on v5x_dmau_device (machine\am9517a.cpp). A default argument value for a protected constructor is a bug waiting to happen, a default zero clock for a device_execute_interface is a bug waiting to happen (machine\am9517a.cpp).
   . Analog Devices ADSP-2100: Disassemble IDLE instruction (not emulated yet) (adsp2100\2100dasm.cpp)
