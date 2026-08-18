@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 17th August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 18th August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -56,9 +56,9 @@
 
 - New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400), Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200) and High Seas Havoc
 - New Non-Working games: Capriccio Star RS, 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club Sony Creative Ver.5 (J 980721 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0) and Tropical Fruits (Eagle, v11.01)
-- New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Dynasty (1992, V1.2), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)' and VS Computer Mahjong (hack)
+- New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Checkmate (set 2), Dynasty (1992, V1.2), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)' and VS Computer Mahjong (hack)
 - New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, lastmisn.cpp
-- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, ghostb.cpp, mc68340dma, ncr53c710, oscar.cpp, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
+- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, ghostb.cpp, macronix_29lv320etti, mc68340dma, ncr53c710, oscar.cpp, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
   . ARM: Simplify handling of unaligned reads (arm\arm.cpp)
@@ -75,7 +75,9 @@
   . MC68340: Implemented DMA transfers and external interrupt handling. Convert the DMA module to a device and implement dual-address transfers, external request handshakes and interrupt arbitration. Support configured external autovectors and restrict MBAR accesses to CPU space (machine\68340.cpp).
   . Motorola MC68030: Fixed CACR mask for '030, was causing a few Macs to misdetect as an '040 (m68000\m68k_in.lst and m68000\m68kops.cpp)
   . Motorola MC68040: On the MC68040 CACR reserved bits must read as 0 (m68000\m68k_in.lst, m68kcpu.h and m68kops.cpp), fixes Amiga CPU detection (GitHub #15792).
-  . Motorola MC68HC705xxx: Added SCCR1 and BAUD register stubs. Added remaining SPI and SCI registers. The mc68hc05c8a datasheet notices that these two are short by 4 bytes. This corrects the error (m6805\m68hc05.cpp).
+  . Motorola MC68HC705xxx
+    . Added SCCR1 and BAUD register stubs. Added remaining SPI and SCI registers. The mc68hc05c8a datasheet notices that these two are short by 4 bytes. This corrects the error (m6805\m68hc05.cpp).
+    . Added SPI and SCI IRQs. Consulted the mc68hc05c8a and MC68HC05C4 documents. Label SPI and SCI vector with part family. Makes the vectors specific to the C family of these parts. Updated Vector Naming (m6805\m68hc05.cpp).
   . NCR 53C7xx SCSI
     . Initial support for the NCR53C710. Split the generic ncr53c7xx_device into ncr53c700_device and ncr53c710_device. Changed register defines into constants. Convert the UNIMPLEMENTED define into a function. Correct DCNTL bit definitions and implemented manual-start. Correct SCSI selection to present both initiator and target IDs. Added target BSY waiting. Correct SFBR to latch the first byte of each Block Move. Added masked SFBR comparisons for Transfer Control instructions. Correct Block Move opcode widths and rejected reserved initiator opcode 0. Implemented 53C710 specific software reset and SIGP handling. Support big-endian mode on the 53C710. Added 53C710 table-indirect Block Move and selection operands. Added 53C710 register/SFBR read-modify-write SCRIPTS instructions. Added 53C710 memory-to-memory moves. Added relative Transfer Control addresses. Implemented SIGP wakeup from Wait Reselect. Improved logging. Added SCRIPTS disassembly for the newly supported 53C710 instructions. Added working SCSI support to the Amiga 4000T driver. The system successfully boots now instead of hanging while checking for SCSI. GPT-5.6-SOL was used as a research and debugging tool (machine\53c7xx.cpp).
     . Fixed some issues shown by the ReAmiga diagnostic test: Don't fatalerror when the DMA watchdog is set. Honor memmask on writes to the TEMP register. Implemented CTEST5 ADCK and BBCK manual DMA address/count clocks. Implemented ISTAT software resets. Gate external interrupt by SIEN and DIEN. All tests now pass except for the FIFO and low level tests. GPT-5.6-SOL was used as a research and debugging tool (machine\53c7xx.cpp).
@@ -119,6 +121,7 @@
     . Clear RTS/DTR flags in WR5 on channel reset
     . Fixed interrupt, DMA and status handling. Implemented 8085 three-cycle CALL interrupt acknowledge. Use channel A WR2 for interrupt mode/vector selection. Fixed special receive condition vectoring. Implement WR2A DMA request modes and interrupt suppression. Correct RR0 /RTSB reporting on channel B. Latch external/status inputs until reset and retrigger changed conditions. Suppress reset-time modem control edges. Fixed transmitter interrupt/DMA reset inhibition. Correct CRC preset and sync/hunt state handling. Tighten channel reset and first-character receive interrupt behavior. Fixes (MESS) MikroMikko 1 and 2 MPSC tests. Checked drivers that use z80sio for keyboard input are still working. Assisted by Claude Opus 5 (machine\z80sio.cpp).
 - bfm_cobra3.cpp: Hook up MC68340 DMA and correct board signals. Read multiplexed inputs from the connected byte lane, pass the video controller interrupt at its asserted polarity, and connect the active-high SCSI request to the DMA controller's active-low DREQ input (bfm\bfm_cobra3.cpp).
+- cdi.cpp: Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
 - chihiro.cpp: Fixed crash regression (shared\xbox.cpp)
 - cinemat.cpp: Fixed visible area typo. Fixed display regression (vector list should be cleared after each frame).
 - cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
@@ -204,7 +207,7 @@
 - Super Pinball Action: Fixed dipswitch port regression
 - Tao Taido: Fixed player 2 controls in clone Tao Taido (6 button version). Note: For a long time in clone taotaidoa, player 2's kick buttons (4-6) actually causes player 1 to kick in-game, as if they pressed their own corresponding kick buttons. The game checks player 3 and 4 inputs, which are visible in the service mode's input test program, and reuses them for kick buttons. As noted in the driver notes, players 3 and 4 aren't used at all in the 2-button parent taotaido or the 2/3-button clone taotaido3. Adjusting the 'P4' port to map buttons 1-3, rather than three of the directions, to player 2's buttons 4-6 allows player 2 to kick as expected.
 - Tong Zi Maque: Fleshed out the driver. Claude Opus 5 completed the decryption, reversed the EEPROM and RTC hook-up and helped with the GFX emulation.
-- Description changes of Cuty Line Limited 2 (V1.60), Janyou Part I (Double Bet, set 1), 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', Mahjong Yarunara (Japan, ver. 1.00), 'Print Club 2 Standard Ver1 (U 970921 V1.000)', RayStorm (VER 2.60G), Rugby? (Four Roses hardware) and Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0)
+- Description changes of Checkmate (set 1), Cuty Line Limited 2 (V1.60), Janyou Part I (Double Bet, set 1), 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', Mahjong Yarunara (Japan, ver. 1.00), 'Print Club 2 Standard Ver1 (U 970921 V1.000)', RayStorm (VER 2.60G), Rugby? (Four Roses hardware) and Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0)
 - Fixed rom names in cbasebal.cpp, goldstar.cpp, megasys1.cpp and sbmjb.cpp
 - Renamed (cobracomjb) to (cobracomjbl), (dynamj) to (cll2), (karnova) to (karnov5u), (koikois) to (koikoisa) and (srdarwinb) to (srdarwinjbl)
 - Dipswitch fixes in cmmb.cpp, dyna_dc4000.cpp, hshavoc.cpp, pacman.cpp and simple_st0016.cpp
@@ -238,6 +241,8 @@
   . Renamed osd\windows\video.cpp/h to osd\windows\winvideo.cpp/h to resolve header name collision 
   . Replaced eminline bit manipulation functions with C++20's <bit> (formats\aiffile.cpp, formats\ap_dsk35.cpp, util\hashing.cpp and util\msdib.cpp). Retire rot[lr]_32 and rot[lr]_64 inline functions in favor of std::rot[lr] from C++20's <bit> (osd\eminline.h).
   . Cleaned up various things, mostly where .c_str() is unnecessary (isa\isa.cpp, imagedev\harddriv.cpp, sound\disc_inp.hxx, emu\emuopts.cpp, emu\image.cpp and util\timeconv.cpp).
+- Debugger: Proper Z80 architecture support in the gdbstub (GDB stub debugger). Assisted by GLM-5.1. REF: https://sourceware.org/git/\?p\=binutils-gdb.git\;a\=blob_plain\;f\=gdb/features/z80.c\ and hb\=HEAD (debugger\debuggdbstub.cpp, z80\kc82.h, z80\z80.cpp and z80/z84c015.h) [holub].
+
 
 
 
