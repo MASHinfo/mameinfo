@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 21st August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 22nd August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -55,10 +55,11 @@
 0.290GIT
 
 - New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400), Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200) and High Seas Havoc
-- New Non-Working games: Capriccio Star RS, 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club Sony Creative Ver.5 (J 980721 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0), Taishan Wuxian and Tropical Fruits (Eagle, v11.01)
+- New Non-Working games: Aroma Club, Capriccio Star RS, El Tesoro del Faraon (V1.1, Catalonia), 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club Sony Creative Ver.5 (J 980721 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0), Taishan Wuxian and Tropical Fruits (Eagle, v11.01)
 - New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Checkmate (set 2), Dynasty (1992, V1.2), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
-- New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, ghostb.cpp, lastmisn.cpp and oscar.cpp
-- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, macronix_29lv320etti, mc68340dma, ncr53c710, ram_slot, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
+- New AGEMAME games: 18+, 493, Action 4U SL, Action Total (S7), Arcon, Atlantis (S6), Baba Jaga (S17), Bel Ami (S3), Block Buster, Boss, Bully (S11), Caipi (S7), Daxx (S4), Daxx (S8), Duo, Eleven (S3), Endspiel (S9), Fire Game (S3), Foxx (S5), Freegames (S11), Gloria SL (S4), Gloria SL (S5), Gloria Super, Graffiti, Graffity, Hard Rock, HERO, Hexen Tanz, Hot Slot (S5), Jumpin Jack SL, King Classic SL (S2), King Classic SL (S3), Limbo (S3), Luxx Pro, M 200 (S5), Mach Mehr, Monopoly, Neon (S12), Neon (S13), Oxigen (S7), Phantom (S7), Piratengold (S4), Piratengold (S5), Play Time (S11), Quick Risc (S4), Rex, Roxy Classic, Sky (S6), Speed Run (S3), Speed Run (S4), Sunfair XL (S2), Tex Mex, That's Cool, Titan Pro, Total Genial (S11), Tropical (S3), Victoria, Winplay SL and X-Cross.
+- New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, eurotec.cpp, ghostb.cpp, lastmisn.cpp, oscar.cpp and technik2000.cpp
+- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, i2c_ds1307, macronix_29lv320etti, mc68340dma, ncr53c710, ram_slot, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
 - New DATs: GameInit.dat (https://www.progettosnaps.net/gameinit/)
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
@@ -131,6 +132,7 @@
     . Fixed interrupt, DMA and status handling. Implemented 8085 three-cycle CALL interrupt acknowledge. Use channel A WR2 for interrupt mode/vector selection. Fixed special receive condition vectoring. Implement WR2A DMA request modes and interrupt suppression. Correct RR0 /RTSB reporting on channel B. Latch external/status inputs until reset and retrigger changed conditions. Suppress reset-time modem control edges. Fixed transmitter interrupt/DMA reset inhibition. Correct CRC preset and sync/hunt state handling. Tighten channel reset and first-character receive interrupt behavior. Fixes (MESS) MikroMikko 1 and 2 MPSC tests. Checked drivers that use z80sio for keyboard input are still working. Assisted by Claude Opus 5 (machine\z80sio.cpp).
     . K68564 improvements: Derive mk68564_device directly from z80sio_device. Correct XMTCTL character-length mapping. Implemented internal loop mode. Implemented MK68564 specific interrupt pending, acknowledge and vector handling. Also reset m_tx_count when starting a transmission from an idle condition to avoid additional delays - this change affects all z80sio devices. GPT-5.6-SOL was used as a research and debugging tool (machine\z80sio.cpp).
 - aleck64.cpp: Fixed screen refresh rate regression (nintendo\n64_m.cpp)
+- astrcorp.cpp: Added a List of some CGA missing games
 - bfm_cobra3.cpp: Hook up MC68340 DMA and correct board signals. Read multiplexed inputs from the connected byte lane, pass the video controller interrupt at its asserted polarity, and connect the active-high SCSI request to the DMA controller's active-low DREQ input (bfm\bfm_cobra3.cpp).
 - cdi.cpp
   . Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
@@ -214,6 +216,7 @@
 - Enduro Racer: Fixed end address off-by-1 regression (sound\segapcm.cpp). Fixes broken engine sounds in Enduro Racer (ID 09512).
 - Euro Bingo 7: Added PAT PLD and counters SEEPROM dumps
 - High Seas Havoc: Improved decryption and hooked up PIC and inputs. Game is playable. Claude Opus 5 did most of the reverse engineering.
+- Il Galeone: Added PLD dump
 - Johnny Nero Action Hero: NEC VR5500 has unique page mask and Config encodings vs. stock MIPS III. Fixing this allows jnero to write a correct display list instead of garbage (mips\mips3.cpp and mips3com.cpp).
 - Jongputer: Use decryption PROM instead of XOR tables for clone VS Computer Mahjong, fixes at least the stuck sound (constant tone in-game after the mahjong tiles are laid down). PROM hook-up by Claude Opus 5.
 - Lady Gum: Marked PLD (locked) as bad
@@ -234,7 +237,7 @@
 - Description changes of Checkmate (set 1), Cross Puzzle (v. 1.00), Cuty Line Limited 2 (V1.60), Dyger (Korea, set 1), Dyger (Korea, set 2), Janyou Part I (Double Bet, set 1), 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', Mahjong Yarunara (Japan, ver. 1.00), 'Print Club 2 Standard Ver1 (U 970921 V1.000)', RayStorm (VER 2.60G), Rugby? (Four Roses hardware), Shippuu Mahou Daisakusen (Japan), Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0), Wink (older, bugfixed) and Wink (newer).
 - Fixed rom names in cbasebal.cpp, goldstar.cpp, megasys1.cpp and sbmjb.cpp
 - Renamed (cobracomjb) to (cobracomjbl), (dynamj) to (cll2), (karnova) to (karnov5u), (koikois) to (koikoisa), (srdarwinb) to (srdarwinjbl), (wink) to (winkob) and (winka) to (wink).
-- Dipswitch fixes in cmmb.cpp, dyna_dc4000.cpp, hshavoc.cpp, pacman.cpp, crospuzl.cpp and simple_st0016.cpp
+- Dipswitch fixes in cmmb.cpp, dyna_dc4000.cpp, hshavoc.cpp, pacman.cpp, crospuzl.cpp and simple_st0016.cpp and tomsadvs.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
     . Split the screen_device into multiple devices depending on the actual type. Scripts to do the mass conversions written by Qwen 3.6. Changed the frame_period API to use attotime instead of attoseconds. Fixed the "default sizing" case (emu\screen.cpp).
