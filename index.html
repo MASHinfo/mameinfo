@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 22nd August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 23rd August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -59,11 +59,12 @@
 - New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Checkmate (set 2), Dynasty (1992, V1.2), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
 - New AGEMAME games: 18+, 493, Action 4U SL, Action Total (S7), Arcon, Atlantis (S6), Baba Jaga (S17), Bel Ami (S3), Block Buster, Boss, Bully (S11), Caipi (S7), Daxx (S4), Daxx (S8), Duo, Eleven (S3), Endspiel (S9), Fire Game (S3), Foxx (S5), Freegames (S11), Gloria SL (S4), Gloria SL (S5), Gloria Super, Graffiti, Graffity, Hard Rock, HERO, Hexen Tanz, Hot Slot (S5), Jumpin Jack SL, King Classic SL (S2), King Classic SL (S3), Limbo (S3), Luxx Pro, M 200 (S5), Mach Mehr, Monopoly, Neon (S12), Neon (S13), Oxigen (S7), Phantom (S7), Piratengold (S4), Piratengold (S5), Play Time (S11), Quick Risc (S4), Rex, Roxy Classic, Sky (S6), Speed Run (S3), Speed Run (S4), Sunfair XL (S2), Tex Mex, That's Cool, Titan Pro, Total Genial (S11), Tropical (S3), Victoria, Winplay SL and X-Cross.
 - New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, eurotec.cpp, ghostb.cpp, lastmisn.cpp, oscar.cpp and technik2000.cpp
-- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, i2c_ds1307, macronix_29lv320etti, mc68340dma, ncr53c710, ram_slot, saturn_dcc, saturn_vdp2, zorro3 and zorro3_slot
+- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, arm610, i2c_ds1307, macronix_29lv320etti, mc68340dma, ncr53c710, ram_slot, saturn_dcc, saturn_vdp2, w65816, zorro3 and zorro3_slot
 - New DATs: GameInit.dat (https://www.progettosnaps.net/gameinit/)
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
   . ARM: Simplify handling of unaligned reads (arm\arm.cpp)
+  . ARM7: Bugfixes and updates: Fixed multiple issues with ARMv3 parts that dynamically switch between 26 and 32 bit modes. Added ARM610 model for RISC PC 600. Allow ARM926 to execute code from the instruction TCM. Debugging assisted by Claude Opus 5. Added DEC SA110 variant with correct flags, (MESS) sarpc_j233 boots (arm7\arm7.cpp).
   . Fujitsu Micro F2MC-16: Revert MAME 0.289 changes (External interrupts do not seem to have a iack/vector fetch cycle) (f2mc16\f2mc16.cpp).
   . Hitachi H8: Use logmacro for verbose logging (h8\h8_timer16.cpp). Minor logging fixes (h8\h8_dma.cpp and h8\h8_sci.cpp). Fixed logerror bug that caused assertion failures in (MESS) jv880 and rd500 (h8\h8_timer16.cpp).
   . Hitachi SH7xxx/SH-1/2/3/4
@@ -76,6 +77,7 @@
     . Timers run three times too fast. timer_value() and timer_time_until() are in cycles, not input clocks, so divide down accordingly (mcs96\i8x9x.cpp).
     . MULB indexed byte operand and HSO CAM entries lost to exact-equality matching. mulb with an indexed byte operand must read a byte. Fire HSO CAM entries on reached-or-passed, not exact equality. Co-authored-by Claude Opus 5 (mcs96\i8x9x.cpp).
   . MC68340: Implemented DMA transfers and external interrupt handling. Convert the DMA module to a device and implement dual-address transfers, external request handshakes and interrupt arbitration. Support configured external autovectors and restrict MBAR accesses to CPU space (machine\68340.cpp).
+  . MOS Technology 6502: New cycle-interruptable 65816 core (WDC W65C816S) using the existing m6502 generator infrastructure. Switch (MESS) apple2gs.cpp to W65816 and bus\adb and default to the correct LLE A9M0330 keyboard and A9M0331 mouse. Claude Opus 5 assisted with conformance testing and a final refactor and cleanup pass (m6502\m6502d.cpp and m6502\m6502make.py).
   . Motorola MC68030: Fixed CACR mask for '030, was causing a few Macs to misdetect as an '040 (m68000\m68k_in.lst and m68000\m68kops.cpp)
   . Motorola MC68040: On the MC68040 CACR reserved bits must read as 0 (m68000\m68k_in.lst, m68kcpu.h and m68kops.cpp), fixes Amiga CPU detection (GitHub #15792).
   . Motorola MC68HC705xxx
@@ -85,7 +87,9 @@
     . Initial support for the NCR53C710. Split the generic ncr53c7xx_device into ncr53c700_device and ncr53c710_device. Changed register defines into constants. Convert the UNIMPLEMENTED define into a function. Correct DCNTL bit definitions and implemented manual-start. Correct SCSI selection to present both initiator and target IDs. Added target BSY waiting. Correct SFBR to latch the first byte of each Block Move. Added masked SFBR comparisons for Transfer Control instructions. Correct Block Move opcode widths and rejected reserved initiator opcode 0. Implemented 53C710 specific software reset and SIGP handling. Support big-endian mode on the 53C710. Added 53C710 table-indirect Block Move and selection operands. Added 53C710 register/SFBR read-modify-write SCRIPTS instructions. Added 53C710 memory-to-memory moves. Added relative Transfer Control addresses. Implemented SIGP wakeup from Wait Reselect. Improved logging. Added SCRIPTS disassembly for the newly supported 53C710 instructions. Added working SCSI support to the Amiga 4000T driver. The system successfully boots now instead of hanging while checking for SCSI. GPT-5.6-SOL was used as a research and debugging tool (machine\53c7xx.cpp).
     . Fixed some issues shown by the ReAmiga diagnostic test: Don't fatalerror when the DMA watchdog is set. Honor memmask on writes to the TEMP register. Implemented CTEST5 ADCK and BBCK manual DMA address/count clocks. Implemented ISTAT software resets. Gate external interrupt by SIEN and DIEN. All tests now pass except for the FIFO and low level tests. GPT-5.6-SOL was used as a research and debugging tool (machine\53c7xx.cpp).
   . NEC VR5500: NEC VR5500 has unique page mask and Config encodings vs. stock MIPS III. Fixing this allows jnero to write a correct display list instead of garbage (mips\mips3.cpp and mips3com.cpp).
-  . Philips SCC68070: Fixed UART Status. This change fixes several issues in the UART for this device. This has the effect of resolving some errors in the CD-i bios tests. Previously, UART would flag as Ready on every callback. Now it won't identify as ready while a transmission is currently queued. It would also preserve the Break flag on reset. This change correctly resets the Break flag. Finally, this unsets Ready when transmitting a write (machine\scc68070.cpp).
+  . Philips SCC68070
+    . Fixed UART Status. This change fixes several issues in the UART for this device. This has the effect of resolving some errors in the CD-i bios tests. Previously, UART would flag as Ready on every callback. Now it won't identify as ready while a transmission is currently queued. It would also preserve the Break flag on reset. This change correctly resets the Break flag. Finally, this unsets Ready when transmitting a write (machine\scc68070.cpp).
+    . Fixed I2C Mismatch. The bits in line 612 don't match line 492 where I2C level is reset. It seems to be accidentally copying the m_uart_rx_int value instead (machine\scc68070.cpp).
   . Sony CXD8530xx/CXD86xxx (PSX CPU): Moved ram_device into drivers, support all ram window sizes and mirror 0x1fc801xxx registers at 0x9fc801xxx & 0xbfc801xxx (psx\psx.cpp).
   . Toshiba TMP90xxx/TMP91640: Fixed CPIR infinitely looping. Combined LDI/LDD and added CPD (tlcs90\tlcs90.cpp).
   . Votrax SC-01/-A: Fixed a sign error that can make the SC-01 F2 noise-injection filter unstable for valid internal ROM states (sound\votrax.cpp). Fixes sound cuts off in Q*bert and Q*bert's Qubes after a while and doesn't come back (except for the knocker) (ID 09521).
@@ -137,6 +141,7 @@
 - cdi.cpp
   . Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
   . Fixed Opcode length and rename Flag. Adjusted handling of "Disable Input Polling" mode and renamed to "Debug Mode" (philips\cdislavehle.cpp). Added Test Plug. Allow access to a test menu by booting the console with the Test Plug set (philips\cdi.cpp and philips\cdislavehle.cpp).
+  . Cleanup Reset. The reset function has duplicated code and is slightly out of sync. This merge corrects a few mismatches. This likely impacts no games. Also added RAM time to the cdimono2 (philips\cdi.cpp and machine\scc68070.cpp).
 - chihiro.cpp: Fixed crash regression (shared\xbox.cpp)
 - cinemat.cpp: Fixed visible area typo. Fixed display regression (vector list should be cleared after each frame).
 - cmmb.cpp: Promoted 'Centipede / Millipede / Missile Command (rev 1.03)' and 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)' to working. Grok 4.5 assisted with reverse-engineering and Claude Opus 5 assisted with a cleanup/refactor pass once everything worked.
@@ -207,7 +212,7 @@
   . Promoted colmns97, danchih and danchiq to working. Cleaned up various Saturn code and made relationship between headers, sources and classes less confusing.
 - system16.cpp: Emulated Beauty Block / IQ Pipe protection (Reverse engineering by Claude Opus 5). Fixed gfx in Beauty Block & IQ Pipe.
 - taito_l.cpp and tnzs.cpp: Lower cpu quantum a bit
-- Amiga (alg.cpp, arsystems.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp)
+- Amiga (alg.cpp, arsystems.cpp, cubo.cpp, mquake.cpp and upscope.cpp): Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp). Implemented CDTV subcode support. Correct port C input and interrupt latch handling (machine\6525tpi.cpp). Added raw P-W subcode output (machine\cr511b.cpp). Connect CDTV and A570 subcode signals. Hook up 6500/1 remote control input converter. This allows the front-panel buttons for Play/Stop/Prev/Next to work. CD+G playback works now (amiga\amiga.cpp).
 - Backfire!: Fixed sound routing
 - Capcom Baseball: 3rd coin is actually service coin. Improved clocks.
 - Cross Puzzle: Made it boot. Reversed by Claude Opus 5. Applied feedback. 
@@ -274,6 +279,8 @@
   . Proper Z80 architecture support in the gdbstub (GDB stub debugger). Assisted by GLM-5.1. REF: https://sourceware.org/git/\?p\=binutils-gdb.git\;a\=blob_plain\;f\=gdb/features/z80.c\ and hb\=HEAD (debugger\debuggdbstub.cpp, z80\kc82.h, z80\z80.cpp and z80\z84c015.h) [holub].
   . Answer qOffsets so symbol files load unrelocated. GDB asks for the section offsets of the running target when a symbol file is loaded; without an answer it applies its default relocation and symbol addresses stop matching the emulated address space. The CPU address space is not relocated, so reply with all-zero offsets: a symbol file linked at its runtime addresses and loaded with "file"/"add-symbol-file" is used as-is. Assisted by GLM-5.1. Example (Z80, symbol file linked at its runtime addresses): (gdb) file boot.elf, (gdb) target remote 127.0.0.1:12000, 0x00000000 in ?? (), (gdb) break boot_continue and Breakpoint 1 at 0x69 (debugger\debuggdbstub.cpp).
   . gdbstub socket lifecycle fixes: * Opening the listening socket at the first stop threw the fatal error from inside the instruction hook, crashing MAME with a segfault when the port was already taken. The socket is now bound in init_debugger and the fatal error is deferred to a reset notifier, which fires inside running_machine::run's exception handler and exits cleanly. * On detach the connection is closed once the reply has been flushed, so the port is free for another listener. Assisted by GLM-5.1 (debugger\debuggdbstub.cpp).
+
+
 
 
 
