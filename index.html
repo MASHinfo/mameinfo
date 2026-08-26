@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 26th August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 27th August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -64,7 +64,9 @@
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
   . ARM: Simplify handling of unaligned reads (arm\arm.cpp)
-  . ARM7: Bugfixes and updates: Fixed multiple issues with ARMv3 parts that dynamically switch between 26 and 32 bit modes. Added ARM610 model for RISC PC 600. Allow ARM926 to execute code from the instruction TCM. Debugging assisted by Claude Opus 5. Added DEC SA110 variant with correct flags, (MESS) sarpc_j233 boots (arm7\arm7.cpp).
+  . ARM7
+    . Bugfixes and updates: Fixed multiple issues with ARMv3 parts that dynamically switch between 26 and 32 bit modes. Added ARM610 model for RISC PC 600. Allow ARM926 to execute code from the instruction TCM. Debugging assisted by Claude Opus 5. Added DEC SA110 variant with correct flags, (MESS) sarpc_j233 boots (arm7\arm7.cpp).
+    . Many fixes: SMLA* instructions were doing the wrong operation. QDADD/QDSUB weren't saturating the operand. Some forms of Thumb BLX were not decoded properly. BKPT was mis-decoded as MSR, which trashed CPSR. Thumb ADC ignored the incoming carry flag. Data aborts ignored the high vector flag. BLX LR in ARM mode did things in the wrong order. MRC with R15 as the destination was supposed to update flags, not the PC. LDR* R15 set the PC to the wrong value. Some undefined opcodes were wrongly executed as LDR/STR. Undefined Thumb instructions weren't generating the UND exception. v5TE DSP ops worked on v4 emulated parts. PLD is v5TE, not v6. LDM*/STM* with an empty register list are NOPs. Disassembler was wrong for SMLA* and SMUL*. ARMv3 was mishandling CP15 writes. Tested on a bunch of drivers including the (MESS) newton.cpp (NewtonOS now boots), the 39in1.cpp gang and more. Audit and debugging assisted by Claude Opus 5 (arm7\arm7.cpp).
   . Fujitsu Micro F2MC-16: Revert MAME 0.289 changes (External interrupts do not seem to have a iack/vector fetch cycle) (f2mc16\f2mc16.cpp).
   . Hitachi H8: Use logmacro for verbose logging (h8\h8_timer16.cpp). Minor logging fixes (h8\h8_dma.cpp and h8\h8_sci.cpp). Fixed logerror bug that caused assertion failures in (MESS) jv880 and rd500 (h8\h8_timer16.cpp).
   . Hitachi SH7xxx/SH-1/2/3/4
