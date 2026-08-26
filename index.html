@@ -55,11 +55,11 @@
 0.290GIT
 
 - New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400), Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200) and High Seas Havoc
-- New Non-Working games: Aroma Club, Capriccio Star RS, El Tesoro del Faraon (V1.1, Catalonia), 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club 2 Mr. Bean (J 980325 V1.000), Print Club Sony Creative Ver.5 (J 980721 V1.000), Print Club Sony Creative Ver.6 (J 971006 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0), Taishan Wuxian and Tropical Fruits (Eagle, v11.01)
+- New Non-Working games: Aroma Club, Capriccio Star RS, El Tesoro del Faraon (V1.1, Catalonia), 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club 2 Mr. Bean (J 980325 V1.000), Print Club Sony Creative Ver.5 (J 980721 V1.000), Print Club Sony Creative Ver.6 (J 971006 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0), Taishan Wuxian, Tropical Fruits (Eagle, v11.01) and 'unknown 960606-5 based machine (set 2)'
 - New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Checkmate (set 2), Dynasty (1992, V1.2), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
 - New AGEMAME games: 18+, 493, Action 4U SL, Action Total (S7), Arcon, Atlantis (S6), Baba Jaga (S17), Bel Ami (S3), Block Buster, Boss, Bully (S11), Caipi (S7), Daxx (S4), Daxx (S8), Duo, Eleven (S3), Endspiel (S9), Fire Game (S3), Foxx (S5), Freegames (S11), Gloria SL (S4), Gloria SL (S5), Gloria Super, Graffiti, Graffity, Hard Rock, HERO, Hexen Tanz, Hot Slot (S5), Jumpin Jack SL, King Classic SL (S2), King Classic SL (S3), Limbo (S3), Luxx Pro, M 200 (S5), Mach Mehr, Monopoly, Neon (S12), Neon (S13), Oxigen (S7), Phantom (S7), Piratengold (S4), Piratengold (S5), Play Time (S11), Quick Risc (S4), Rex, Roxy Classic, Sky (S6), Speed Run (S3), Speed Run (S4), Sunfair XL (S2), Tex Mex, That's Cool, Titan Pro, Total Genial (S11), Tropical (S3), Victoria, Winplay SL and X-Cross.
 - New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, eurotec.cpp, ghostb.cpp, lastmisn.cpp, oscar.cpp and technik2000.cpp
-- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, arm610, at_ssrt, c1541rp, c1541tt, cga_chameleon, i2c_ds1307, macronix_29lv320etti, mc68340dma, ncr53c710, pkscram.cpp, ram_slot, sa110, saturn_dcc, saturn_vdp2, w65816, zorro3 and zorro3_slot
+- New devices: amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, arm610, at_ssrt, c1541rp, c1541tt, cga_chameleon, i2c_ds1307, macronix_29lv320etti, mc68340dma, ncr53c710, pkscram.cpp, ram_slot, sa110, saturn_dcc, saturn_vdp2, w65816, wd1010, zorro3 and zorro3_slot
 - New DATs: GameInit.dat (https://www.progettosnaps.net/gameinit/)
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout (sharc\sharcops.hxx).
@@ -131,6 +131,9 @@
   . Hitachi HD44780 LCD Controller: Added parent rom reference (sed1278 and ks0066; video\hd44780.h)
   . Intel 8251 USART: TxEMPTY remains asserted while transmitting sync characters. Empty commit to restart workflow run (machine\i8251.cpp).
   . Keyboard: Fixed missing column select pullup (pc_kbd\pcat101.cpp)
+  . MagicEyes VRender0 SoC
+    . Set screen to avoid fatal error when a terminal is active and added setter for external UART clock (machine\vrender0.cpp)
+    . Implemented external UART clock and worked around problem with buffer space polling. Claude Opus 5 implementation (machine\vr0uart.cpp).
   . Motorola MC6845 CRTC: Don't recompute parameters before device has started (video\mc6845.cpp)
   . NCR 5380 SCSI: Protected constructors with default arguments are a bug waiting to happen. Restore base-part self-reset interrupt (regressed by GitHub #15658). Make SCSI bus reset edge-triggered. The SCSI bus reset (chip reset + interrupt) is triggered by the /RST line transitioning to true, not by it merely being asserted. The previous code triggered on the level (icmd_w reset unconditionally on ASSERT RST; scsi_ctrl_changed on ctrl & S_RST), so a device asserting RST while another device already held it would reset and interrupt a second time. Claude Opus 4.8 assisted with datasheet analysis and implementation (machine\ncr5380.cpp).
   . NCR 53Cxx SCSI Controller: Register 0xe must read as 0 on 53C94/53C96 (machine\ncr53c90.cpp)
@@ -146,7 +149,7 @@
     . K68564 improvements: Derive mk68564_device directly from z80sio_device. Correct XMTCTL character-length mapping. Implemented internal loop mode. Implemented MK68564 specific interrupt pending, acknowledge and vector handling. Also reset m_tx_count when starting a transmission from an idle condition to avoid additional delays - this change affects all z80sio devices. GPT-5.6-SOL was used as a research and debugging tool (machine\z80sio.cpp).
 - aleck64.cpp: Fixed screen refresh rate regression (nintendo\n64_m.cpp)
 - astrcorp.cpp: Added a List of some CGA missing games
-- belatra.cpp and ssfindo.cpp: Rework keyboard interface. Various fixes towards a7000p -bios 2 boot. Moved interrupt actual hookup to client responsibility, tentatively collect all sources rather than just the active change. Use actual 2 MHz clock for timers, and fix live readbacks. Unconnect keyboards for Arcade targets. Moved keyboard connector from iomd to driver (machine\arm_iomd.cpp).
+- belatra.cpp and ssfindo.cpp: Rework keyboard interface. Various fixes towards a7000p -bios 2 boot. Moved interrupt actual hookup to client responsibility, tentatively collect all sources rather than just the active change. Use actual 2 MHz clock for timers, and fix live readbacks. Unconnect keyboards for Arcade targets. Moved keyboard connector from iomd to driver. Start hooking external interrupts (machine\arm_iomd.cpp).
 - bfm_cobra3.cpp: Hook up MC68340 DMA and correct board signals. Read multiplexed inputs from the connected byte lane, pass the video controller interrupt at its asserted polarity, and connect the active-high SCSI request to the DMA controller's active-low DREQ input (bfm\bfm_cobra3.cpp).
 - cdi.cpp
   . Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
@@ -173,6 +176,7 @@
   . Descrambled GFX for cafepara and cafebrk. Correct ougonhai memory map. Integrated GitHub #15838 in a more MAME-like way. Fixes mjtkp2 GFX/colors. Thanks to the original author Gently28. Fixed mjtkp2 remaining GFX glitches 
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
   . Correct GFX forBao Qing Tian (TIC). Claude Opus 5 identified the issue.
+- firebeat.cpp and twinkle.cpp: Added configuration register reads. Added IDE (preliminary, doesn't seem to work right in riscpc). Fix enable bit (CR0 bit 0 not 1). Fixed MIDI 2 clock select (CR4 bit 5 not CR5) (machine\fdc37c665gt.cpp).
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
 - mcr.cpp: Moved most public stuff to protected / private
@@ -217,7 +221,7 @@
     . Read ADR in TOC properly. Fixed curfad filter rejection range. Read TOC sets DTREQ only, doesn't change drive status. Fixes (MESS) hisspach boot (sega\saturn_cd_hle.cpp).
     . Improved redbook track resume and restart. Avoid (MESS) dendego crash on title screen, make Multiplayer Audio CD playback a bit more solid. Make repeat to honor seek phase and fixed redbook range. Fixed repeat assertion failure. Removed dubious handling of get status command (sega\saturn_cd_hle.cpp).
   . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
-  . Make stvbios to use a 6 button input def
+  . Make stvbios to use a 6 button input def. Added a dump cart header debug facility (sega\stv.cpp).
   . Demoted 'Virtual Mahjong 2 - My Fair Lady (J 980608 V1.000)' to MACHINE_NOT_WORKING. Note: Don't think it ever worked, has random sync problems with SH-2 reading sound RAM.
   . Demoted 'Danchi de Hanafuda (J 990607 V1.400)' and 'Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)' to MACHINE_NOT_WORKING.
   . Promoted colmns97, danchih and danchiq to working. Cleaned up various Saturn code and made relationship between headers, sources and classes less confusing.
@@ -235,6 +239,7 @@
 - Dynasty: Dumped gfx mask ROM for Dynasty (1992, V5.1G)
 - Enduro Racer: Fixed end address off-by-1 regression (sound\segapcm.cpp). Fixes broken engine sounds in Enduro Racer (ID 09512).
 - Euro Bingo 7: Added PAT PLD and counters SEEPROM dumps
+- Fancy Bowling: Made the game boot. Claude Opus 5 identified and solved the boot problems (missing ident of the CF card, UART communication getting stuck and blocking boot).
 - High Seas Havoc: Improved decryption and hooked up PIC and inputs. Game is playable. Claude Opus 5 did most of the reverse engineering.
 - Il Galeone: Added PLD dump
 - Johnny Nero Action Hero: NEC VR5500 has unique page mask and Config encodings vs. stock MIPS III. Fixing this allows jnero to write a correct display list instead of garbage (mips\mips3.cpp and mips3com.cpp).
@@ -245,6 +250,7 @@
 - Mortal Kombat (Yawdim bootleg, set 4), Pango Fun (Italy), PGM and Poker (Version 50.02 ICB, set 4): Dumped and verified PLDs
 - Operation Wolf: Latch TC0060DCA volume writes, fixes Operation Wolf.
 - Q*bert and Q*bert's Qubes: Fixed a sign error that can make the SC-01 F2 noise-injection filter unstable for valid internal ROM states (sound\votrax.cpp). Fixes sound cuts off in Q*bert and Q*bert's Qubes after a while and doesn't come back (except for the knocker) (ID 09521).
+- P's Attack: Made the game boot. Claude Opus 5 reversed the PIC16C711 fake ready return.
 - Pac-Carnival: Dumped/Verified PLDs
 - Paperboy: Fixed factory reset EEPROM for calibrated controls
 - Psychic Force 2012
@@ -257,7 +263,7 @@
 - Tao Taido: Fixed player 2 controls in clone Tao Taido (6 button version). Note: For a long time in clone taotaidoa, player 2's kick buttons (4-6) actually causes player 1 to kick in-game, as if they pressed their own corresponding kick buttons. The game checks player 3 and 4 inputs, which are visible in the service mode's input test program, and reuses them for kick buttons. As noted in the driver notes, players 3 and 4 aren't used at all in the 2-button parent taotaido or the 2/3-button clone taotaido3. Adjusting the 'P4' port to map buttons 1-3, rather than three of the directions, to player 2's buttons 4-6 allows player 2 to kick as expected.
 - Tong Zi Maque: Fleshed out the driver. Claude Opus 5 completed the decryption, reversed the EEPROM and RTC hook-up and helped with the GFX emulation.
 - Wink: Emulated protection according to schematics. Reversed by Claude Opus 5.
-- Description changes of Checkmate (set 1), Cross Puzzle (v. 1.00), Cuty Line Limited 2 (V1.60), Dyger (Korea, set 1), Dyger (Korea, set 2), Janyou Part I (Double Bet, set 1), 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', Mahjong Yarunara (Japan, ver. 1.00), 'Print Club 2 Standard Ver1 (U 970921 V1.000)', RayStorm (VER 2.60G), Rugby? (Four Roses hardware), Shippuu Mahou Daisakusen (Japan), Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0), Wink (older, bugfixed) and Wink (newer).
+- Description changes of Checkmate (set 1), Cross Puzzle (v. 1.00), Cuty Line Limited 2 (V1.60), Dyger (Korea, set 1), Dyger (Korea, set 2), Fancy Bowling, Janyou Part I (Double Bet, set 1), 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', Mahjong Yarunara (Japan, ver. 1.00), P's Attack (V1.11a), 'Print Club 2 Standard Ver1 (U 970921 V1.000)', RayStorm (VER 2.60G), Rugby? (Four Roses hardware), Shippuu Mahou Daisakusen (Japan), Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0), Wink (older, bugfixed), 'unknown 960606-5 based machine (set 3)' and Wink (newer).
 - Fixed rom names in cbasebal.cpp, goldstar.cpp, megasys1.cpp and sbmjb.cpp
 - Renamed (cobracomjb) to (cobracomjbl), (dynamj) to (cll2), (karnova) to (karnov5u), (koikois) to (koikoisa), (srdarwinb) to (srdarwinjbl), (wink) to (winkob) and (winka) to (wink).
 - Dipswitch fixes in cmmb.cpp, dyna_dc4000.cpp, hshavoc.cpp, pacman.cpp, crospuzl.cpp and simple_st0016.cpp and tomsadvs.cpp
