@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 27th August 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 28th August 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -190,7 +190,7 @@
   . Descrambled GFX for cafepara and cafebrk. Correct ougonhai memory map. Integrated GitHub #15838 in a more MAME-like way. Fixes mjtkp2 GFX/colors. Thanks to the original author Gently28. Fixed mjtkp2 remaining GFX glitches.
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
   . Correct GFX for Bao Qing Tian (TIC). Claude Opus 5 identified the issue.
-- firebeat.cpp and twinkle.cpp: Added configuration register reads. Added IDE (preliminary, doesn't seem to work right in riscpc). Fix enable bit (CR0 bit 0 not 1). Fixed MIDI 2 clock select (CR4 bit 5 not CR5) (machine\fdc37c665gt.cpp).
+- firebeat.cpp and twinkle.cpp: Added configuration register reads. Added IDE (preliminary, doesn't seem to work right in riscpc). Fix enable bit (CR0 bit 0 not 1). Fixed MIDI 2 clock select (CR4 bit 5 not CR5). Changed default value on IDE ports to match rpcemu-extended (machine\fdc37c665gt.cpp).
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
 - mcr.cpp: Moved most public stuff to protected / private
@@ -259,7 +259,7 @@
 - Mortal Kombat (Yawdim bootleg, set 4), Pango Fun (Italy), PGM and Poker (Version 50.02 ICB, set 4): Dumped and verified PLDs
 - Operation Wolf: Latch TC0060DCA volume writes, fixes Operation Wolf.
 - Q*bert and Q*bert's Qubes: Fixed a sign error that can make the SC-01 F2 noise-injection filter unstable for valid internal ROM states (sound\votrax.cpp). Fixes sound cuts off in Q*bert and Q*bert's Qubes after a while and doesn't come back (except for the knocker) (ID 09521).
-- P's Attack: Made the game boot. Claude Opus 5 reversed the PIC16C711 fake ready return.
+- P's Attack: Made the game boot. Claude Opus 5 reversed the PIC16C711 fake ready return. Hookup gun triggers.
 - Pac-Carnival: Dumped/Verified PLDs
 - Paperboy: Fixed factory reset EEPROM for calibrated controls
 - Psychic Force 2012
