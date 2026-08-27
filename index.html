@@ -54,7 +54,8 @@
 <div class="smallfont" style="MARGIN-BOTTOM: 2px"></div><pre class="alt2" style="BORDER-BOTTOM: 1px inset; BORDER-LEFT: 1px inset; BORDER-RIGHT: 1px inset; BORDER-TOP: 1px inset; HEIGHT: 450px; MARGIN: 0px; OVERFLOW: auto; PADDING-BOTTOM: 6px; PADDING-LEFT: 6px; PADDING-RIGHT: 6px; PADDING-TOP: 6px; WIDTH: 980px"><div dir="ltr" style="TEXT-ALIGN: left"><font size="2" face="Arial" color="#CCCCCC">
 0.290GIT
 
-- New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400), Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200) and High Seas Havoc
+- New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400) and Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)
+- New games booting/playable: baoqingt, cafebrk, cafedoll, cafedollg, cafepara, crospuzl, dyna_dc4000.cpp, gegemdb, hshavoc, kd2001, maldaiza, ougonhai, psattack, ringball, slotouji, tongzi and v0bowl
 - New Non-Working games: Aroma Club, Capriccio Star RS, El Tesoro del Faraon (V1.1, Catalonia), 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club 2 Mr. Bean (J 980325 V1.000), Print Club Sony Creative Ver.5 (J 980721 V1.000), Print Club Sony Creative Ver.6 (J 971006 V1.000), Sugo Rock Spirit, Super Magic Flight (Japan, v1.0), Taishan Wuxian, Tropical Fruits (Eagle, v11.01) and 'unknown 960606-5 based machine (set 2)'
 - New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Checkmate (set 2), Dynasty (1992, V1.2), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Police Trainer (Rev 1.2), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
 - New AGEMAME games: 18+, 493, Action 4U SL, Action Total (S7), Arcon, Atlantis (S6), Baba Jaga (S17), Bel Ami (S3), Block Buster, Boss, Bully (S11), Caipi (S7), Daxx (S4), Daxx (S8), Duo, Eleven (S3), Endspiel (S9), Fire Game (S3), Foxx (S5), Freegames (S11), Gloria SL (S4), Gloria SL (S5), Gloria Super, Graffiti, Graffity, Hard Rock, HERO, Hexen Tanz, Hot Slot (S5), Jumpin Jack SL, King Classic SL (S2), King Classic SL (S3), Limbo (S3), Luxx Pro, M 200 (S5), Mach Mehr, Monopoly, Neon (S12), Neon (S13), Oxigen (S7), Phantom (S7), Piratengold (S4), Piratengold (S5), Play Time (S11), Quick Risc (S4), Rex, Roxy Classic, Sky (S6), Speed Run (S3), Speed Run (S4), Sunfair XL (S2), Tex Mex, That's Cool, Titan Pro, Total Genial (S11), Tropical (S3), Victoria, Winplay SL and X-Cross.
@@ -152,7 +153,7 @@
 - aleck64.cpp: Fixed screen refresh rate regression (nintendo\n64_m.cpp)
 - astrcorp.cpp: Added a List of some CGA missing games
 - belatra.cpp and ssfindo.cpp: Rework keyboard interface. Various fixes towards a7000p -bios 2 boot. Moved interrupt actual hookup to client responsibility, tentatively collect all sources rather than just the active change. Use actual 2 MHz clock for timers, and fix live readbacks. Unconnect keyboards for Arcade targets. Moved keyboard connector from iomd to driver. Start hooking external interrupts (machine\arm_iomd.cpp).
-- bfm_cobra3.cpp: Hook up MC68340 DMA and correct board signals. Read multiplexed inputs from the connected byte lane, pass the video controller interrupt at its asserted polarity, and connect the active-high SCSI request to the DMA controller's active-low DREQ input (bfm\bfm_cobra3.cpp).
+- bfm_cobra3.cpp: Hook up MC68340 DMA and correct board signals. Read multiplexed inputs from the connected byte lane, pass the video controller interrupt at its asserted polarity and connect the active-high SCSI request to the DMA controller's active-low DREQ input (bfm\bfm_cobra3.cpp).
 - cdi.cpp
   . Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
   . Fixed Opcode length and rename Flag. Adjusted handling of "Disable Input Polling" mode and renamed to "Debug Mode" (philips\cdislavehle.cpp). Added Test Plug. Allow access to a test menu by booting the console with the Test Plug set (philips\cdi.cpp and philips\cdislavehle.cpp).
@@ -175,9 +176,9 @@
   . Replaced bad dumped gfx rom in Cherry Master '92 (V1.2D)
 - dynax.cpp and royalmah.cpp
   . Correct protection implementation for games based on TMP9* using the internal ROM. cafedoll, clone cafedollg and ougonhai now boot.
-  . Descrambled GFX for cafepara and cafebrk. Correct ougonhai memory map. Integrated GitHub #15838 in a more MAME-like way. Fixes mjtkp2 GFX/colors. Thanks to the original author Gently28. Fixed mjtkp2 remaining GFX glitches 
+  . Descrambled GFX for cafepara and cafebrk. Correct ougonhai memory map. Integrated GitHub #15838 in a more MAME-like way. Fixes mjtkp2 GFX/colors. Thanks to the original author Gently28. Fixed mjtkp2 remaining GFX glitches.
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
-  . Correct GFX forBao Qing Tian (TIC). Claude Opus 5 identified the issue.
+  . Correct GFX for Bao Qing Tian (TIC). Claude Opus 5 identified the issue.
 - firebeat.cpp and twinkle.cpp: Added configuration register reads. Added IDE (preliminary, doesn't seem to work right in riscpc). Fix enable bit (CR0 bit 0 not 1). Fixed MIDI 2 clock select (CR4 bit 5 not CR5) (machine\fdc37c665gt.cpp).
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
@@ -225,7 +226,6 @@
   . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
   . Make stvbios to use a 6 button input def. Added a dump cart header debug facility (sega\stv.cpp).
   . Demoted 'Virtual Mahjong 2 - My Fair Lady (J 980608 V1.000)' to MACHINE_NOT_WORKING. Note: Don't think it ever worked, has random sync problems with SH-2 reading sound RAM.
-  . Demoted 'Danchi de Hanafuda (J 990607 V1.400)' and 'Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)' to MACHINE_NOT_WORKING.
   . Promoted colmns97, danchih and danchiq to working. Cleaned up various Saturn code and made relationship between headers, sources and classes less confusing.
 - system16.cpp: Emulated Beauty Block / IQ Pipe protection (Reverse engineering by Claude Opus 5). Fixed gfx in Beauty Block & IQ Pipe.
 - taito_l.cpp and tnzs.cpp: Lower cpu quantum a bit
@@ -238,7 +238,7 @@
 - Capcom Baseball: 3rd coin is actually service coin. Improved clocks.
 - Cross Puzzle: Made it boot. Reversed by Claude Opus 5. Applied feedback. 
 - Cruis'n Exotica: Rework dashboard layout to match the real cabinet (layout\crusnexo.lay)
-- Dynasty: Dumped gfx mask ROM for Dynasty (1992, V5.1G)
+- Dynasty: Dumped gfx rom for Dynasty (1992, V5.1G)
 - Enduro Racer: Fixed end address off-by-1 regression (sound\segapcm.cpp). Fixes broken engine sounds in Enduro Racer (ID 09512).
 - Euro Bingo 7: Added PAT PLD and counters SEEPROM dumps
 - Fancy Bowling: Made the game boot. Claude Opus 5 identified and solved the boot problems (missing ident of the CF card, UART communication getting stuck and blocking boot).
@@ -248,7 +248,7 @@
 - Jongputer: Use decryption PROM instead of XOR tables for clone VS Computer Mahjong, fixes at least the stuck sound (constant tone in-game after the mahjong tiles are laid down). PROM hook-up by Claude Opus 5.
 - Lady Gum: Marked PLD (locked) as bad
 - Mahjong Shinkirou Deja Vu: Fixed CPIR infinitely looping (tlcs90\tlcs90.cpp). Fixes mjdejavu and clone mjdejav2 tiles in players hand are not sorted automatically when start the game (ID 00964).
-- Maldaliza: Completed protection patches for Maldaliza. Game boots with wrong inputs. Missing patches found by Claude Opus 5.
+- Maldaliza: Completed protection patches. Game boots with wrong inputs. Missing patches found by Claude Opus 5.
 - Mortal Kombat (Yawdim bootleg, set 4), Pango Fun (Italy), PGM and Poker (Version 50.02 ICB, set 4): Dumped and verified PLDs
 - Operation Wolf: Latch TC0060DCA volume writes, fixes Operation Wolf.
 - Q*bert and Q*bert's Qubes: Fixed a sign error that can make the SC-01 F2 noise-injection filter unstable for valid internal ROM states (sound\votrax.cpp). Fixes sound cuts off in Q*bert and Q*bert's Qubes after a while and doesn't come back (except for the knocker) (ID 09521).
