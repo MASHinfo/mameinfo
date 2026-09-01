@@ -181,6 +181,7 @@
     . Hook up serial connection between the LC6554 LCD CPU and the CR511B drive. Controls in CD+G now work as expected, as well as the track display on the VFD. GPT-5.6-SOL was used as a research and debugging tool (amiga/cdtv and lc6500\lc6554.cpp).
     . Improved INT2/INT6 processing. Fixes cdtv:snoopy booting (amiga\amiga_m.cpp).
     . CR-511-B CD-ROM drive: Added raw P-W subcode output. Implemented direct drive control by serial interface. Keep SCOR active even for data sectors. Fixes hang after playing video in cdtv:covgrlsp. Cancel pending data transfers on a new read. Fixes cdtv:pinoc (and likely more). Report an error for invalid audio tracks. Fixes cdtv:psychoki and cdtv:psychokia. Use a table based command dispatcher. Implemented commands 0x00, 0x06, 0x80 and 0x83. Support early execution of commands by toggling the cmd line. The cdtest tool now reports "Drive Passed". GPT-5.6-SOL was used as a research and debugging tool (machine\cr511b.cpp).
+    . Keep floppy DMA engine running even with no drive attached, Allows CDTV to boot without floppy drives (amiga\amiga.cpp and amiga\paulafdc.cpp).
 - astrcorp.cpp: Added a List of some CGA missing games
 - atlantis.cpp and midzeus.cpp: Rendering improvements. Fixed fast clear leaving depth buffer at nearest. Added untextured solid-color quad path. Clamp translucency factors to fix darkened cars. Wrap texel addressing within waveram. Fixed MT08615 (Zeus2 side). Assisted by Claude Opus 4.8 (video\zeus2.cpp).
 - belatra.cpp and ssfindo.cpp: Rework keyboard interface. Various fixes towards a7000p -bios 2 boot. Moved interrupt actual hookup to client responsibility, tentatively collect all sources rather than just the active change. Use actual 2 MHz clock for timers, and fix live readbacks. Unconnect keyboards for Arcade targets. Moved keyboard connector from iomd to driver. Start hooking external interrupts. Fire sound IRQ at the end of a given sound DMA (machine\arm_iomd.cpp). Added mixer_device, fixed regressed sound mixing. Disable timer if sound frequency is zero. Implemented external sound clksel and hook it up to 'Pang Pang Car'. Make drawing a bit more safe (machine\acorn_vidc.cpp).
@@ -223,6 +224,7 @@
 - namcos22.cpp
   . Removed some redundant m_poly->wait() calls in screen_update. Replaced render_triangle_fan usages with render_polygon & render_triangle. Use render_polygon rather than render_triangle_fan for rendering clipped quads (namco\namcos22_v.cpp).
   . Clip extents before calculating its parameters (video\poly.h) 
+- nexus3d.cpp: Misc notes
 - policetr.cpp: Updated comments
 - popobear.cpp: Added NVRAM to magkengo and qiwang
 - seattle.cpp: Initialize register file and timer state at reset. Fixes intermittent failure to boot on some Atari games (machine\gt64xxx.cpp).
