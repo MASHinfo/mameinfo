@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 4th September 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 5th September 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -57,7 +57,7 @@
 - New Working games: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 2), 'Centipede / Millipede / Missile Command (rev 1.03)', 'Centipede / Millipede / Missile Command / Let's Go Bowling (rev 1.62)', Columns '97 (JET 961209 V1.000), Danchi de Hanafuda (J 990607 V1.400) and Danchi de Quiz: Okusan Yontaku Desuyo! (J 001128 V1.200)
 - New games booting/playable: baoqingt, cafebrk, cafedoll, cafedollg, cafepara, crospuzl, dyna_dc4000.cpp, gegemdb, hshavoc, kd2001, maldaiza, ougonhai, psattack, ringball, slotouji, tongzi and v0bowl
 - New Non-Working games: Aroma Club (J 970611 V1.000), Burning Striker, Capriccio Star RS, El Tesoro del Faraon (V1.1, Catalonia), 'From TV Animation One Piece - Nakama o Tasukero! Dr. Chopper', 'GeGeGe no Kitarou - Taose! Seiyou Youkai Gundan', Haowan Dou Dizhu, Huangjin Da Manguan (China, V739C), Mahjong Emperor (Japan, ver. 1.01), Mahjong Waratte Ii Tomo (Japan, ver. 1.00), Miracle Stadium, Premier Eleven (prototype), Print Club 2 Banpresto Bono Bono, Print Club 2 Mr. Bean (J 980325 V1.000), Print Club 2 Tsubuyaki Shiro (J 970708 V1.100), Print Club Nightmare Before Christmas (J 980717 V1.000), Print Club Sony Creative Ver.5 (J 980721 V1.000), Print Club Sony Creative Ver.6 (J 971006 V1.000), Showa Retro Print Club 2, Sugo Rock Spirit, Super Magic Flight (Japan, v1.0), Taishan Wuxian, Tropical Fruits (Eagle, v11.01), 'unknown 960606-5 based machine (set 2)', 'unknown Hai Wei Technology game' and 'Xingyun 168'
-- New clones: Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Big 10 (1986, System Make, set 2), Checkmate (set 2), Dynasty (1992, V1.2), *Ichi Ban Jyan (Ver 3.31), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), *'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Mahjong Chuuka Ken (China?), Police Trainer (Rev 1.2), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
+- New clones: Aka Mahjong (Double Bet, ver 1 19), Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Big 10 (1986, System Make, set 2), Chaoji Da Manguan II (China, V641C), Checkmate (set 2), Dynasty (1992, V1.2), Ichi Ban Jyan (Ver 3.31), Janyou Part I (Double Bet, set 2), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Mahjong Chuuka Ken (China?), Mahjong Gal no Kaika (Japan, prototype), Police Trainer (Rev 1.2), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), Sweet Gal (Japan 850410 SG 0-01), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
 - New AGEMAME games: 18+, 493, Action 4U SL, Action Total (S7), Arcon, Atlantis (S6), Baba Jaga (S17), Bel Ami (S3), Block Buster, Boss, Bully (S11), Caipi (S7), Daxx (S4), Daxx (S8), Duo, Eleven (S3), Endspiel (S9), Fire Game (S3), Foxx (S5), Freegames (S11), Gloria SL (S4), Gloria SL (S5), Gloria Super, Graffiti, Graffity, Hard Rock, HERO, Hexen Tanz, Hot Slot (S5), Jumpin Jack SL, King Classic SL (S2), King Classic SL (S3), Limbo (S3), Luxx Pro, M 200 (S5), Mach Mehr, Monopoly, Neon (S12), Neon (S13), Oxigen (S7), Phantom (S7), Piratengold (S4), Piratengold (S5), Play Time (S11), Quick Risc (S4), Rex, Roxy Classic, Sky (S6), Speed Run (S3), Speed Run (S4), Sunfair XL (S2), Tex Mex, That's Cool, Titan Pro, Total Genial (S11), Tropical (S3), Victoria, Winplay SL and X-Cross.
 - New PinMAME games: Super Star (Recreativos Franco, set 3) and Super Star (Recreativos Franco, set 4)
 - New drivers: caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, eoforce.cpp, eurotec.cpp, ghostb.cpp, lastmisn.cpp, oscar.cpp, srdarwin.cpp and technik2000.cpp
@@ -179,7 +179,7 @@
 - aleck64.cpp: Fixed screen refresh rate regression (nintendo\n64_m.cpp)
 - amiga.cpp (alg.cpp, arsystems.cpp, cubo.cpp, mquake.cpp and upscope.cpp)
   . Fixed potential OOB palette select for OCS/ECS (amiga\amiga_m.cpp).
-  . Defer copper vblank restart while copper DMA is disabled. Fixes amigaocs_flop:maglines intro. Assisted by GLM-5.1 (amiga\agnus_copper.cpp). Prevent deferred updates from overwriting COPJMP2. Fixes the "lc" tests of the vAmiga Test Suite (amiga\agnus_copper.cpp).
+  . Defer copper vblank restart while copper DMA is disabled. Fixes amigaocs_flop:maglines intro. Assisted by GLM-5.1 (amiga\agnus_copper.cpp). Prevent deferred updates from overwriting COPJMP2. Fixes the "lc" tests of the vAmiga Test Suite. Directly write chipset registers instead of going through the CPU (amiga\agnus_copper.cpp).
   . CDTV:
     . Connect CDTV and A570 subcode signals. Hook up 6500/1 remote control input converter. This allows the front-panel buttons for Play/Stop/Prev/Next to work. CD+G playback works now (amiga\amiga.cpp).
     . Correct port C input and interrupt latch handling (machine\6525tpi.cpp).
@@ -283,7 +283,7 @@
 - Capcom Baseball: 3rd coin is actually service coin. Improved clocks.
 - Check Man: Lower AY-3-8910 volume for clone Check Man (Japan)
 - Cross Puzzle: Made it boot. Reversed by Claude Opus 5. Applied feedback. 
-- Cruis'n Exotica: Rework dashboard layout to match the real cabinet (layout\crusnexo.lay)
+- Cruis'n Exotica: Rework dashboard layout to match the real cabinet.Added unlit radio button (layout\crusnexo.lay)
 - Dynasty: Dumped gfx rom for Dynasty (1992, V5.1G)
 - Enduro Racer: Fixed end address off-by-1 regression (sound\segapcm.cpp). Fixes broken engine sounds in Enduro Racer (ID 09512).
 - Euro Bingo 7: Added PAT PLD and counters SEEPROM dumps
@@ -322,7 +322,7 @@
 - Wink: Emulated protection according to schematics. Reversed by Claude Opus 5.
 - Description changes of Big 10 (1986, System Make, set 1), Checkmate (set 1), Cross Puzzle (v. 1.00), Cuty Line Limited 2 (V1.60), Dyger (Korea, set 1), Dyger (Korea, set 2), Fancy Bowling, Janyou Part I (Double Bet, set 1), 'Koi Koi Shimasho - Super Real Hanafuda (E63-00001 PCB)', Mahjong Yarunara (Japan, ver. 1.00), P's Attack (V1.11a), 'Print Club 2 Standard Ver1 (U 970921 V1.000)', RayStorm (VER 2.60G), Rugby? (Four Roses hardware), Shippuu Mahou Daisakusen (Japan), Tropical Fruits (Playmark, V. 24-06.00 Rev. 4.0), 'unknown 960606-5 based machine (set 3)', Wink (newer) and Wink (older, bugfixed).
 - Fixed rom names in cbasebal.cpp, goldstar.cpp, megasys1.cpp and sbmjb.cpp
-- Renamed (cobracomjb) to (cobracomjbl), (dynamj) to (cll2), (ichiban) to (ichiban305), (karnova) to (karnov5u), (koikois) to (koikoisa), (srdarwinb) to (srdarwinjbl), (wink) to (winkob) and (winka) to (wink).
+- Renamed (akamj) to (akamja), (cobracomjb) to (cobracomjbl), (dynamj) to (cll2), (ichiban) to (ichiban305), (karnova) to (karnov5u), (koikois) to (koikoisa), (srdarwinb) to (srdarwinjbl), (wink) to (winkob) and (winka) to (wink).
 - Dipswitch fixes in cmmb.cpp, dyna_dc4000.cpp, hshavoc.cpp, pacman.cpp, crospuzl.cpp and simple_st0016.cpp and tomsadvs.cpp
 - MAME
   . VIDEO RENDERING SYSTEM
@@ -331,6 +331,9 @@
     . Fixed a ~20 year old bug (dating to 0.106u2) with vector.cpp: The initial point of the first vector line when a new vector list was processed always started at 0,0 instead of starting at the end point of the last line in the most recently processed vector list (emu\vector.cpp).
     . BGFX: Added vector CRT renderer (GitHub #15692). Enable vector CRT rendering by default. Keep -nobgfx_vectorcrt available as an explicit opt-out. Increase bloom targets from one-third to half resolution to prevent the blur kernel from becoming under-resolved at 1080p. Normalize blur offsets against output resolution to preserve the apparent bloom size (bgfx\* and render\bgfx\*).
   . MEMORY SYSTEM: Fixed nullptr access during validation (emu\emumem_mview.cpp and emu\emumem.cpp)
+  . LUA engine
+    . Fixed null-pointer crash in emu.wait()/on_machine_postload() when called before the wait-task timer is attached (mame\luaengine.cpp).
+    . Allow omitting the condition and action for bpset and wpset (see MT09543) (mame\luaengine_debug.cpp)
   . INPUT/OUTPUT
     . Actually added the rules to clean preset/example INI files (makefile)
     . Allow scripts to enumerate device outputs (emu\output.cpp and mame\luaengine.cpp).
@@ -349,9 +352,10 @@
     . Fixed several size and range handling issues: Check the full hunk byte-by-byte when determining whether it is zero-filled. The previous code checked the buffer as uint32_t values, which could leave the final 1-3 bytes unchecked when the hunk size was not divisible by four. Checking bytes also avoids requiring the input buffer to be aligned for uint32_t access. Used GPT 6.3 to help find what to change. Reject zero hunk and unit sizes before calculating the hunk and unit counts. This prevents division by zero when opening a malformed CHD. Reject zero hunk and unit sizes before checking the number of units per hunk. This prevents modulo by zero when creating a CHD with invalid size parameters. Treat zero-length byte reads and writes as no-ops. This avoids unsigned underflow when calculating the last affected hunk from offset + bytes - 1. Keep parent unit references in 64-bit values when compressing V5 maps. Also perform parent unit index calculations in 64-bit arithmetic to avoid truncation or overflow for references beyond the 32-bit range (util\chd.cpp). Retain session data (util\cdrom.cpp, util\chd.cpp and tools\chdman.cpp).
     . Fixed session parsing by extending the read_metadata function to include the absolute meta-index (util\chd.cpp and util\cdrom.cpp)
   . 3RDPARTY: Updated ASIO to version 1.38.2, GLM to 1.0.3, LSQLite3 to 0.9.7, Lua to 5.4.8, LZMA to 26.02, PUGIXML to 1.16, SQLite3 to 3.53.4, utf8proc to 2.11.3 and ZSTD to 1.5.7.
-  . LUA engine: Fixed null-pointer crash in emu.wait()/on_machine_postload() when called before the wait-task timer is attached (mame\luaengine.cpp).
-  . Added a function for converting system clock time points to NTFS timestamps (util\timeconv.cpp). Moved some PKZIP format constants to a header (util\pkzipdefs.h and util\unzip.cpp).
-  . Added initial support for creating PKZIP archives (util\archiver.cpp). Added functions that take a reference to a stream rather than a smart pointer that don't take ownership. This makes it clearer than using core_file::open_proxy which doens't extend the lifetime anyway (util\chd.cpp, util\unzip.cpp and util\un7z.cpp). Added some error checks that had been overlooked (util\un7z.cpp and imagedev\diablo.cpp). Got rid of core_file dependency in a lot of places, use I/O interfaces instead. Stage the correct set of changes (util\chd.cpp).
+  . UTILs
+    . Added a function for converting system clock time points to NTFS timestamps (util\timeconv.cpp). Moved some PKZIP format constants to a header (util\pkzipdefs.h and util\unzip.cpp).
+    . Added initial support for creating PKZIP archives (util\archiver.cpp). Added functions that take a reference to a stream rather than a smart pointer that don't take ownership. This makes it clearer than using core_file::open_proxy which doens't extend the lifetime anyway (util\chd.cpp, util\unzip.cpp and util\un7z.cpp). Added some error checks that had been overlooked (util\un7z.cpp and imagedev\diablo.cpp). Got rid of core_file dependency in a lot of places, use I/O interfaces instead. Stage the correct set of changes (util\chd.cpp).
+    . Removed text writing functions (util\corefile.cpp and emu\fileio.cpp). Added an output stream buffer for writing text to a write_stream with line ending translation and/or transcoding to UTF-16 (util\ioprocsstream.cpp). Declare UTF-8 encoding in the XML declaration rather than the non-standard practice of prepending an encoded U+FEFF (util\xmlfile.cpp and mame\cheat.cpp). Fixed line ending translation not being applied for certain parts of the HTML output (tools\regrep.cpp).
   . Consolidate drivers into single file (sidearms.cpp and tceptor.cpp)
 - Compiling
   . Updated Android builds to use SDL3. Use SDL_INSTALL_ROOT to get proper pkg-config settings and extract include too (osd/sdl3). Make build use OSD=sdl3 by default and fixed compilation. Updated gradle, sdk and java code to SDL3. Fixed sdk warnings (android). Should use pkg-config as others. Require only EMSDK and update docs (asmjs).
