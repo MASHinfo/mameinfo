@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 14th September 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 15th September 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -88,7 +88,7 @@
     . Generate the no FPU exception when MSR[FP] is cleared, and added a temporary opt-in hack for some cache-reliant (MESS) Mac OS 9 behavior. Fixes garbage window backgrounds in the Finder and elsewhere on PowerMacs. Claude Opus 5 assisted with tracking down these issues (powerpc\ppc.h, ppccom.cpp and ppcdrc.cpp).
     . TLB fixes exposed by (MESS) Mac OS X (powerpc\ppc.h and ppccom.cpp). Respect the ICFI bit in HID0, fixes regressions in Konami M2 games. Finding the bug was assisted by Claude Opus 5 (powerpc\ppccom.cpp).
     . Fold CTR-only branches. Branch folding wasn't implemented for bdnz/bdz instructions. This caused the Power Macintosh 6100 ROM's calibration loop to be off by 1 cycle and miscalculate the CPU clock (powerpc\ppcfe.cpp).
-    . Fixed Mac OS X kernel panics freezing the MAME process (powerpc\ppcdrc.cpp)
+    . Fixed Mac OS X kernel panics freezing the MAME process (powerpc\ppcdrc.cpp). Fixed the polarity of the 603 TLB miss SRR1 store bit. The MPC603e User's Manual contradicts itself in places even in the latest revision on this point, but real-world code agrees with this polarity (powerpc\ppcdrc.cpp).
   . Intel 8080: Fixed INTE output at reset (i8085\i8085.cpp)
   . Intel I386: Fixed rotate (i386\i386op16.hxx). Fixed stmxcsr typo in disassembler (i386\i386dasm.cpp). Correct CPU generation flags for several opcodes (i386\i386ops.h).
   . Intel P8798
