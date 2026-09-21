@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 20th September 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 21st September 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -185,6 +185,7 @@
   . Imagetek I4100/4220/4300 VDP: Fixed regressions introduced when implementing sprite buffering. Some control registers need to be buffered in addition to sprite RAM (video\imagetek_i4100.cpp).
   . Intel 8251 USART: TxEMPTY remains asserted while transmitting sync characters. Empty commit to restart workflow run (machine\i8251.cpp).
   . Keyboard: Fixed missing column select pullup (pc_kbd\pcat101.cpp)
+  . Konami 005849 Video Controller: Update notes
   . Konami 054000 Protection: Updates: Fixed naming (use snake_case and lowercase variable names). Use multibyte.h for 24 bit value getter. Fixed logging and side effect checks (konami\k054000.cpp).
   . MagicEyes VRender0 SoC
     . Set screen to avoid fatal error when a terminal is active and added setter for external UART clock (machine\vrender0.cpp)
@@ -205,6 +206,7 @@
     . Gate transmit FIFO full logging on LOGTX. Release External/Status Interrupt latch upon channel reset (machine\z80scc.cpp).
     . Re-Arm the transmit interrupt when a character is loaded. The "Reset Tx Int Pending" command (WR0 = 101) suppresses transmit interrupts "until after the next character has been loaded into the transmit buffer", but the disarm flag was only cleared at the end of the following tra_complete(). The transmit-buffer-empty interrupt for that very character was therefore swallowed, so a driver that writes the next character from its interrupt handler stopped after one byte. Whether it happened at all depended on the write landing while the shift register was still busy, which made it look intermittent (machine\z80scc.cpp).
     . Updated RR0 latch when Reset External/Status Interrupt command is given and another change is pending (machine\z80scc.cpp). Fixes (MESS) macplus mouse cursor gets dragged to nearest screen corner/edge during disk loading (ID 09539).
+    . Fixed regression previously introduced in the case of using RTxC without the BRG. Fixed off-by-one FIFO sizes for both SCC and ESCC. MIE was doing too many things vs. the Zilog manual's description. Now it only gates the INT pin and IUS bit. Claude Fable 5.1 assisted with debug tracing and running regression tests across many SCC-using drivers (machine\z80scc.cpp).
   . Z80 SIO
     . Clear RTS/DTR flags in WR5 on channel reset
     . Fixed interrupt, DMA and status handling. Implemented 8085 three-cycle CALL interrupt acknowledge. Use channel A WR2 for interrupt mode/vector selection. Fixed special receive condition vectoring. Implement WR2A DMA request modes and interrupt suppression. Correct RR0 /RTSB reporting on channel B. Latch external/status inputs until reset and retrigger changed conditions. Suppress reset-time modem control edges. Fixed transmitter interrupt/DMA reset inhibition. Correct CRC preset and sync/hunt state handling. Tighten channel reset and first-character receive interrupt behavior. Fixes (MESS) MikroMikko 1 and 2 MPSC tests. Checked drivers that use z80sio for keyboard input are still working. Assisted by Claude Opus 5 (machine\z80sio.cpp).
@@ -282,6 +284,7 @@
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
   . Correct GFX for Bao Qing Tian (TIC). Claude Opus 5 identified the issue.
 - firebeat.cpp and twinkle.cpp: Added configuration register reads. Added IDE (preliminary, doesn't seem to work right in riscpc). Fix enable bit (CR0 bit 0 not 1). Fixed MIDI 2 clock select (CR4 bit 5 not CR5). Changed default value on IDE ports to match rpcemu-extended. Fixed IDE addressing and added 16bit read/write handlers (machine\fdc37c665gt.cpp).
+- gberet.cpp and jailbrek.cpp: Screen width is 256. Added 2nd spriteram bank to jailbrek.cpp. Update notes (konami\k005849.cpp).
 - gms.cpp: Dumped EEPROMs for sglc, sjms and tbss.
 - gstriker.cpp: Fixed interpretation of line table to use signed per-line and per-pixel steps. Fixes pitch in gstriker/vgoalsoc/twcup94. Debugging, mathletics and the explanation comment were assisted by Claude Fable 5.1 (vsystem\mb60553.cpp).
 - hyprduel.cpp: Fixed input name via usage and naming in test mode
@@ -299,6 +302,7 @@
 - namcos22.cpp
   . Removed some redundant m_poly->wait() calls in screen_update. Replaced render_triangle_fan usages with render_polygon & render_triangle. Use render_polygon rather than render_triangle_fan for rendering clipped quads (namco\namcos22_v.cpp).
   . Clip extents before calculating its parameters (video\poly.h). Fixed lighting when using shared normals. Use double instead of float for extent params in render callbacks (namco\namcos22_v.cpp).
+  . Increase quantum for non-super 22. Ace Driver and Ace Driver: Victory Lap video test writes 1 to DSP RAM to trigger drawing but then clears it back to 0 after 616 cycles; needs quantum frequency at least 40 kHz to ensure the master DSP can read it in time (namco/namcos22.cpp).
 - nexus3d.cpp: Misc notes
 - pgm.cpp: Improved ICS2115 register 0x10 implementation. Minor revert volume envelope behaviour (previous improvement retains to comment) (sound\ics2115.cpp). Fixes kov and kovplus speech cuts out at the title screen (ID 09541).
 - polepos.cpp: Added clock on POLEPOS_SOUND for bootlegs. Fixed missing engine sounds.
