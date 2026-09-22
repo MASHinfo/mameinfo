@@ -170,6 +170,7 @@
   . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8)): M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed. Moved (MESS) chameleon CGA into cga.cpp and correct the charram as it supports 16 rows. Initial chameleon palette support (isa\cga.cpp).
   . Clock: Removed timing checks in callback function (machine\clock.cpp)
   . DECO 55 / 56 / 74 / 141 Tilemap Generator: Fixed attempt to set zero scroll rows. If only one scroll row configured, don't right-shift it. Caused an assertion failure in debug builds (dataeast\deco16ic.cpp).
+  . EFO Sound-3 board: Speech chip should be a TMS5200 (shared\efo_sound3.cpp)
   . Flash ROM: Added Macronix 29LV320ETTI Flash. Set the correct page size for the 29F010 (machine\intelfsh.cpp). Added MBM29LV160B. A 16 Mbit bottom-boot part, maker 0x04 against device 0x2249, read from the table of acceptable flash devices in the SX-KN7000 firmware. Assisted by Claude Opus 5 (machine\intelfsh.cpp).
   . Floppy
     . Removed hardcoded DSDD format, handle SSDD, DSDD, DSHD and DSED (formats\hxcmfm_dsk.cpp).
@@ -182,6 +183,7 @@
     . Moved floppy sound into a separate file (sound\drivesound.cpp) and clean up imagedev\floppy.cpp/h. Lower the spin sound delay (sound\drivesound.cpp). Fixed include guards and added floppy sound to tiny build (sound\drivesound.h). Don't spin up immediately. Approximate real-world spindle spin-up time, i.e. the delay between the motor being switched on and the drive actually picking up speed. Heavier 5.25"/8" mechanisms take noticeably longer to get going than the lighter 3"/3.5" ones. If the motor is switched off again before this time has elapsed, the spin-up sample is never started, so no sound is heard at all. Fixes incessant clicking on CMD FD-2000 disk ready polling. Assisted by Claude Sonnet 5 (sound\drivesound.cpp).
     . Support D1M/D2M/D4M disk images. Assisted by Claude Sonnet 5 and GPT-5.6 Sol (formats\d2m_dsk.cpp).
     . Treat zero master index entries in tree files as sparse. A tree file whose master index block has a zero entry has no index block for that 128K range: ProDOS allocates neither the index block nor its data blocks, and reads the range back as zeros (ProDOS 8 Technical Reference Manual, B.3.6). any_read and any_blocks fetched block 0, the boot block, and used its bytes as data block pointers, so reading such a file either failed with a block number overflow or returned blocks belonging to other files, and flopblocks/hdblocks listed block 0 and a few hundred unrelated blocks as belonging to the file. This is the same case 47891bc62b5 handled for zero entries inside an index block, one level up (formats\fs_prodos.cpp).
+    . Added sector holes for the 10-sector variants used by h17disk (formats\flopimg.cpp)
   . Hitachi HD44780 LCD Controller: Added parent rom reference (sed1278 and ks0066; video\hd44780.h)
   . Hudson HuC6260 VCE: Use screen() accessor to access screen (video\huc6260.cpp)
   . Imagetek I4100/4220/4300 VDP: Fixed regressions introduced when implementing sprite buffering. Some control registers need to be buffered in addition to sprite RAM (video\imagetek_i4100.cpp).
@@ -194,7 +196,7 @@
     . Implemented external UART clock and worked around problem with buffer space polling. Claude Opus 5 implementation (machine\vr0uart.cpp).
   . MOS 6522 VIA and Rockwell R65C22 VIA: Fixed T1/T2 free-run timers going backward after underflow instead of counting down and T2 reads lagging T1 by IFR_DELAY clocks. Fixes (MESS) Commodore 1526 VIA/RIOT self-test. Assisted by Claude Opus 5 (machine\6522via.cpp). Fixed regression which broke QuickTime playback on the (MESS) Pippin. C= 1526 self-test still passes. Debugging assisted by GPT-6 Astra (machine\6522via.cpp).
   . MOS 6530 MIOT: Fixed timer_start() off-by-one tick that fired the underflow interrupt one cycle too late (machine\mos6530.cpp).
-  . Motorola MC6845 CRTC: Don't recompute parameters before device has started (video\mc6845.cpp)
+  . Motorola MC6845 CRTC: Don't recompute parameters before device has started. Added a reconfigure callback carrying the retrace positions (video\mc6845.cpp).
   . Namco C169 (ROZ): Various fixes and updates. Fixed per-scanline draw method to fix Speed Racer intro and in-game road. Fixed non-wrapped draw to fix Metal Hawk title logo and large ship. Fixed docs. Use Cursor Grok 4.6 (namco\namco_c169roz.cpp).
   . NCR 5380 SCSI: Protected constructors with default arguments are a bug waiting to happen. Restore base-part self-reset interrupt (regressed by GitHub #15658). Make SCSI bus reset edge-triggered. The SCSI bus reset (chip reset + interrupt) is triggered by the /RST line transitioning to true, not by it merely being asserted. The previous code triggered on the level (icmd_w reset unconditionally on ASSERT RST; scsi_ctrl_changed on ctrl & S_RST), so a device asserting RST while another device already held it would reset and interrupt a second time. Claude Opus 4.8 assisted with datasheet analysis and implementation (machine\ncr5380.cpp).
   . NCR 53Cxx SCSI Controller: Register 0xe must read as 0 on 53C94/53C96. Fixed NCR53CF94/96 features enable bit and revision read back (machine\ncr53c90.cpp).
@@ -294,7 +296,9 @@
 - hyprduel.cpp: Fixed input name via usage and naming in test mode
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
-- konamigx.cpp: PSAC4 fake-voxel implementation for opengolf and racinfrc. GPT-6 Astra assisted with the reverse-engineering, math and analysis of direct-feed video from hardware.
+- konamigx.cpp
+  . PSAC4 fake-voxel implementation for opengolf and racinfrc. GPT-6 Astra assisted with the reverse-engineering, math and analysis of direct-feed video from hardware.
+  . Removed debug keys, fixes input assignments for Racin' Force. Fixed frame skipping. Added vblank note (sidenote: if it was update_before_vblank, this workaroud wouldn't work, since screen_update is called *before* vblank start handler) (konami\konamigx_v.cpp).
 - lazercmd.cpp: Lower DAC volume
 - mcr.cpp: Moved most public stuff to protected / private
 - model3.cpp
@@ -307,13 +311,15 @@
 - namcos22.cpp
   . Removed some redundant m_poly->wait() calls in screen_update. Replaced render_triangle_fan usages with render_polygon & render_triangle. Use render_polygon rather than render_triangle_fan for rendering clipped quads (namco\namcos22_v.cpp).
   . Clip extents before calculating its parameters (video\poly.h). Fixed lighting when using shared normals. Use double instead of float for extent params in render callbacks (namco\namcos22_v.cpp).
-  . Increase quantum for non-super 22. Ace Driver and Ace Driver: Victory Lap video test writes 1 to DSP RAM to trigger drawing but then clears it back to 0 after 616 cycles; needs quantum frequency at least 40 kHz to ensure the master DSP can read it in time (namco/namcos22.cpp).
+  . Increase quantum for non-super 22. Ace Driver and Ace Driver: Victory Lap video test writes 1 to DSP RAM to trigger drawing but then clears it back to 0 after 616 cycles; needs quantum frequency at least 40 kHz to ensure the master DSP can read it in time (namco\namcos22.cpp).
+  . ss22 uses per-poly fog (namco\namcos22_v.cpp)
 - nexus3d.cpp: Misc notes
 - pgm.cpp: Improved ICS2115 register 0x10 implementation. Minor revert volume envelope behaviour (previous improvement retains to comment) (sound\ics2115.cpp). Fixes kov and kovplus speech cuts out at the title screen (ID 09541).
 - polepos.cpp: Added clock on POLEPOS_SOUND for bootlegs. Fixed missing engine sounds.
 - policetr.cpp: Updated comments
 - popobear.cpp: Added NVRAM to magkengo and qiwang
 - pspikes.cpp: Fixed screen flip for Turbo Force and clone Aero Fighters (Taiwan / Japan, set 1). Replaced the hand-tuned flip constants with values measured from the games themselves. The vsystem_spr2 mirror constants (previously hardcoded 308/208, only correct for clone Aero Fighters (Taiwan / Japan, set 1)) become per-game configuration, and the mirror is now zoom-aware. Write all 512 rowscroll entries instead of 256 so the mirrored row indexes read by a flipped tilemap are initialized. Co-Authored by Claude Opus 5.
+- rastersp.cpp: Fixed endianness issues on screen update (good example of why the *_XOR_(BE|LE) are confusing to use)
 - royalpkr.cpp: Improved IRQ handling. Added ACRTC maps for the high and medium resolution. Preliminary inputs from research of the dumper. IRQs handling improvements and palette hook-up for low and medium res games and config/serial reversal (where not documented by the dumper) done with assistance of Claude Opus 5.
 - seattle.cpp: Initialize register file and timer state at reset. Fixes intermittent failure to boot on some Atari games (machine\gt64xxx.cpp).
 - segas32.cpp: Added per line clipping for titlef, jpark and ga2. Fixes per line clipping (spotlight) issue in ga2, ga2u and ga2j (ID 05233).
@@ -403,7 +409,9 @@
 - Sea Wolf II: Fixed French language DIP switch
 - Super Glob: Connect test switch to enable diagnostics for theglobp and similar epos games (beastfp, beastfpa, theglobp, theglobpa, theglobme, sprglobp, sprglobp2 and sprglbpg).
 - Super Pinball Action: Fixed dipswitch port regression
+- Super Real Mahjong P.V: Simplified address swizzling code. Fixed gamename, canonically known as "P.V".
 - Syvalion: Fixed sprite vertical zoom and low life warning message in Syvalion. Analysis assisted with Cursor Grok 4.6 (taito\taito_h_v.cpp).
+- Table Tennis Champions: Fixed endianness issue on blitter ROM access, added side effect checks, cleaned up screen update and read side of address map a bit.
 - Tao Taido: Fixed player 2 controls in clone Tao Taido (6 button version). Note: For a long time in clone taotaidoa, player 2's kick buttons (4-6) actually causes player 1 to kick in-game, as if they pressed their own corresponding kick buttons. The game checks player 3 and 4 inputs, which are visible in the service mode's input test program, and reuses them for kick buttons. As noted in the driver notes, players 3 and 4 aren't used at all in the 2-button parent taotaido or the 2/3-button clone taotaido3. Adjusting the 'P4' port to map buttons 1-3, rather than three of the directions, to player 2's buttons 4-6 allows player 2 to kick as expected.
 - Tetris (set 1)
   . Update PCB layout. All components correctly identified and checked against a real PCB.
@@ -468,6 +476,7 @@
   . Fixed build with ZLIB_CONST defined (util\ioprocsfilter.cpp). Build libformats and libutils with ZLIB_CONST defined.
   . Use read/write stream interfaces rather than core_file where possible (emu\video.cpp).
   . Use util::(big|little)_endian_cast for address swizzling in various places (glass.cpp, irobot_m.cpp, n64_m.cpp, popobear.cpp, raiden2.cpp, tapatune.cpp and tatsumi.cpp)
+  . Added support to create a JSON compilation database
 - Debugger
   . GDB stub debugger (gdbstub)
     . Proper Z80 architecture support in the gdbstub. Assisted by GLM-5.1. REF: ttps://sourceware.org/git/\?p\=binutils-gdb.git\;a\=blob_plain\;f\=gdb/features/z80.c\;hb\=HEAD (debugger\debuggdbstub.cpp, z80\kc82.h, z80\z80.cpp and z80\z84c015.h).
