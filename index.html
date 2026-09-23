@@ -255,7 +255,7 @@
 - bfm_cobra3.cpp
   . Hook up MC68340 DMA and correct board signals. Read multiplexed inputs from the connected byte lane, pass the video controller interrupt at its asserted polarity and connect the active-high SCSI request to the DMA controller's active-low DREQ input (bfm\bfm_cobra3.cpp).
   . Added preliminary MPEG audio decoder. Implemented the host data interface, active-low reset and request signals, and MPEG-1 Audio Layer II playback using MAME's existing MPEG audio decoder. Improved buffering, control and save-state handling. Map host registers individually. Use fixed-width REQ state. Streamline silent audio output (sound\tms320av110.cpp).
-  . Added MPEG-1 video decoder (video\mpeg_video.cpp1). Added preliminary SGS-Thomson STi3400 MPEG-1 video decoder emulation (video\sti3400.cpp). Added MPEG video decoding to Bellfruit Cobra 3. Separate video rendering from composition. Preserve main RAM in save states (bfm\bfm_cobra3.cpp).
+  . Added MPEG-1 video decoder (video\mpeg_video.cpp). Added preliminary SGS-Thomson STi3400 MPEG-1 video decoder emulation (video\sti3400.cpp). Added MPEG video decoding to Bellfruit Cobra 3. Separate video rendering from composition. Preserve main RAM in save states (bfm\bfm_cobra3.cpp).
 - blzntrnd.cpp: Moved Blazing Tornado and Grand Striker 2 from metro.cpp to their own driver blzntrnd.cpp
 - cdi.cpp
   . Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
@@ -265,6 +265,8 @@
   . Make Quizard 1-4 boot again (machine\scc68070.cpp and philips\cdi.cpp). Added AI-modified MCUs for the various languages supported by the Quizard set. Analysis by GPT-5.6 Sol.
   . Moved CDIC attenuation table to slave HLE. Reverse engineering revealed the attenuation lookup table is in the slave, not the CDIC. This uses the proper lookup table instead of the powf approximation. The result is <0.5% difference in volume (philips\cdicdic.cpp and philips\cdislavehle.cpp).
   . Improved serial interface/UART behavior (machine\scc68070.cpp). Implemented CD-i serial test device (philips\cdipcb.cpp).
+  . Added MPEG-1 video decoder (video\mpeg_video.cpp). Added Digital Video Cartridge (VMPEG) emulation and NTSC support via cdimono1n machine (philips\cdi.cpp). Added accessors needed by the CD-i Digital Video Cartridge (video\mpeg_video.cpp). Fixed joint stereo band decoding (sound\mpeg_audio.cpp). Added an MPEG-1 system stream demultiplexer (machine\mpeg_demux.cpp). Added CD-i full motion audio decoder (sound\gsc38gg307.cpp). Added MPEG-1 full motion video decoder (video\mcd251.cpp).
+  . Make 'CD-i 220 LCD' a device. The cdislave hle currently has partial ownership of the LCD panel's state. This makes it harder to replace the slave_HLE with the DSP chip. This change provides a cleaner separation by using a callback, similar to other devices the slave interacts with (philips\cdi220_lcd.cpp).
 - cedar_magnet.cpp
   . New games (Cocomania, Dodge Ball, Double Dragon, Flying Shark, Super Contra and World Wars) and improvements.
   . Added new reconstruction disk to Dracula's Castle (Magnet System) - Promoted game to working. Better dumps for 'A Day In Space (31/03/87)' and clone clone 'War Mission (WM 09/04/87)'.
@@ -368,6 +370,7 @@
 - 39 in 1 MAME bootleg
   . Correct or added decryption for all sets and redid the CPLD protections using correct math. Claude Opus 5 assisted with the decryption, reverse-engineering of the CPLD protections and portions of the explanatory comments.
   . Promoted clones 4 in 1 MAME bootleg (PLZ-V001), 4 in 1 MAME bootleg (ver 3.00, PLZ-V014), 48 in 1 MAME bootleg (ver 3.09, HPH-V000, alt flash) and 60 in 1 MAME bootleg (ver 3.00, ICD-V000) to working.
+- Attack UFO: Fixed vertical retrace rate (sound\mos6560.h)
 - Backfire!: Fixed sound routing
 - Capcom Baseball: 3rd coin is actually service coin. Improved clocks.
 - Check Man: Lower AY-3-8910 volume for clone Check Man (Japan)
