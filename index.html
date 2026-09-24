@@ -61,7 +61,7 @@
 - New clones: Aka Mahjong (Double Bet, ver 1 19), Aracnis (bootleg of Scorpion on Moon Cresta hardware, set 3), Big 10 (1986, System Make, set 2), Booby Kids (version 4.1, Magnet System), Chaoji Da Manguan II (China, V641C), Checkmate (set 2), Club San Marino (V0.20 Italy, low resolution), Double Dragon (EC, Magnet System), Dynasty (1992, V1.2), El Estivador (Spanish bootleg of Port Man on Galaxian hardware, set 2), Exzisus (EX 2.0, Magnet System), Ichi Ban Jyan (Ver 3.31), The Game Machine (V0.10, medium resolution), The Game Machine (V1.02 Kaernten, medium resolution), Janyou Part I (Double Bet, set 2), Jolly Poker II (V1.16 Kaernten, low resolution), Karnov (World, rev 5), 'Koi Koi Shimasho - Super Real Hanafuda (E51-00001-A PCB)', Loto-Play (MC68705, set 4, with seven-segment display), Lucky Lady (ASD), Mahjong Chuuka Ken (China?), Mahjong Gal no Kaika (Japan, prototype), Pac-Man (VCC hack), Police Trainer (Rev 1.2), Royal Poker (V1.52, low resolution), Royal Poker (V1.54, low resolution), Royal Poker (V1.70, high resolution), Royal Poker (V1.70, low resolution), Royal Poker (V2.00, low resolution), Silk Worm (World, conversion), Skat TV (S1), Solar Fox (cabaret), Super Contra (SC cc, Magnet System), Sweet Gal (Japan 850410 SG 0-01), Triple Draw (V1.06, low resolution), 'unknown 'Space Invaders' gambling game (encrypted, set 3)', VS Computer Mahjong (hack) and Wink (older)
 - New AGEMAME games: 18+, 493, Action 4U SL, Action Total (S7), Arcon, Atlantis (S6), Baba Jaga (S17), Bel Ami (S3), Block Buster, Boss, Bully (S11), Caipi (S7), Daxx (S4), Daxx (S8), Duo, Eleven (S3), Endspiel (S9), Fire Game (S3), Foxx (S5), Freegames (S11), Gloria SL (S4), Gloria SL (S5), Gloria Super, Graffiti, Graffity, Hard Rock, HERO, Hexen Tanz, Hot Slot (S5), Jumpin Jack SL, King Classic SL (S2), King Classic SL (S3), Limbo (S3), Luxx Pro, M 200 (S5), Mach Mehr, Monopoly, Neon (S12), Neon (S13), Oxigen (S7), Phantom (S7), Piratengold (S4), Piratengold (S5), Play Time (S11), Quick Risc (S4), Rex, Roxy Classic, Sky (S6), Speed Run (S3), Speed Run (S4), Sunfair XL (S2), Tex Mex, That's Cool, Titan Pro, Total Genial (S11), Tropical (S3), Victoria, Winplay SL and X-Cross.
 - New PinMAME games: Super Star (Recreativos Franco, set 3) and Super Star (Recreativos Franco, set 4)
-- New drivers: blzntrnd.cpp, caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, eoforce.cpp, eurotec.cpp, ghostb.cpp, lastmisn.cpp, lotoplay_prog.cpp, oscar.cpp, royalpkr.cpp, srdarwin.cpp and technik2000.cpp
+- New drivers: blzntrnd.cpp, caprstar.cpp, cobracom.cpp, eagle_9715a.cpp, eagle_9619b.cpp, eoforce.cpp, eurotec.cpp, ghostb.cpp, lastmisn.cpp, lotoplay_prog.cpp, oscar.cpp, royalpkr.cpp, srdarwin.cpp, technik2000.cpp and xevious.cpp
 - New devices: 136094_0004a, adsp2181ekl, alps_dpg23, amiga_a4091, amiga_adscsi2000, amiga_adscsi2080, amiga_cybervision64, amiga_dkb3128, arm1, arm2, arm250, arm3, arm60, arm610, arm610_be, arm710a_be, at_ssrt, atmega1284, c1350, c1541rp, c1541tt, c1571dd3, cdi_dvc_slot, cdi_dvc_vmpeg, cdi220_lcd, cdipcb, cga_chameleon, citizen_120d, de101, de156, gsc38gg307, i2c_ds1307, jalfpu, mach64vt, macronix_29lv320etti, mb8881, mbm29lv160b, mc68340dma, mcd251, mos8521, ncr53c710, pkscram.cpp, quadencoder, quadmouse, ram_slot, sa110, sa110_be, saturn_dcc, saturn_vdp2, sd2iec, sh7014adc, sh7014wdt, sti3400, tms320av110, tmp95c061_serial, vcs_gunstick, vcs_inkwell184c, vcs_lightpen_left, vcs_lightpen_right, vcs_lightpen_up, vcs_magnum, vcs_stacklr, unihammer, w65816, wd1010, wd1015, wd1015pl5402, zorro3 and zorro3_slot
 - New DATs: GameInit.dat (https://www.progettosnaps.net/gameinit/)
 - CPU
@@ -296,11 +296,13 @@
   . Split TMP* based games in a subclass (royalmah.cpp only). Cloud Opus 5 helped with the reverse engineering and documening of the exact protection mechanism and the cafepara/cafebrk GFX ROM descrambling.
   . Correct GFX for Bao Qing Tian (TIC). Claude Opus 5 identified the issue.
 - firebeat.cpp and twinkle.cpp: Added configuration register reads. Added IDE (preliminary, doesn't seem to work right in riscpc). Fix enable bit (CR0 bit 0 not 1). Fixed MIDI 2 clock select (CR4 bit 5 not CR5). Changed default value on IDE ports to match rpcemu-extended. Fixed IDE addressing and added 16bit read/write handlers (machine\fdc37c665gt.cpp).
+- galaga.cpp and xevious.cpp: Got the xevious_state and derived stuff out of galaga.cpp so the classes and files actually have a correspondence to each other. Required copy/pasting a crystal value and a planar graphics layout.
 - gberet.cpp and jailbrek.cpp: Screen width is 256. Added 2nd spriteram bank to jailbrek.cpp. Update notes (konami\k005849.cpp). Fixed possible cliprect issue.
 - gms.cpp: Dumped EEPROMs for sglc, sjms and tbss.
 - gstriker.cpp: Fixed interpretation of line table to use signed per-line and per-pixel steps. Fixes pitch in gstriker/vgoalsoc/twcup94. Debugging, mathletics and the explanation comment were assisted by Claude Fable 5.1 (vsystem\mb60553.cpp).
 - hyprduel.cpp: Fixed input name via usage and naming in test mode
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
+- jaguar.cpp: Implemented documented latch so the RISC CPUs don't see incomplete/corrupted data from the 68k & up the interleave. (MESS) Jaguar Doom is now fully playable. Debugging assisted by GPT-6 Astra.
 - karnov.cpp: Documentation updates. Correct some ROM labels for 64street, avspirit, phantasm and edf. Added in PCB locations as where missing for said sets. Updated a few comments. Changed comments in the ROM def area to C++-style. Added comment about interesting 64street set.
 - konamigx.cpp
   . PSAC4 fake-voxel implementation for opengolf and racinfrc. GPT-6 Astra assisted with the reverse-engineering, math and analysis of direct-feed video from hardware.
@@ -318,11 +320,12 @@
   . Removed some redundant m_poly->wait() calls in screen_update. Replaced render_triangle_fan usages with render_polygon & render_triangle. Use render_polygon rather than render_triangle_fan for rendering clipped quads (namco\namcos22_v.cpp).
   . Clip extents before calculating its parameters (video\poly.h). Fixed lighting when using shared normals. Use double instead of float for extent params in render callbacks (namco\namcos22_v.cpp).
   . Increase quantum for non-super 22. Ace Driver and Ace Driver: Victory Lap video test writes 1 to DSP RAM to trigger drawing but then clears it back to 0 after 616 cycles; needs quantum frequency at least 40 kHz to ensure the master DSP can read it in time (namco\namcos22.cpp).
-  . ss22 uses per-poly fog (GitHub #16224) (namco\namcos22_v.cpp)
+  . ss22 uses per-poly fog (GitHub #16224) (namco\namcos22_v.cpp). SS22 video PCB uses C397, not C387 (verified by Guru). Also revision A has four each of C400 and C401, same as later revisions.
 - nexus3d.cpp: Misc notes
+- nss.cpp, sfcbox.cpp and snesb.cpp: Fixed HIRQ enable behavior. Fixes flickering in (MESS) Doom and freeze in Mortal Kombat II. Debugging assisted by Claude Opus 5.5 (nintendo\snes.h and nintendo\snes_m.cpp).
 - pgm.cpp: Improved ICS2115 register 0x10 implementation. Minor revert volume envelope behaviour (previous improvement retains to comment) (sound\ics2115.cpp). Fixes kov and kovplus speech cuts out at the title screen (ID 09541).
 - polepos.cpp: Added clock on POLEPOS_SOUND for bootlegs. Fixed missing engine sounds.
-- policetr.cpp: Updated comments
+- policetr.cpp: Updated comments. Use machine configuration functions rather than crazy class hierarchy to set speedup hack parameters.
 - popobear.cpp: Added NVRAM to magkengo and qiwang
 - pspikes.cpp: Fixed screen flip for Turbo Force and clone Aero Fighters (Taiwan / Japan, set 1). Replaced the hand-tuned flip constants with values measured from the games themselves. The vsystem_spr2 mirror constants (previously hardcoded 308/208, only correct for clone Aero Fighters (Taiwan / Japan, set 1)) become per-game configuration, and the mirror is now zoom-aware. Write all 512 rowscroll entries instead of 256 so the mirrored row indexes read by a flipped tilemap are initialized. Co-Authored by Claude Opus 5.
 - rastersp.cpp: Fixed endianness issues on screen update (good example of why the *_XOR_(BE|LE) are confusing to use)
@@ -441,6 +444,7 @@
       . Added 'depixelize' screen chain based on Felix Kreuzer's implementation of Kopf & Lischinski's SIGGRAPH paper (bgfx\effects\depixelize\*)
       . Properly use the new rowbytes on mode changes. This resolves a bunch of driver-dependent issues including blank screens on macOS and crashes with MesaGL on Linux. Debugging assisted by Claude Fable 5.1 (bgfx\chainmanager.cpp and bgfx\texturemanager.cpp).
   . MEMORY SYSTEM: Fixed nullptr access during validation (emu\emumem_mview.cpp and emu\emumem.cpp)
+  . DEVICE: Got rid of some C string pointers in APIs, allow the linker to coalesce out-of-line instantiations of state_add templates. To follow up, .c_str() calls can be removed from calls to state_add in various CPU devices (emu\distate.cpp).
   . LUA engine
     . Fixed null-pointer crash in emu.wait()/on_machine_postload() when called before the wait-task timer is attached (mame\luaengine.cpp).
     . Allow omitting the condition and action for bpset and wpset. Fixes LUA bpset/wpset functions cause MAME crash (ID 09543) (mame\luaengine_debug.cpp).
@@ -485,7 +489,8 @@
   . Fixed build with ZLIB_CONST defined (util\ioprocsfilter.cpp). Build libformats and libutils with ZLIB_CONST defined.
   . Use read/write stream interfaces rather than core_file where possible (emu\video.cpp).
   . Use util::(big|little)_endian_cast for address swizzling in various places (glass.cpp, irobot_m.cpp, n64_m.cpp, popobear.cpp, raiden2.cpp, tapatune.cpp and tatsumi.cpp)
-  . Added support to create a JSON compilation database
+  . Added support to create a JSON compilation database.
+  . Got rid of driver_start and driver_reset. These are leftovers from the pre-device world where driver_start/driver_reset were for drivers\*.* and machine_start/machine/reset were for machine\*.*. Having both of them just makes things confusing, and there was a clear preference for the "machine" variants.
 - Debugger
   . GDB stub debugger (gdbstub)
     . Proper Z80 architecture support in the gdbstub. Assisted by GLM-5.1. REF: ttps://sourceware.org/git/\?p\=binutils-gdb.git\;a\=blob_plain\;f\=gdb/features/z80.c\;hb\=HEAD (debugger\debuggdbstub.cpp, z80\kc82.h, z80\z80.cpp and z80\z84c015.h).
