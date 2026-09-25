@@ -88,7 +88,7 @@
     . SH family updates: Removed shadow m_am member that was causing confusion in favor of the base class's. Exception vector fetches now mask the fetched PC with m_am. Fixed DRC cycle counts for MULS, MULU, BT/BF, TSTM, BSRF and STC/LDC. Fixed interpreter cycle counts for JMP, ORI and ORM. Fixed interpreter MAC.W and MAC.L to generate correct results. Illegal instructions now trap when they happen instead of some time later. generate_delay_slot() propagates the delay slot's cycle count back to the caller. Fixed DRC delay slot behavior for BSRF, BRAF, JSR, JMP, RTS and RTE. MOV.W @(disp,PC), MOV.L @(disp,PC) and MOVA now use the correct address when in a delay slot. RTE restores PC and SR before the delay slot executes and properly masks SR. LDC.L @Rm+,SR masks the loaded value with SH_FLAGS. SLEEP now actually sleeps on the DRC, it was a no-op before. The FPU now uses the requested rounding mode for both interpreter and DRC. Correctness fixes for the interpreter versions of FTRC, FDIV, FSQRT, FSRRA, FMAC, FTRV and LDS. Fixed 11 cases of copy-pasted very broken UML_TEST (..., m_fpu_pr, 0). DRC FNEG inverts the sign bit in both precisions. DRC FTRC routed to the range-checked implementation. All seven DRC FMOV forms converted to UML via generate_fmov_single/generate_fmov_pair. DRC FLDS, FTRC, FSQRT, FSRRA, FCNVSD, FCNVDS, FIPR and FTRV converted from cfuncs to UML. DRC CLRS, SETS, SHAD, SHLD, LDCDBR, the banked STC/LDC forms and the @-Rn/@Rn+ control-register transfers and LDS/LDS.L to FPSCR converted to UML. Func_FSSCA applies the rounding mode before calling the interpreter. Tested to fix a selection of Saturn software that was marked "doesn't work on DRC" and to generate byte-identical 3D frames between the interpreter and DRC with 6 Naomi games. On both x64 and arm64 hosts and even x64 vs. arm64. Additionally, a generated Lua script performed an FPU torture test which found and verified many of these issues. Debugging and tracing assistance and some suggestions on fixes were provided by Claude Opus 5. Fixed things that should be in the DRC cache.
     . A few cleanups: Flip the interpreter's policy to run primarily in the host's rounding mode and only set ours when necessary. Moved m_fpmode into the cache for further x64 safety. Added the necessary #pragma for FP environment changes on Clang. As far as I can tell, GCC wants per-file -frounding-math in the build system for this, and ditto drcbec.cpp. That's a relatively big change for two things that won't normally be used though (the SH interpreter and drcbec).
     . Added SH7016/SH7017 mid-speed A/D converter. Fixed the SH7014 SCI's asynchronous frame and bit rate. The frame format had all three of its fields the wrong way round. A port set up for 8N1, as MIDI is, was receiving 7E2 and framing every byte. The internal bit rate was short by the factor between the peripheral clock and the bit clock. Expose the receive input, which had no accessor. The SH7014 SCI loads on a falling TDRE only, and its requests are levels. Fixed SH7014 watchdog timer. The SH7014's DMAC restarted every transfer it finished. The SH7014's IRQ pins have vectors and priorities of their own. sh7014 edge-detected IRQs never reached the CPU (sh\sh7014.cpp).
-    . Implemented standby mode that SLEEP kicks the SH-2 into and fixed a bug with FRT capture (sh\sh2.cpp and sh\sh7604.cpp)
+    . Implemented standby mode that SLEEP kicks the SH-2 into and fixed a bug with FRT capture. Fixed SH7604 on-chip divider corner cases (sh\sh2.cpp and sh\sh7604.cpp)
   . IBM PowerPC
     . Help performance on PCI PowerMacs with a 68K DRC: * Apple's 68k DRC frequently generates a code sequence, flushes it, and then regenerates the exact same thing at the exact same address. So we now cache small sequences and can restore them without the overhead of a recompile. This required adding some accessors to the 3 DRC backends. * The entire vTLB (a MAME DRC implementation detail, *not* the 603's architectural TLB) was being used as a comparison for deciding to flush a block rather than just the actual mapping. In particular, the access count bits were causing unnecessary recompiles. * The vTLB was also too small: at its original size it covered just 512K of working set. By trial and error stepping through powers of 2, 4096 was found to give the best results running real Mac software. With these changes, pwrmacg3 went from roughly 160,000 block flushes and recompiles per second to 0 when idling at the Mac OS 8.1 Finder. This also smoothed out regular audio breakups on pippin caused by recompile storms and seems to have even sped up a few of the PPC arcade games by a few ticks. Claude Opus 5 assisted with measuring and isolating the performance issues n (powerpc\ppc.h, ppccom.h and ppcdrc.cpp).
     . Generate the no FPU exception when MSR[FP] is cleared, and added a temporary opt-in hack for some cache-reliant (MESS) Mac OS 9 behavior. Fixes garbage window backgrounds in the Finder and elsewhere on PowerMacs. Claude Opus 5 assisted with tracking down these issues (powerpc\ppc.h, ppccom.cpp and ppcdrc.cpp).
@@ -169,7 +169,9 @@
   . Atari RLE Motion Objects: Align sprite pen base to the sprite's color depth. Fixes the yellow blood in Primal Rage (atari\atarirle.cpp).
   . CD-ROM: Support CD+G Discs. Without this change, CD+G discs when played in the CD-i audio player will sound like "crackling". With this change, CD+G discs will play correctly (util\cdrom.cpp).
   . CXD85xxx/CXD86xxx GPU (PSX GPU): Use ram_device. Added support for setting the PAL & NTSC CRTC clock & set the device clock to half the system clock (video\psx.cpp).
-  . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8)): M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed. Moved (MESS) chameleon CGA into cga.cpp and correct the charram as it supports 16 rows. Initial chameleon palette support (isa\cga.cpp).
+  . CGA (ISA8 CGA - 4enlinea, ISA8_CGA_TETRISKR and Yamaha V6363 CMDC (on-board CGA ISA8))
+    . M24 mode2 bit 0 enables the 400 line mode, it does not select graphics. Text versus graphics is still selected by bit 1 of the CGA mode control register, so software that leaves mode2 bit 0 set while in text mode had its text page fed to the 1bpp renderer and nothing was displayed. Moved (MESS) chameleon CGA into cga.cpp and correct the charram as it supports 16 rows. Initial chameleon palette support (isa\cga.cpp).
+    . Made a subdevice to handle the PCT's slightly non-standard CGA, and to draw properly when it's not the only monitor in MAME (isa\cga.cpp).
   . Clock: Removed timing checks in callback function (machine\clock.cpp)
   . DECO 55 / 56 / 74 / 141 Tilemap Generator: Fixed attempt to set zero scroll rows. If only one scroll row configured, don't right-shift it. Caused an assertion failure in debug builds (dataeast\deco16ic.cpp).
   . EFO Sound-3 board: Speech chip should be a TMS5200 (shared\efo_sound3.cpp)
@@ -262,16 +264,32 @@
   . Added MPEG-1 video decoder (video\mpeg_video.cpp). Added preliminary SGS-Thomson STi3400 MPEG-1 video decoder emulation (video\sti3400.cpp). Added MPEG video decoding to Bellfruit Cobra 3. Separate video rendering from composition. Preserve main RAM in save states (bfm\bfm_cobra3.cpp).
 - blzntrnd.cpp: Moved Blazing Tornado and Grand Striker 2 from metro.cpp to their own driver blzntrnd.cpp
 - cdi.cpp
-  . Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp)
-  . Fixed Opcode length and rename Flag. Adjusted handling of "Disable Input Polling" mode and renamed to "Debug Mode" (philips\cdislavehle.cpp). Added Test Plug. Allow access to a test menu by booting the console with the Test Plug set (philips\cdi.cpp and philips\cdislavehle.cpp).
-  . Cleanup Reset. The reset function has duplicated code and is slightly out of sync. This merge corrects a few mismatches. This likely impacts no games. Also added RAM time to the cdimono2 (philips\cdi.cpp and machine\scc68070.cpp).
-  . Play Music CDs. This added a small disc-type check to the CD-i Slave HLE. This allows it to recognize music CDs, which triggers the CD player mode. Fixed CDIC Audio Track Size (philips\cdislavehle.cpp).
+
+  . CD-i 220 LCD: Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp). Make 'CD-i 220 LCD' a device. The cdislave hle currently has partial ownership of the LCD panel's state. This makes it harder to replace the slave_HLE with the DSP chip. This change provides a cleaner separation by using a callback, similar to other devices the slave interacts with (philips\cdi220_lcd.cpp).
+
+
+  . CDIC MCU: Moved CDIC attenuation table to slave HLE. Reverse engineering revealed the attenuation lookup table is in the slave, not the CDIC. This uses the proper lookup table instead of the powf approximation. The result is <0.5% difference in volume (philips\cdicdic.cpp and philips\cdislavehle.cpp). Fixed Multitrack Audio Discs. Allows multitrack discs to play correctly. Previously only the first 1 or 2 tracks worked reliably (philips\cdicdic.cpp). CD+G Graphics. Sends the CD+G subcode data to the CPU for rendering (philips\cdicdic.cpp).
+  . SLAVE MCU: Fixed Opcode length and rename Flag. Adjusted handling of "Disable Input Polling" mode and renamed to "Debug Mode" (philips\cdislavehle.cpp). Added Test Plug. Allow access to a test menu by booting the console with the Test Plug set (philips\cdi.cpp and philips\cdislavehle.cpp). Play Music CDs. This added a small disc-type check to the CD-i Slave HLE. This allows it to recognize music CDs, which triggers the CD player mode. Fixed CDIC Audio Track Size (philips\cdislavehle.cpp).
+
+
+
+  . SCC68070 peripheral: Cleanup Reset. The reset function has duplicated code and is slightly out of sync. This merge corrects a few mismatches. This likely impacts no games. Also added RAM time to the cdimono2 (philips\cdi.cpp and machine\scc68070.cpp). Improved serial interface/UART behavior (machine\scc68070.cpp). 
+
+
   . Make Quizard 1-4 boot again (machine\scc68070.cpp and philips\cdi.cpp). Added AI-modified MCUs for the various languages supported by the Quizard set. Analysis by GPT-5.6 Sol.
-  . Moved CDIC attenuation table to slave HLE. Reverse engineering revealed the attenuation lookup table is in the slave, not the CDIC. This uses the proper lookup table instead of the powf approximation. The result is <0.5% difference in volume (philips\cdicdic.cpp and philips\cdislavehle.cpp).
-  . Improved serial interface/UART behavior (machine\scc68070.cpp). Implemented CD-i serial test device (philips\cdipcb.cpp).
+
+
+
+
+
+Implemented CD-i serial test device (philips\cdipcb.cpp).
   . Added MPEG-1 video decoder (video\mpeg_video.cpp). Added Digital Video Cartridge (VMPEG) emulation and NTSC support via cdimono1n machine (philips\cdi.cpp). Added accessors needed by the CD-i Digital Video Cartridge (video\mpeg_video.cpp). Fixed joint stereo band decoding (sound\mpeg_audio.cpp). Added an MPEG-1 system stream demultiplexer (machine\mpeg_demux.cpp). Added CD-i full motion audio decoder (sound\gsc38gg307.cpp). Added MPEG-1 full motion video decoder (video\mcd251.cpp).
-  . Make 'CD-i 220 LCD' a device. The cdislave hle currently has partial ownership of the LCD panel's state. This makes it harder to replace the slave_HLE with the DSP chip. This change provides a cleaner separation by using a callback, similar to other devices the slave interacts with (philips\cdi220_lcd.cpp).
-  . Fixed Multitrack Audio Discs. Allows multitrack discs to play correctly. Previously only the first 1 or 2 tracks worked reliably (philips\cdicdic.cpp).
+
+
+
+  . MCD212 Video Decoder: Fixed Layer Mixing. In some cases, both Path 0 and Path 1 try to set the Matte control. If both try to set it, Path 0 should win (philips\mcd212.cpp). 
+
+
 - cedar_magnet.cpp
   . New games (Cocomania, Dodge Ball, Double Dragon, Flying Shark, Super Contra and World Wars) and improvements.
   . Added new reconstruction disk to Dracula's Castle (Magnet System) - Promoted game to working. Better dumps for 'A Day In Space (31/03/87)' and clone clone 'War Mission (WM 09/04/87)'.
@@ -356,14 +374,14 @@
   . Sega SCUDSP
     . Rewrote DMA to use a timer and removed instant hack. Make sure to honor C-Bus transfer fixed adds rule with DMA. Fixes (MESS) mshvssf bad colors in main menu and gameplay (scudsp\scudsp.cpp).
     . Refine some DMA loose ends: C-Bus DMA reads actually can be either 0 or 4. B-Bus DMA reads are hardwired to +4. DMA CTx pointers actually increments on every transfer (scudsp\scudsp.cpp).
-    . Fixed ALU output for NOP. DSPs are weird (scudsp\scudsp.cpp)
+    . Fixed ALU output for NOP. DSPs are weird. Update the multiplier when anything changes RX. Fixes T&L calculations in (MESS) vkyoute2 (scudsp\scudsp.cpp)
   . Sega Saturn VDP1
     . Avoid using vertical cell scroll with linezoom for now, avoid 'Batman Forever' The Riddler stage going 0% emulation speed (ID 07203) (sega\saturn.cpp).
     . Make sure sonicjamj (hash\saturn.xml) doesn't fail SCU DMAs to VDP2 back-to-backs for now (sega\saturn_scu.cpp and sega\saturn.cpp).
     . Fixed sprite window in interlaced mode. Fixes (MESS) amoudan GFXs in main menu and gameplay. Implemented VDP2 4bpp bitmap with zoom mode (sega\saturn.cpp).
     . Don't do sprite window if type is invalid. Fixes several empty dot cases and (MESS) saturnjp [kof96, kof97, samsho4]: VDP1 transparency issue with several games (ID 07508) (sega\saturn.cpp).
     . Fixed VDP1 GFX alignment with flipy + clip y. Fixes (MESS) draculax inverted castle map plus some enemies glitching out when on top of screen (sega\saturn.cpp).
-    . Added poorly documented VDP1 drawing trigger behavior required by (MESS) Doom and Exhumed
+    . Added poorly documented VDP1 drawing trigger behavior required by (MESS) Doom and Exhumed. Properly invalidate the RBG0 cache. Fixes missing water in (MESS) vkyoute2 (sega\saturn.cpp).
   . Sega Saturn VDP2: Moved CRTC logic in a new VDP2 device. Make it generate blank signals. Fixes saturneu [test1f] debug assertion (ID 05855) (sega\saturn_vdp2.cpp).
   . Sega Saturn/ST-V CD Block HLE
     . Fixed regression with CD auto boots. Fixes (MESS) saturnjp [azelpanztai]: Special Function Code Select enable 0004 0000, contact MAMEdev (ID 04951). Reset pending playback parameters when issuing a disc seek command. Added logging for disc status changes. Yield commands until status changes are performed. Make it play along with seek rules. Fixes (MESS) jungrhyt crashing when repeating a stage (sega\saturn_cd_hle.cpp).
@@ -373,7 +391,7 @@
     . Execute command even if CD isn't inserted and fixed modem status readback regression. Read ADR in TOC properly. Fixed curfad filter rejection range (sega\saturn_cd_hle.cpp).
     . Read ADR in TOC properly. Fixed curfad filter rejection range. Read TOC sets DTREQ only, doesn't change drive status. Fixes (MESS) hisspach boot (sega\saturn_cd_hle.cpp).
     . Improved redbook track resume and restart. Avoid (MESS) dendego crash on title screen, make Multiplayer Audio CD playback a bit more solid. Make repeat to honor seek phase and fixed redbook range. Fixed repeat assertion failure. Removed dubious handling of get status command (sega\saturn_cd_hle.cpp).
-  . Hitachi SH-2 (SH7604): Implemented standby mode that SLEEP kicks the SH-2 into and fixed a bug with FRT capture (sh\sh2.cpp and sh\sh7604.cpp)
+  . Hitachi SH-2 (SH7604): Implemented standby mode that SLEEP kicks the SH-2 into and fixed a bug with FRT capture (sh\sh2.cpp and sh\sh7604.cpp). Fixed SH7604 on-chip divider corner cases (sh\sh7604.cpp).
   . Start converting IOGA to use 315-5649. Hook it up to standard stvbios. Hopper, critcrsh and mahjong panel variants TBD. Hookup inputs for fanzonem and wwshin. Removed magzun boot patches. Demoted wasafari to MACHINE_NOT_WORKING (no way to rotate crank input in-game). BREAKING CHANGE: magzun now just black screen out of removing said hacks.
   . Make stvbios to use a 6 button input def. Added a dump cart header debug facility. Cart empty space 1-fills, fixes a bunch of IC13s still failing ROM test along the way (sega\stv.cpp).
   . Demoted 'Virtual Mahjong 2 - My Fair Lady (J 980608 V1.000)' to MACHINE_NOT_WORKING. Note: Don't think it ever worked, has random sync problems with SH-2 reading sound RAM.
