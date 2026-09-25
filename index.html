@@ -264,32 +264,13 @@
   . Added MPEG-1 video decoder (video\mpeg_video.cpp). Added preliminary SGS-Thomson STi3400 MPEG-1 video decoder emulation (video\sti3400.cpp). Added MPEG video decoding to Bellfruit Cobra 3. Separate video rendering from composition. Preserve main RAM in save states (bfm\bfm_cobra3.cpp).
 - blzntrnd.cpp: Moved Blazing Tornado and Grand Striker 2 from metro.cpp to their own driver blzntrnd.cpp
 - cdi.cpp
-
   . CD-i 220 LCD: Enhanced Front Display. The LCD display now has indicator lights. Previously these were erroneously displayed as an 8th digit. This maps the Play and Pause indicator lights on the front panel. Visible when using audio CDs. Fully wires up the LCD display. Map Mute Button (philips\cdi.cpp and philips\cdi220_lcd.cpp). Make 'CD-i 220 LCD' a device. The cdislave hle currently has partial ownership of the LCD panel's state. This makes it harder to replace the slave_HLE with the DSP chip. This change provides a cleaner separation by using a callback, similar to other devices the slave interacts with (philips\cdi220_lcd.cpp).
-
-
   . CDIC MCU: Moved CDIC attenuation table to slave HLE. Reverse engineering revealed the attenuation lookup table is in the slave, not the CDIC. This uses the proper lookup table instead of the powf approximation. The result is <0.5% difference in volume (philips\cdicdic.cpp and philips\cdislavehle.cpp). Fixed Multitrack Audio Discs. Allows multitrack discs to play correctly. Previously only the first 1 or 2 tracks worked reliably (philips\cdicdic.cpp). CD+G Graphics. Sends the CD+G subcode data to the CPU for rendering (philips\cdicdic.cpp).
   . SLAVE MCU: Fixed Opcode length and rename Flag. Adjusted handling of "Disable Input Polling" mode and renamed to "Debug Mode" (philips\cdislavehle.cpp). Added Test Plug. Allow access to a test menu by booting the console with the Test Plug set (philips\cdi.cpp and philips\cdislavehle.cpp). Play Music CDs. This added a small disc-type check to the CD-i Slave HLE. This allows it to recognize music CDs, which triggers the CD player mode. Fixed CDIC Audio Track Size (philips\cdislavehle.cpp).
-
-
-
-  . SCC68070 peripheral: Cleanup Reset. The reset function has duplicated code and is slightly out of sync. This merge corrects a few mismatches. This likely impacts no games. Also added RAM time to the cdimono2 (philips\cdi.cpp and machine\scc68070.cpp). Improved serial interface/UART behavior (machine\scc68070.cpp). 
-
-
-  . Make Quizard 1-4 boot again (machine\scc68070.cpp and philips\cdi.cpp). Added AI-modified MCUs for the various languages supported by the Quizard set. Analysis by GPT-5.6 Sol.
-
-
-
-
-
-Implemented CD-i serial test device (philips\cdipcb.cpp).
-  . Added MPEG-1 video decoder (video\mpeg_video.cpp). Added Digital Video Cartridge (VMPEG) emulation and NTSC support via cdimono1n machine (philips\cdi.cpp). Added accessors needed by the CD-i Digital Video Cartridge (video\mpeg_video.cpp). Fixed joint stereo band decoding (sound\mpeg_audio.cpp). Added an MPEG-1 system stream demultiplexer (machine\mpeg_demux.cpp). Added CD-i full motion audio decoder (sound\gsc38gg307.cpp). Added MPEG-1 full motion video decoder (video\mcd251.cpp).
-
-
-
+  . SCC68070 peripheral: Cleanup Reset. The reset function has duplicated code and is slightly out of sync. This merge corrects a few mismatches. This likely impacts no games. Also added RAM time to the cdimono2 (philips\cdi.cpp and machine\scc68070.cpp). Make Quizard 1-4 boot again (machine\scc68070.cpp and philips\cdi.cpp). Added AI-modified MCUs for the various languages supported by the Quizard set. Analysis by GPT-5.6 Sol. Improved serial interface/UART behavior (machine\scc68070.cpp). 
   . MCD212 Video Decoder: Fixed Layer Mixing. In some cases, both Path 0 and Path 1 try to set the Matte control. If both try to set it, Path 0 should win (philips\mcd212.cpp). 
-
-
+  . Digital Video Cartridge: Added MPEG-1 video decoder (video\mpeg_video.cpp). Added Digital Video Cartridge (VMPEG) emulation and NTSC support via cdimono1n machine (philips\cdi.cpp). Added accessors needed by the CD-i Digital Video Cartridge (video\mpeg_video.cpp). Fixed joint stereo band decoding (sound\mpeg_audio.cpp). Added an MPEG-1 system stream demultiplexer (machine\mpeg_demux.cpp). Added CD-i full motion audio decoder (sound\gsc38gg307.cpp). Added MPEG-1 full motion video decoder (video\mcd251.cpp).
+  . CD-i Service PCB: Implemented CD-i serial test device (philips\cdipcb.cpp).
 - cedar_magnet.cpp
   . New games (Cocomania, Dodge Ball, Double Dragon, Flying Shark, Super Contra and World Wars) and improvements.
   . Added new reconstruction disk to Dracula's Castle (Magnet System) - Promoted game to working. Better dumps for 'A Day In Space (31/03/87)' and clone clone 'War Mission (WM 09/04/87)'.
