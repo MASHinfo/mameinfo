@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 2nd October 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 3rd October 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -163,6 +163,7 @@
   . Sound Interface
     . Open device at emu rate to avoid resampler drift and compare queue bytes against bytes in backpressure check (assisted by GLM-5.1; sound\sdl3_sound.cpp).
     . Many CoreAudio fixes and improvements: Fixed missing comma after "Left Top Middle" in sMacChannelLabels, causing descriptions to desync. Fixed unbounded lookup in unknown-label fallback. Fixed some channels getting two descriptions. Fixed channel bitmap translation for channels > 31. Fixed -verbose logging for channels using the bitmap lookup. Fixed m_nodes desync caused by skipped devices. Guard against null device_uid/device_name. Source render callback now verifies against the buffer size. Fixed issue where source buffer could be smaller than a device’s minimum buffer. Sink and source channels are now accounted for separately. node.m_sinks / m_sources were double-counted in some configurations. Source streams were opened with the stream count instead of the channel count. m_channels was never set for source streams. Node scope and rate range now chosen from is_sink rather than in_streams > 0. Sample-rate property address was missing PROPERTY_ELEMENT_MASTER. Error numbers were being discarded instead of reported in some cases. Input callback was moved from kAudioUnitScope_Output to Global. Packet size is now clamped to BufferFrameSizeRange. m_max_frames is now derived from MaximumFramesPerSlice and BufferFrameSizeRange. Input-path error message said "output device". m_need_generation_bump is now atomic for thread safety. AudioUnitRender failures no longer osd_printf_error from the realtime I/O thread. m_stream_id starts at 1; open failures return 0 rather than -1. Top Rear Center X and LFE 3 channels are now properly reported to the core. static_assert added to validate the channel lookup table. set/clear_property_listener take AudioObjectPropertySelector, not AudioObjectPropertyElement. Added selector_name() for improved FourCC logging. Device-gone errors on listener removal are verbose, not errors (e.g. closing the lid on a MacBook). Stream-config buffer list uses unique_ptr instead of malloc/free. m_input_buffer.set_latency() moved from the sink path to the source path. Claude Opus 4.8 and 5 assisted with research and debugging for some of these issues (sound\coreaudio_sound.cpp).
+    . Fixed microphone input stride for interleaved capture. The equal-rate microphone reader steps through interleaved capture data using the emulated stream's output count. This mixes or skips source channels when host and guest channel counts differ. Advance using the source buffer's channel count, as the input resamplers already do (emu\sound.cpp).
   . Yamaha SWP30 sound chip
     . Two register field width fixes in the streaming block. IIR2's a1 and b1 registers were swapped and the DPCM accumulator leaked in compressor modes 0-2.
     . Fixed three meg drc mismatches with the interpreter. Make the revram enable register readable.
@@ -215,6 +216,7 @@
   . Kaneko KC002/VU002 Sprites: Fixed notes. Hardware with 2 sprite chip is for extend sprite framebuffer output (384x256 with overlay). Cursor Grok 4.6 for analysis.
   . Keyboard: Fixed missing column select pullup (pc_kbd\pcat101.cpp)
   . Konami 005849 Video Controller: Update notes
+  . Konami 053250 LVC: Support two-chips-one-RAM mode and support per-line priority. Debugging and some fix ideas assisted by GPT-6 Astra (konami\k053250.cpp).
   . Konami 054000 Protection: Updates: Fixed naming (use snake_case and lowercase variable names). Use multibyte.h for 24 bit value getter. Fixed logging and side effect checks (konami\k054000.cpp).
   . MagicEyes VRender0 Video Engine: Don't flip in vblank if the count is zero. Fixes most of the graphics in Trivia R Us dissapears when there's text in Jestbook and Funny Question Game (video\vrender0.cpp) (ID 08891).
   . MOS 6522 VIA and Rockwell R65C22 VIA: Fixed T1/T2 free-run timers going backward after underflow instead of counting down and T2 reads lagging T1 by IFR_DELAY clocks. Fixes (MESS) Commodore 1526 VIA/RIOT self-test. Assisted by Claude Opus 5 (machine\6522via.cpp). Fixed regression which broke QuickTime playback on the (MESS) Pippin. C= 1526 self-test still passes. Debugging assisted by GPT-6 Astra (machine\6522via.cpp).
@@ -458,6 +460,7 @@
 - Mortal Kombat (Yawdim bootleg, set 4), Pango Fun (Italy), PGM and Poker (Version 50.02 ICB, set 4): Dumped and verified PLDs
 - Operation Wolf: Latch TC0060DCA volume writes, fixes Operation Wolf.
 - Outfoxies: Fixed overdumped mask ROMs on Outfoxies. Tested with the right EPROM equivalents on real hardware (27c800 for SHAR and 27c400 for SHAS).
+- Over Drive: Fixed multiple IRQ and timing-related goofs. Caused everything from flashing glitches to missing sky layers (konami\overdriv.cpp). Support two-chips-one-RAM mode and support per-line priority. Debugging and some fix ideas assisted by GPT-6 Astra (konami\k053250.cpp).
 - Q*bert and Q*bert's Qubes: Fixed a sign error that can make the SC-01 F2 noise-injection filter unstable for valid internal ROM states (sound\votrax.cpp). Fixes sound cuts off in Q*bert and Q*bert's Qubes after a while and doesn't come back (except for the knocker) (ID 09521).
 - P's Attack: Made the game boot. Claude Opus 5 reversed the PIC16C711 fake ready return. Hookup gun triggers. Use an enum for interrupt sources. Implemented light pen registers for P's Attack lightguns (machine\vrender0.cpp).
 - Pac-Carnival: Dumped/Verified PLDs
