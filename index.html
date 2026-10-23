@@ -30,7 +30,7 @@
 
 <br><br>
 
-<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo + MAMEUI-inifiles-0290GIT (16th Oct).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0290GIT (16th Oct) (4.58 MB)</b></font></a><br><br>
+<font size="4" face="Arial" color="#FFFF00"><b>*NEW* </b></font><a href="https://mashinfo.github.io/mameinfo/download/Mameinfo + MAMEUI-inifiles-0290GIT (23rd Oct).7z"><font size="+1" face="Arial" color="#eeeeee"><b>Mameinfo + MAMEUI-inifiles-0290GIT (23rd Oct) (4.61 MB)</b></font></a><br><br>
 
 <a href="https://mashinfo.github.io/mameinfo/download/MAMEUI-inifiles-0289.zip"><font size="+1" face="Arial" color="#eeeeee"><b>MAMEUI 0.289 Category-, Version and Alltime inifiles (1022 kB)</b></font></a><br><br>
 
@@ -173,6 +173,7 @@
   . NEC V25: Fixes and updates. The timer control registers can now be read back properly. DMA requests can be triggered from both the DMARQ pins and the TC pins. Implemented async mode in the serial interface. Only the first interrupt of a group carries its priority. nstruction cycle counts from manual. Fixed REP resume after interrupt. Give the V25 its own specific cycle counts, MAME previously reused the V20's which are slower. Bank-switched interrupts save and restore the REP context. Assisted by Claude Opus 5 (nec\v25.cpp). Fixes audio CPU crashes if some sound effects are triggered during player death in clone V-Five (Japan) (ID 09546).
   . NEC V30: RESET no longer clears the general registers. DAA/DAS now use the flags properly. AAA/AAS updates S/Z/P/V correctly. ADD4S/SUB4S/CMP4S: Fixed flag usage and updating and wrap IX/IY at 64k. TEST1 updates S, P, AC and Z correctly. ROL4/ROR4 now properly handle AL’s upper nibble. INS/EXT set the flags correctly now. Signed MUL/IMUL set the flags correctly now. DIV/DIVU set the flags as documented now. AAM uses its immediate as the base instead of a fixed 10. AAD sets the flags correctly now. opcode D6 is XLAT, not SETALC. 8C and 8E versions of MOV only decode 2 segment register bits. All V30 and universal changes verified with PCTTEST and regression tested on multiple drivers (nec\nec.cpp).
   . NEC V60: Incorrectly printed opcodes DBLT/DBLE/DBV/DBNV in disassembly. Latent issue with incorrect opsize usage in disassembly. Stale m_amflag caused segfault (v60\am2.hxx, v60\op12.hxx and v60\v60d.cpp).
+  . NEC V810: Implemented the TRAP instruction. Added optional bus timing and use it for the PC-FX. Halt on a fatal exception. Fixed MUL and MULU with r30 as the destination and their flags (v810\v810.cpp).
   . NEC VR5500: NEC VR5500 has unique page mask and Config encodings vs. stock MIPS III. Fixing this allows jnero to write a correct display list instead of garbage (mips\mips3.cpp and mips3com.cpp).
   . Philips SCC68070
     . Fixed UART Status. This change fixes several issues in the UART for this device. This has the effect of resolving some errors in the CD-i bios tests. Previously, UART would flag as Ready on every callback. Now it won't identify as ready while a transmission is currently queued. It would also preserve the Break flag on reset. This change correctly resets the Break flag. Finally, this unsets Ready when transmitting a write (machine\scc68070.cpp).
@@ -309,6 +310,7 @@
   . Rockwell 65C52 DACIA: Fixed IRQ clear on status read and fixed transmitter empty status bit (machine\r65c52.cpp)
   . S3 86c764/86c968: Hookup CR50. Fixed SVGA 8-bit mode enable for Cybervision64 (video\pc_vga_s3.cpp).
   . SCSI Hard Disk: Mode sense page 0x38. Required by (MESS) EP/IX 2.1.1 on MIPS RS2030 (nscsi\hd.cpp).
+  . SCSI HLE: Go to MESSAGE OUT on ATN during a transfer, free the bus on ABORT. Keep an interrupted transfer unless the message is ABORT or BUS DEVICE RESET (machine\nscsi_hle.cpp).
   . Sega 315-5124 SMS1 VDP: Fixed regression in (MESS) Road Rash (Game Gear) after Z80 core changed (When trying to draw the title screen, the wrong part of the screen gets shifted and the game hangs) (ID 09493) (video\315_5124.cpp).
   . Sega 315-5838 / 317-0229 Compression and Encryption: Reworked the device to work with games other than Decathlete (sega\315-5838_317-0229_comp.cpp)
   . Sega 837-13xxx I/O Board: Initialize all twelve port finder tags. Initial implementation overrides for 837-13844 (smarinef and anpanman2). Added rotary encoder setter to 837-13844, hook it up to inunoos. Initial 837-13938 variant, hookup to Crackin' DJ. Hookup inputs and 837-13938 to OutTrigger (sega\jvs13551.cpp). Hookup rotary command 0x23 (machine\jvsdev.cpp).
@@ -473,6 +475,7 @@
   . Update MysticWarr driver to unlock all the konamigx improvements. Correct a regression.
   . Fixed EEPROM saves for clones Gokujou Parodius blending and Golfing Greats 2 terrain. Address review of the IRQ latch and sprite blending (konami\konamigx.cpp)
   . Emulated the Konami 056734 (ESC) security chip. The chip runs its boot code, kernel and the games' uploaded programs from the game ROM, replacing the C simulations of those programs (generate_sprites, konamigx_esc_alert and the per-game *_esc handlers). Each set is configured with its chip's key, configuration nibble and instruction fetch scramble. Sexy Parodius: The program's overlays (stage 1 snow, particles) are drawn. Removed MACHINE_UNEMULATED_PROTECTION. The programs place sprites 0x14 (Daisu-Kiss, Twin Bee Yahhoo!) or 4 (Sexy Parodius) further right than the C did, so the Type 2 K055673 x offset is -46 for every set that used -26, -42 or -46. Salamander 2's program writes the sprite depth code at bit 6, not bit 9: removed salmndr2_sprite_callback. Dragoon Might and Lethal Enforcers II use the standard sprite callback; Dragoon Might's sprites take no mix code from attribute bits 9:8. Renumbered the gameDefs special cases. Reference: konami_056734_manual.md (rb6502/mame-ai-tips). Assisted by Claude Opus 5.5.
+  . Fixed palette lookup for Gaiapolis ROZ layer. Corrects black squares during some cutscenes (konami\mystwarr_v.cpp).
   . Promoted Racin' Force (ver EAC) and clone Racin' Force (ver UAB) to working
 - konamim2.cpp
   . Respect the ICFI bit in HID0, fixes regressions in Konami M2 games. Finding the bug was assisted by Claude Opus 5 (powerpc\ppccom.cpp).
@@ -500,11 +503,11 @@
   . Increase quantum for non-super 22. Ace Driver and Ace Driver: Victory Lap video test writes 1 to DSP RAM to trigger drawing but then clears it back to 0 after 616 cycles; needs quantum frequency at least 40 kHz to ensure the master DSP can read it in time (namco\namcos22.cpp).
   . ss22 uses per-poly fog (GitHub #16224) (namco\namcos22_v.cpp). SS22 video PCB uses C397, not C387 (verified by Guru). Also revision A has four each of C400 and C401, same as later revisions.
   . Added additional developer inputs (fine-increment/decrement and freeze-toggle) for Armadillo Racing
-  . No need for code 5 special case in blit_polyobject (namco\namcos22_v.cpp)
+  . No need for code 5 special case in blit_polyobject (namco\namcos22_v.cpp). Expose developer pad connectors as SFC controller slots, replacing custom dev input configs.
 - namcos23.cpp
   . Bug fixes: Made save states complete, including the command list. Sign-extend the coordinates of immediate models the same way as ROM models. Fixes Gunmen Wars title screen. Respect the identity matrix bit in command 0x012c, fixes missing player models in Gunmen Wars.
   . Interpret normals as signed 10 bit integers, fixes overly-dark lighting in Time Crisis II character models among others. GPT-6 Astra assisted with all of this debugging.
-  . Further lighting adjustments and apply the gamma ramp uploaded by the game
+  . Further lighting adjustments and apply the gamma ramp uploaded by the game. Expose developer pad connectors as SFC controller slots, replacing custom dev input configs.
 - nexus3d.cpp: Misc notes
 - nss.cpp, sfcbox.cpp and snesb.cpp: Fixed HIRQ enable behavior. Fixes flickering in (MESS) Doom and freeze in Mortal Kombat II. Debugging assisted by Claude Opus 5.5 (nintendo\snes.h and nintendo\snes_m.cpp).
 - pgm.cpp
@@ -666,6 +669,10 @@
 - Pac-Carnival: Dumped/Verified PLDs
 - Paperboy: Fixed factory reset EEPROM for calibrated controls
 - Passing Shot: dumped PROMs and PLDs for clone Passing Shot (4 Players) (bootleg).
+- PC-Engine (battlera.cpp, ggconnie.cpp, paranoia.cpp, tourvis.cpp and uapce.cpp)
+  . Hudson HuC6261 VCE: Draw the KING BG layers and RAINBOW video, and mix them with the HuC6270s. Implemented cellophane (layer blending). VSync on lines 0-2. Use the documented YUV to RGB matrix. Order equal layer priorities HuC6270 > HuC6272 > HuC6271. Removed the unused HuC6271 finder, tidy up (video\huc6261.cpp).
+  . Hudson HuC6271 'Rainbow': Draw the KING BG layers and RAINBOW video, and mix them with the HuC6270s. Use std::numbers for the IDCT constants. Count the stuffing byte after FF in the JPEG block size. Store palette indices as u32, tidy up (video\huc6271.cpp).
+  . Hudson HuC6272 'King': Implemented the SCSI controller registers, pseudo-DMA and DMA to KRAM, and SCSI/DMA interrupts. Draw the KING BG layers and RAINBOW video, and mix them with the HuC6270s. Fix PC-FX ADPCM. Mix CD-DA into the HuC6230 line input. Drive the CD-ROM over NSCSI. Added the CD sub-code interface. Report IRQ changes only, save the KRAM address registers, tidy up (video\huc6272.cpp). 
 - PC hardware: Bulk replace machine_configs and inits to ATTR_COLD.
 - Play Sonic 4: Improved emulation: Added the vblank NMI (enabled through the output latch), so the system now boots past the self-test. Mapped the I/O 0x00-0x1f outputs as four 74LS259 latches: game PCB select relays, coin/start pulses to the selected PCB, coin counters and NVRAM write enable. Added a layout with the credits and time LED displays. Added the tile bank bits from the attribute byte. The screen is black while a game PCB's video is selected. Documented the three undumped color PROMs (marked NO_DUMP). The palette is a placeholder, so the set is flagged MACHINE_WRONG_COLORS. Fixed the input types, added DIP switch locations as shown by the test mode, and changed the sound flag to MACHINE_NO_SOUND_HW. Minor fixes on the color prom decoding (guess, they're not dumped). Assisted by Claude Opus 5.5.
 - Poker Ladies: Partially decrypted opcodes for the encrypted Poker Ladies bootlegs. Assisted by GPT6.
