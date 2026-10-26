@@ -66,6 +66,7 @@
 - New DATs: GameInit.dat (https://www.progettosnaps.net/gameinit/)
 - CPU
   . Analog Devices ADSP21062 'Sharc': Simplify execution of rotate instructions (no need to switch on sign). Added macro to force unsigned register readout. Fixed off-by-one errors in circular buffer wrapping (sharc\sharcops.hxx).
+  . Analog Devices ADSP-2181: Added internal BDMA, timers and SPORT support to the ADSP2181 (adsp2100\adsp2100.cpp).
   . ARM7
     . Bugfixes and updates: Fixed multiple issues with ARMv3 parts that dynamically switch between 26 and 32 bit modes. Added ARM610 model for RISC PC 600. Allow ARM926 to execute code from the instruction TCM. Debugging assisted by Claude Opus 5. Added DEC SA110 variant with correct flags, (MESS) sarpc_j233 boots (arm7\arm7.cpp). Simplify handling of unaligned reads (arm7\arm7.cpp).
     . Many fixes: SMLA* instructions were doing the wrong operation. QDADD/QDSUB weren't saturating the operand. Some forms of Thumb BLX were not decoded properly. BKPT was mis-decoded as MSR, which trashed CPSR. Thumb ADC ignored the incoming carry flag. Data aborts ignored the high vector flag. BLX LR in ARM mode did things in the wrong order. MRC with R15 as the destination was supposed to update flags, not the PC. LDR* R15 set the PC to the wrong value. Some undefined opcodes were wrongly executed as LDR/STR. Undefined Thumb instructions weren't generating the UND exception. v5TE DSP ops worked on v4 emulated parts. PLD is v5TE, not v6. LDM*/STM* with an empty register list are NOPs. Disassembler was wrong for SMLA* and SMUL*. ARMv3 was mishandling CP15 writes. Tested on a bunch of drivers including the (MESS) newton.cpp (NewtonOS now boots), the 39in1.cpp gang and more. Audit and debugging assisted by Claude Opus 5 (arm7\arm7.cpp).
@@ -88,6 +89,7 @@
     . drcbex64.cpp: Fixed failure to set roundiing mode in some cases (cpu\drcbex64.cpp).
     . drcbearm64: Use full division for FRECIP like x64 and C do. Fixes the camera having a seizure in some Model 3 games. Debugging was assisted by GPT-6 Astra (cpu\drcbearm64.cpp).
     . sharcdrc.cpp: Set a rounding mode for the SHARC and TGPx4 DRCs. Resolves weird behavior on x64 systems. Debugging assisted by Claude Fable 5.1 (sharc\sharcdrc.cpp). Fixes coprocessor error on bootup in fvipers, fvipersb, schamp and sfight (ID 09394).
+    . Fixed multiple bugs in instruction sequence analysis: Fixed current source/target getting overwritten by values for first branch encountered in the inner loop. Actually analyse dependencies for instructions in delay slots recursively. The comment indicated that the code did this, but it was lying. Fixes issues with dependency analysis for CPUs with multiple-instruction delay slots. Fixed dependency analysis for instructions in branch delay slots. Previously instructions in the delay slot for a branch that is taken were analysed as though the branch was not taken. Fixed dependency analysis for conditional branches with delay slots (cpu\drcfe.h and cpu\drcfe.ipp).
   . Fujitsu Micro F2MC-16: Revert MAME 0.289 changes (External interrupts do not seem to have a iack/vector fetch cycle) (f2mc16\f2mc16.cpp). Fixes black screen and freezes MAME at start in Motocross Go! and clones (ID 09509).
   . Hitachi H8
     . Use logmacro for verbose logging (h8\h8_timer16.cpp). Minor logging fixes (h8\h8_dma.cpp and h8\h8_sci.cpp). Fixed logerror bug that caused assertion failures in (MESS) jv880 and rd500 (h8\h8_timer16.cpp). Quiet default logerror (h8\h8_timer8.cpp).
@@ -108,6 +110,7 @@
   . Hyperstone E1-xxxx
     . Fixed SETADR carry going into bit 0 instead of bit 9 (e132xs\e132xsdrc_ops.hxx). Fixes task switching in Mr. Kicker and Yori Jori Kuk Kuk. Promoted Mr. Kicker (SEMICOM-003b PCB), Yori Jori Kuk Kuk and Royal Poker 2 (Network version 3.12) to working. Marginally more pipeline-friendly implementation of recompiled SETADR instruction (e132xs\e132xsdrc_ops.hxx).
     . Updated all condition codes when dynamically checking for delay slot. Fixes easily rerproducible instances of Crazy War may freeze during gameplay (ID 09574) (e132xs\e132xsdrc_ops.hxx).
+    . Removed workarounds for issues with dependency analysis of delayed branches, optimised a degenerate case of SUB used to manipulate condition codes, and cleaned up code. Practical impact on performance in minimal (e132xs\e132xsdrc.cpp).
   . IBM PowerPC
     . Help performance on PCI PowerMacs with a 68K DRC: * Apple's 68k DRC frequently generates a code sequence, flushes it, and then regenerates the exact same thing at the exact same address. So we now cache small sequences and can restore them without the overhead of a recompile. This required adding some accessors to the 3 DRC backends. * The entire vTLB (a MAME DRC implementation detail, *not* the 603's architectural TLB) was being used as a comparison for deciding to flush a block rather than just the actual mapping. In particular, the access count bits were causing unnecessary recompiles. * The vTLB was also too small: at its original size it covered just 512K of working set. By trial and error stepping through powers of 2, 4096 was found to give the best results running real Mac software. With these changes, pwrmacg3 went from roughly 160,000 block flushes and recompiles per second to 0 when idling at the Mac OS 8.1 Finder. This also smoothed out regular audio breakups on pippin caused by recompile storms and seems to have even sped up a few of the PPC arcade games by a few ticks. Claude Opus 5 assisted with measuring and isolating the performance issues n (powerpc\ppc.h, ppccom.h and ppcdrc.cpp).
     . Generate the no FPU exception when MSR[FP] is cleared, and added a temporary opt-in hack for some cache-reliant (MESS) Mac OS 9 behavior. Fixes garbage window backgrounds in the Finder and elsewhere on PowerMacs. Claude Opus 5 assisted with tracking down these issues (powerpc\ppc.h, ppccom.cpp and ppcdrc.cpp). TLB fixes exposed by (MESS) Mac OS X (powerpc\ppc.h and ppccom.cpp). Respect the ICFI bit in HID0, fixes regressions in Konami M2 games. Finding the bug was assisted by Claude Opus 5 (powerpc\ppccom.cpp).
@@ -316,6 +319,7 @@
   . RAM: Convert RAM to slot device to fix limitation of only being able to configure ":ram" from the command line & not having a UI to select the size. RAM sizes are now shown in -listslots/-listdevices & show up as slots rather than ramoptions in -listxml. Slot options are built from set_extra_options()/set_default_size(), so drivers do not require mass changing yet. size()/mask() are valid after device_config_complete(), pointer() can be called before device_start(), so the ram_device does not need to start before the device it's providing ram for. The width of RAM can be set in the drivers, allowing endian issues in state saves to be correct (machine\ram.cpp). Replaced -ramsize in comments with -ram and removed -ramsize from the docs & updated minimaws (ram_device). Updated PSX ram_device consistency, options are currently combined from set_default_size() & set_extra_options() but the other updates duplicated them for easier overriding of the default in the driver (sony\psx.cpp).
   . RAMDAC: Register palette RAM and index and mask registers for saved states (video\ramdac.cpp)
   . RCA CDP1852 I/O: Cache the MODE input, skip idle clock edges and drive the SR output on reset. Assisted by Claude Opus 5.5 (machine\cdp1852.cpp)
+  . Real Time Clock interface: Fixed inverted leap-year condition. The shared RTC calendar currently skips 29 February when the stored year is divisible by four and permits it in other years. Correct the rollover condition so devices with leap-year support retain 29 February in the appropriate years (emu\dirtc.cpp).
   . Rockwell 65C52 DACIA: Fixed IRQ clear on status read and fixed transmitter empty status bit (machine\r65c52.cpp)
   . S3 86c764/86c968: Hookup CR50. Fixed SVGA 8-bit mode enable for Cybervision64 (video\pc_vga_s3.cpp).
   . SCSI Hard Disk: Mode sense page 0x38. Required by (MESS) EP/IX 2.1.1 on MIPS RS2030 (nscsi\hd.cpp).
@@ -330,6 +334,7 @@
   . Sony PSX DMA: A CD DMA word count of 0 transfers 0x10000 words. Fixes (MESS) Saru! Get You! (hang at PS logo) and Crime Crackers (black screen). An OTC DMA word count of 0 clears 0x10000 words (psx\dma.cpp).
   . Taito TC0100SCN: Fixed FG line scroll start column (taito\tc0100scn.cpp)
   . TMS9927 VTC: Fixed cursor visibility check when the display is scrolled. Assisted by Claude Opus 5.5 (video\tms9927.cpp).
+  . uPD1990A RTC: old the time counter on Time Set, keep the TP mode on Register Hold (machine\upd1990a.cpp).
   . VGA: Clear buffer on each frame for SVGA modes. Avoid transitional artifacts for 320x240 modes (video\pc_vga.cpp).
   . Western Digital WD33C9x SCSI Controller: Fixed extra nested fn for just setting up a delay timer (machine\wd33c9x.cpp)
   . Winbond W83977TF Super I/O: Added the two UARTs (machine\w83977tf.cpp)
@@ -473,6 +478,7 @@
   . Disable the network CPU on non-racing games for performance purposes, as it's unused on those games.
 - hy-268a.cpp and hy-9802.cpp: Fixed command decoder. With this wlfx does not hang anymore. Implemented DWT and DMOD, hy-9802.cpp and hy-268a.cpp show signs of life. Implemented GAI>3, do not bail out for hdw<3, updated drivers to follow that. Use clock() to calculate the frame_period. Debugging was assisted by Claude Opus 5.5 (video\hd63484.cpp).
 - hyprduel.cpp: Fixed input name via usage and naming in test mode
+- igs_m036.cpp: Added IGS036 internal ROMs to cjddzsp, jhzb, jxry, lhtb, mjzhizun and xyddz.
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
 - jaguar.cpp
   . Implemented documented latch so the RISC CPUs don't see incomplete/corrupted data from the 68k & up the interleave. (MESS) Jaguar Doom is now fully playable. Debugging assisted by GPT-6 Astra (atari\jaguar.cpp).
@@ -499,7 +505,9 @@
 - lindbergh.cpp: Added PIC16F648A variant and hook it up to Lindbergh (disabled for now)
 - mcr.cpp: Moved most public stuff to protected / private
 - megadriv_ybox.cpp: Improved protection simulation for xmvsfmb, songjang and shuifeng. All but cleanups done by Claude Opus 5.5.
-- megaphx.cpp and littlerb.cpp: Hook up reset for PIC. This allows us to remove the PIC timer hack. Also improve boot rom switching: Fixes afterwar going into the weeds (misc\megaphx.cpp). Replaced generic RAMDAC with BT478 device and hook up the mode switch (shared\inder_vid.cpp). Gemini 4 Argon was used as a research and debugging tool.
+- megaphx.cpp and littlerb.cpp
+  . Hook up reset for PIC. This allows us to remove the PIC timer hack. Also improve boot rom switching: Fixes afterwar going into the weeds (misc\megaphx.cpp).
+  . Replaced generic RAMDAC with BT478 device and hook up the mode switch. Gemini 4 Argon was used as a research and debugging tool (shared\inder_vid.cpp). Support fine horizontal scroll. Improves scrolling in afterwar (shared\inder_vid.cpp).
 - model2.cpp
   . i960 fixes: SUBC had the borrow inverted, this affected Speed Racer's 64-bit multtiply/divide subroutines. MOVRE was stomping past the destination register; this trashed m_SAT in Dead or Alive. The priority wasn't being adjusted properly when taking an IRQ. MODI's sign test was overflowing and giving wrong results frequently in Speed Racer. Core audit and disassembbly to determine which games were affected by which bugs assisted by Claude Fable 5.1 (i960\i960.cpp).
   . Don't mirror MADRS at 0x7c0-0x7ff, fixes corrupted and then silent sound in Dead or Alive (sound\scsp.cpp).
@@ -526,7 +534,9 @@
   . Interpret normals as signed 10 bit integers, fixes overly-dark lighting in Time Crisis II character models among others. GPT-6 Astra assisted with all of this debugging.
   . Further lighting adjustments and apply the gamma ramp uploaded by the game. Expose developer pad connectors as SFC controller slots, replacing custom dev input configs.
 - nexus3d.cpp: Misc notes
-- nss.cpp, sfcbox.cpp and snesb.cpp: Fixed HIRQ enable behavior. Fixes flickering in (MESS) Doom and freeze in Mortal Kombat II. Debugging assisted by Claude Opus 5.5 (nintendo\snes.h and nintendo\snes_m.cpp).
+- nss.cpp, sfcbox.cpp, snesb.cpp and snesb51.cpp
+  . Fixed HIRQ enable behavior. Fixes flickering in (MESS) Doom and freeze in Mortal Kombat II. Debugging assisted by Claude Opus 5.5 (nintendo\snes.h and nintendo\snes_m.cpp).
+  . Restore emulation-mode execution tables after loading state (g65816\g65816.cpp)
 - pgm.cpp
   . Improved ICS2115 register 0x10 implementation. Minor revert volume envelope behaviour (previous improvement retains to comment) (sound\ics2115.cpp). Fixes kov and kovplus speech cuts out at the title screen (ID 09541).
   . Updated based on FPGA core learnings. ICS2115 format selection. IRQ4/6 enable/disable and acknowledge behavior. Sprite DMA timing and enable behavior (sound\ics2115.cpp, igs\igs023_video.cpp and igs\pgm.cpp).
@@ -801,6 +811,7 @@
   . Got rid of driver_start and driver_reset. These are leftovers from the pre-device world where driver_start/driver_reset were for drivers\*.* and machine_start/machine/reset were for machine\*.*. Having both of them just makes things confusing, and there was a clear preference for the "machine" variants.
   . Got rid of a log of obsolete .c_str() calls (cpu\* and sound\swp30.cpp). Cleaned up comments marking hacks/workarounds for emulation issues. Also use consistent format for MAME Testers issue references.
   . Added some missing standard headers (formats\rpk.h and util\avhuff.h). Made some bit manipulations a bit less scary-looking (no change in behaviour) (video\pc_vga_cirrus.cpp and video\ygv625.cpp). Marked various functions cold.
+  . Worked aroung non-debug build failing on current Clang 23.1.3 Windows environment (windows\window.cpp).
 - Debugger
   . GDB stub debugger (gdbstub)
     . Proper Z80 architecture support in the gdbstub. Assisted by GLM-5.1. REF: ttps://sourceware.org/git/\?p\=binutils-gdb.git\;a\=blob_plain\;f\=gdb/features/z80.c\;hb\=HEAD (debugger\debuggdbstub.cpp, z80\kc82.h, z80\z80.cpp and z80\z84c015.h).
