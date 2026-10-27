@@ -19,7 +19,7 @@
 
 <center>
 <font size="6" face="Arial" color="#CCCCCC"><u>Mameinfo.dat v0.290GIT</u></font>
-<br><font size="2" face="Arial" color="#FFFFFF">Updated - 26th October 2026</font><p>
+<br><font size="2" face="Arial" color="#FFFFFF">Updated - 27th October 2026</font><p>
 <font face="Arial" color="#FFFFFF">Homepage - </font><a href="https://mashinfo.github.io/mameinfo/"><font face="Arial">mameworld.info/mameinfo</font></a><br>
 <font face="Arial">E-Mail - </font><a href="mailto:mameinfo@ewetel.net"><font face="Arial">mameinfo@ewetel.net</font></a><p>
 <img src="pics/movie.gif" border="0">&nbsp;<font size="+2" face="Times">  Visit </font><a href="https://mashinfo.github.io/mameinfo/movies/index.html"><font size="+3" face="Times">ARCADE AT THE MOVIES</font></a></p><p>
@@ -242,6 +242,7 @@
     . Don't mirror MADRS at 0x7c0-0x7ff, fixes corrupted and then silent sound in Dead or Alive (sound\scsp.cpp).
   . Yamaha YMW-258-F: Effect DSP interface, don't clamp voice register numbers. Voice register numbers above 7 were clamped to 7. The TG100 writes FF to register 9 at every key on, which set the amplitude LFO of every voice to maximum depth. Writes to unknown registers are now ignored. Added the YMW258-F's interface to an external effect DSP (YM3413 in the TG100). Determined that voice registers 7-10 are envelope rates and AM depth (sound\multipcm.cpp). Exponential attack curve. The attack closes a fixed fraction of the remaining attenuation per sample instead of ramping linearly in dB, and starts at attenuation 0x2a0 of 0x3ff (-63 dB). The YMF278B manual's attack times are 67 steps (0-100%) and 40 steps (10-90%) of att -= (att >> 4) + 1 starting at 0x2a0. The fixed-point update stays within 3% of the attack time of that curve (sound\gew.cpp).
 - DEVICE
+  . 2C0xxx PPU/PPC: Fixed missing OAMADDR reset which caused wrong sprite data being used in a number of games. Set sprite0 hit flag only if line is covered by the sprite. Only update vertical position if rendering was active at HBLANK (video\ppu2c0x.cpp).
   . 3dfx Voodoo Banshee: Implemented screen-to-screen blits. Thrill Drive 2 uses this for motion blur post-processing. Co-Authored by Claude Opus 5.5.
   . 3dfx Voodoo Graphics
     . Fixed multibase texture LOD addresses. With TMULTIBASEADDR set, LOD 1, LOD 2 and LODs 3-8 take their base from their own register, but the hardware still adds the LOD's offset within the mipmap chain. Co-Authored by Claude Opus 5.5 (video\voodoo_render.cpp).
@@ -321,6 +322,7 @@
   . RCA CDP1852 I/O: Cache the MODE input, skip idle clock edges and drive the SR output on reset. Assisted by Claude Opus 5.5 (machine\cdp1852.cpp)
   . Real Time Clock interface: Fixed inverted leap-year condition. The shared RTC calendar currently skips 29 February when the stored year is divisible by four and permits it in other years. Correct the rollover condition so devices with leap-year support retain 29 February in the appropriate years (emu\dirtc.cpp).
   . Rockwell 65C52 DACIA: Fixed IRQ clear on status read and fixed transmitter empty status bit (machine\r65c52.cpp)
+  . RP5H01 6/7-bit Counter: Inhibit counter clocks while reset is asserted (machine\rp5h01.cpp)
   . S3 86c764/86c968: Hookup CR50. Fixed SVGA 8-bit mode enable for Cybervision64 (video\pc_vga_s3.cpp).
   . SCSI Hard Disk: Mode sense page 0x38. Required by (MESS) EP/IX 2.1.1 on MIPS RS2030 (nscsi\hd.cpp).
   . SCSI HLE: Go to MESSAGE OUT on ATN during a transfer, free the bus on ABORT. Keep an interrupted transfer unless the message is ABORT or BUS DEVICE RESET (machine\nscsi_hle.cpp).
@@ -478,7 +480,7 @@
   . Disable the network CPU on non-racing games for performance purposes, as it's unused on those games.
 - hy-268a.cpp and hy-9802.cpp: Fixed command decoder. With this wlfx does not hang anymore. Implemented DWT and DMOD, hy-9802.cpp and hy-268a.cpp show signs of life. Implemented GAI>3, do not bail out for hdw<3, updated drivers to follow that. Use clock() to calculate the frame_period. Debugging was assisted by Claude Opus 5.5 (video\hd63484.cpp).
 - hyprduel.cpp: Fixed input name via usage and naming in test mode
-- igs_m036.cpp: Added IGS036 internal ROMs to cjddzsp, jhzb, jxry, lhtb, mjzhizun and xyddz.
+- igs_m036.cpp: Added IGS036 internal ROMs to cjddzsp, jhzb, jxry, lhtb, mjzhizun and xyddz. Redumped huoqilin's program ROM.
 - itgambl3.cpp, menghong.cpp and sanremmg.cpp: Bugfixes to M16C disassembler found with an Apple PMU99 firmware binary. ADJNZ/SBJNZ weren't handling the imm4 field properly. ROT/SHA/SHL count is signed magnitude, not twos-complement. 32-bit register pairs were not printed correctly due to order-of-operations. BMCnd condition decoding was wrong. Long JCnd displacement is not signed. bit,base:16[SB] was not showing the bit number correctly. PUSHM register order was wrong. BNXOR was being called BXNOR. UND instruction was not decoded. dsp:16[An] / dsp:16[SB] were shown incorrectly. Grok 4.6 assisted verifying the divergences from the M16C Software manual (m16c\m16cdasm.cpp).
 - jaguar.cpp
   . Implemented documented latch so the RISC CPUs don't see incomplete/corrupted data from the 68k & up the interleave. (MESS) Jaguar Doom is now fully playable. Debugging assisted by GPT-6 Astra (atari\jaguar.cpp).
